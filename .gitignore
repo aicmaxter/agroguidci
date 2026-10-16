@@ -1,0 +1,28 @@
+# --- secrets et fichiers locaux : ne JAMAIS publier ---
+.env
+.env.*
+!.env.example
+.agent-token*.json
+*.key
+*.pem
+credentials*.json
+
+# --- etat d'execution (contient donnees producteurs et traces locales) ---
+data/
+out/
+logs/
+*.log
+pids.json
+
+# --- python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# --- outils ---
+.vercel
+.idea/
+.vscode/
+.DS_Store

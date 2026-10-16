@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AGROGUIDCI — conseil agricole multi-agents pour la Côte d'Ivoire</title>
+<meta name="description" content="AGROGUIDCI : un agent principal agronome et six sous-agents spécialisés qui répondent à une seule demande agricole par une réponse cohérente, prudente et traçable.">
+<style>
+  :root{
+    --bg:#0d1117; --panel:#141b23; --panel2:#1a222c; --line:#243040;
+    --txt:#e6edf3; --muted:#93a4b8; --accent:#3fb950; --accent2:#d29922; --red:#f85149;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+       font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  a{color:#58a6ff;text-decoration:none} a:hover{text-decoration:underline}
+  header{border-bottom:1px solid var(--line);background:linear-gradient(180deg,#101820,#0d1117)}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 24px}
+  .hero{padding:56px 0 40px}
+  .kicker{color:var(--accent);font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:600}
+  h1{font-size:42px;line-height:1.15;margin:14px 0 10px;letter-spacing:-.5px}
+  h1 small{display:block;font-size:18px;color:var(--muted);font-weight:400;letter-spacing:0;margin-top:10px}
+  h2{font-size:24px;margin:44px 0 6px;letter-spacing:-.2px}
+  h2 .num{color:var(--muted);font-weight:400;margin-right:8px}
+  h3{font-size:17px;margin:26px 0 8px}
+  p{color:#cbd6e2}
+  .lead{font-size:18px;color:#cbd6e2;max-width:760px}
+  .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));margin:18px 0}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}
+  .card h4{margin:0 0 6px;font-size:15px}
+  .card p{margin:0;font-size:14px;color:var(--muted)}
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+  th{background:var(--panel2);color:#cbd6e2;font-weight:600}
+  tbody tr:nth-child(odd){background:#121922}
+  code,kbd{background:#1b2430;border:1px solid var(--line);border-radius:5px;padding:1px 6px;
+           font:.87em ui-monospace,SFMono-Regular,Consolas,monospace;color:#e6edf3}
+  pre{background:#111820;border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow:auto}
+  pre code{background:none;border:0;padding:0}
+  .loop{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+  .pill{border:1px solid var(--line);background:var(--panel);border-radius:999px;
+        padding:6px 13px;font-size:13px;font-weight:600}
+  .pill.go{color:#58a6ff}.pill.stop{color:var(--accent2)}.pill.esc{color:var(--red)}
+  .ok{color:var(--accent);font-weight:600}
+  .warn{color:var(--accent2);font-weight:600}
+  .no{color:var(--red);font-weight:600}
+  .note{border-left:3px solid var(--accent);background:#101820;padding:12px 16px;margin:18px 0;
+        border-radius:0 8px 8px 0;color:#cbd6e2}
+  .note.warn{border-left-color:var(--accent2)}
+  ul{padding-left:22px} li{margin:4px 0}
+  footer{border-top:1px solid var(--line);margin-top:56px;padding:24px 0 48px;color:var(--muted);font-size:13px}
+  .btns{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0 0}
+  .btn{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:10px 16px;
+       font-size:14px;font-weight:600}
+  .btn.primary{border-color:#2a6b3c;background:#12261a;color:#7ee2a3}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap hero">
+    <div class="kicker">Côte d'Ivoire · conseil agricole et élevage</div>
+    <h1>AGROGUIDCI
+      <small>Un agent principal agronome, six spécialistes, une seule réponse —
+      cohérente, prudente et traçable.</small>
+    </h1>
+    <p class="lead">Le producteur formule <strong>une demande</strong> : l'Agent Agronome Expert
+    clarifie le besoin, sélectionne les compétences utiles, délègue aux sous-agents, puis signe
+    une réponse unique — avec ses chiffres vérifiés, ses limites déclarées et son journal de
+    mission.</p>
+    <div class="btns">
+      <a class="btn primary" href="specs.html">Lire la spécification des agents</a>
+      <a class="btn" href="https://github.com/aicmaxter/agroguidci" target="_blank" rel="noopener">Code source (GitHub)</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <h2><span class="num">01</span>La règle centrale</h2>
+  <p><code>GOAL → PLAN → ACT → OBSERVE → DECIDE → ADAPT → VERIFY</code> puis
+  <strong>CONTINUE</strong>, <strong>STOP</strong> ou <strong>ESCALATE</strong>.</p>
+  <div class="loop">
+    <span class="pill">GOAL — clarifier le besoin</span>
+    <span class="pill">PLAN — choisir les compétences</span>
+    <span class="pill">ACT — agir ou déléguer</span>
+    <span class="pill">OBSERVE — lire le résultat réel</span>
+    <span class="pill">DECIDE — comparer à l'attendu</span>
+    <span class="pill">ADAPT — une seule relance</span>
+    <span class="pill">VERIFY — recalculer</span>
+    <span class="pill go">CONTINUE</span>
+    <span class="pill stop">STOP</span>
+    <span class="pill esc">ESCALATE</span>
+  </div>
+  <p>Le système ne se contente pas d'exécuter une tâche : il observe son propre résultat, détecte
+  l'écart, cherche une alternative autorisée, adapte son plan, vérifie — ou passe la main à un
+  humain.</p>
+
+  <h2><span class="num">02</span>L'architecture</h2>
+  <p><strong>AGROGUIDCI</strong> est la plateforme. L'<strong>Agent Agronome Expert</strong> est le
+  cerveau opérationnel : il traite l'agronomie en propre et coordonne. Les sous-agents ne sont
+  convoqués que lorsqu'ils sont utiles à la demande.</p>
+  <table>
+    <thead><tr><th>Agent</th><th>Rôle</th><th>Compétences</th><th>Outils réellement installés</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Agent Agronome Expert</strong><br><code>agro-agronome-01</code></td>
+        <td>Coordinateur et superviseur de la boucle ; agronomie traitée en propre</td>
+        <td>clarification, triage, planning, observation, décision, adaptation, vérification, synthèse, audit (9)</td>
+        <td><code>meteo_et_pluies</code>, <code>contexte_documentaire</code>, délégation aux sous-agents, validation humaine</td>
+      </tr>
+      <tr>
+        <td><strong>Techniques Agricoles</strong><br><code>agro-techniques-01</code></td>
+        <td>Itinéraire cultural : sol, semis, entretien, irrigation, récolte — sans produit ni dose</td>
+        <td>préparation du sol, semis, entretien, irrigation, post-récolte, observation parcelle (7)</td>
+        <td>base de connaissances locale (la recherche externe reste au sous-agent Recherche)</td>
+      </tr>
+      <tr>
+        <td><strong>Production Animale</strong><br><code>agro-elevage-01</code></td>
+        <td>Conduite d'élevage et biosécurité, avec escalade sanitaire obligatoire</td>
+        <td>conduite, nutrition, logement, reproduction, biosécurité, escalade sanitaire (6)</td>
+        <td>base locale ; aucun outil d'action sur l'animal</td>
+      </tr>
+      <tr>
+        <td><strong>Recherche Agricole</strong><br><code>agro-recherche-01</code></td>
+        <td>Données publiques datées et sourcées : météo, contexte, réglementation</td>
+        <td>recherche ciblée, évaluation des sources, météo, réglementaire, veille (6)</td>
+        <td><code>meteo_et_pluies</code> (Open-Meteo + géocodage), <code>contexte_documentaire</code></td>
+      </tr>
+      <tr>
+        <td><strong>Analyse de Données</strong><br><code>agro-analyste-01</code></td>
+        <td>Calcul économique et statistique sur les données fournies ; aucun pronostic</td>
+        <td>validation de données, anomalies, statistiques, marge, seuil, scenarios (7)</td>
+        <td><code>calculer_marge</code>, <code>analyser_tableau</code></td>
+      </tr>
+      <tr>
+        <td><strong>Relation Producteurs et Accompagnement</strong><br><code>agro-relation-01</code></td>
+        <td>Qualification, dossier producteur, brouillons de messages, parcours de suivi</td>
+        <td>qualification, dossier, plan d'accompagnement, rédaction, suivi, protection des données (6)</td>
+        <td><code>registre_producteur</code> (stockage local, données personnelles)</td>
+      </tr>
+      <tr>
+        <td><strong>Automatisation</strong><br><code>agro-automation-01</code></td>
+        <td>Calendriers et rappels explicitement demandés ; jamais d'action système seule</td>
+        <td>calendrier, rappels, échéances, doublons, vérification d'activation (6)</td>
+        <td><code>calendrier_et_rappels</code>, <code>activer_rappels</code> <span class="warn">(sensible)</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2><span class="num">03</span>Ce que le système ne fera jamais</h2>
+  <ul>
+    <li>Prescrire un pesticide, un traitement ou un <strong>dosage</strong>.</li>
+    <li>Prescrire un médicament vétérinaire ou poser un diagnostic définitif.</li>
+    <li>Annoncer un prix de marché, un rendement garanti, un revenu promis.</li>
+    <li>Inventer une donnée, une source, une URL ou la sortie d'un outil.</li>
+    <li>Envoyer un message, publier, acheter, payer, supprimer à votre place.</li>
+    <li>Donner un conseil médical humain.</li>
+  </ul>
+  <div class="note">Ce qui n'est pas su est écrit noir sur blanc : <strong>FAIT</strong>,
+  <strong>ORDRE DE GRANDEUR (à confirmer localement)</strong> ou <strong>INCONNU</strong> — et le
+  renvoi se fait vers l'échelon local : ANADER, CNRA, MINADER, MIRAH, vétérinaire, coopérative.</div>
+
+  <h2><span class="num">04</span>Gouvernance des actions</h2>
+  <table>
+    <thead><tr><th>Action</th><th>Mode</th><th>Règle appliquée</th></tr></thead>
+    <tbody>
+      <tr><td>Lire des documents autorisés</td><td class="ok">Automatique</td><td>Respecter le périmètre d'accès</td></tr>
+      <tr><td>Calculer / analyser des données fournies</td><td class="ok">Automatique</td><td>Contrôler unités, doublons, cohérence avant de publier un chiffre</td></tr>
+      <tr><td>Préparer un rapport ou un brouillon</td><td class="ok">Automatique</td><td>Un brouillon n'est jamais un envoi</td></tr>
+      <tr><td>Générer un fichier local (calendrier)</td><td class="ok">Automatique</td><td>Sur demande, dates explicites, fichier relu</td></tr>
+      <tr><td>Créer une tâche planifiée système</td><td class="warn">Validation humaine</td><td>Demande explicite, autorisation opérateur, puis vérification de l'état réel</td></tr>
+      <tr><td>Écrire dans une base persistante externe</td><td class="no">Interdit</td><td>Hors périmètre sans droits accordés</td></tr>
+      <tr><td>Envoyer un email / message externe</td><td class="no">Interdit</td><td>Aucun envoi automatique à un tiers</td></tr>
+      <tr><td>Acheter, payer, supprimer, publier</td><td class="no">Interdit</td><td>Validation humaine spécifique et procédure sûre</td></tr>
+    </tbody>
+  </table>
+  <div class="note warn">Un outil exécuté ne signifie pas que la mission a réussi : chaque
+  mission est <strong>recalculée indépendamment</strong> avant d'être remise, et une action
+  sensible <strong>dépose une demande</strong> qu'un opérateur approuve — le résultat réel est
+  relu avant d'être annoncé.</div>
+
+  <h2><span class="num">05</span>Preuves d'exécution</h2>
+  <div class="grid">
+    <div class="card"><h4><span class="ok">TERMINEE_VERIFIEE</span></h4>
+      <p>Mission cacao (Daloa, 3 ha) : marge recalculée indépendamment à l'identique —
+      recette 1 350 000 FCFA − charges 500 000 = <strong>850 000 FCFA</strong>, seuil
+      <strong>333,3 kg</strong>.</p></div>
+    <div class="card"><h4><span class="ok">7 / 7</span> tests de rupture</h4>
+      <p>Outil indisponible, données erronées, chemin inconnu, mission impossible, permission
+      refusée, information manquante, intégration déconnectée — comportements attendus tenus.</p></div>
+    <div class="card"><h4><span class="ok">Coherent</span></h4>
+      <p>Contrôle automatique <code>supervision.py --coherence</code> : chaque agent documenté,
+      chaque outil cité existe, chaque outil installé a un titulaire.</p></div>
+    <div class="card"><h4>États finaux</h4>
+      <p><code>TERMINEE_VERIFIEE</code>, <code>A_VALIDER</code>,
+      <code>EN_ATTENTE_INFORMATION</code>, <code>ECHEC_OUTIL</code>,
+      <code>ARRETEE_PERMISSION</code>, <code>ESCALADE_HUMAINE</code>.</p></div>
+  </div>
+
+  <h2><span class="num">06</span>Ce qui n'est pas connecté (et le reste dit)</h2>
+  <table>
+    <thead><tr><th>Capacité attendue</th><th>État</th><th>Conséquence pour le producteur</th></tr></thead>
+    <tbody>
+      <tr><td>Recherche web généraliste</td><td class="no">Non installé</td><td>Aucune citation inventée : le système déclare la source absente.</td></tr>
+      <tr><td>Prix de marché (bord champ, intrants)</td><td class="no">Non connecté</td><td>Les prix ne sont jamais affirmés : « à vérifier » auprès de la coopérative / du Conseil du Café-Cacao.</td></tr>
+      <tr><td>Envoi de notification / message</td><td class="no">Absent et interdit</td><td>Le message est préparé, l'envoi reste au producteur.</td></tr>
+      <tr><td>Tâche planifiée Windows</td><td class="warn">Actif mais sensible</td><td>Dépose une demande de validation ; un opérateur approuve, la tâche est relue.</td></tr>
+    </tbody>
+  </table>
+
+  <h2><span class="num">07</span>Exécuter le système</h2>
+<pre><code>python demarrer_agroguidci.py             # orchestrateur local + 7 agents
+python coordinateur.py --demande "A Daloa, 3 ha de cacao, 900 kg a 1500 FCFA le kg..."
+python supervision.py --etat              # agents réellement en ligne
+python supervision.py --charte            # rôles, compétences, outils, actions sensibles
+python supervision.py --coherence         # spec &lt;-&gt; agents &lt;-&gt; outils
+python validation.py --lister             # actions sensibles en attente d'un humain
+python tests_j2.py                        # les sept ruptures + rapport de preuves</code></pre>
+  <p>Le système tourne en local : un orchestrateur FastAPI, sept agents Python, une base de
+  connaissances agricole ivoirienne (agronomie, techniques culturales, production animale,
+  services) et un journal de mission par demande.</p>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    AGROGUIDCI — Agent Agronome Expert &amp; sous-agents · spécification « Autonomize / make it
+    adapt », Jour 2 · <a href="specs.html">Agent specs</a> ·
+    <a href="https://github.com/aicmaxter/agroguidci" target="_blank" rel="noopener">dépôt git</a>.<br>
+    Cette page décrit le système ; elle n'exécute aucun agent. Les chiffres cités sont des
+    résultats de calcul sur des données fournies, pas des références de marché.
+  </div>
+</footer>
+</body>
+</html>
