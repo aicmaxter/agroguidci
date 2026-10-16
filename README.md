@@ -1,9 +1,16 @@
 # AGROGUIDCI — Expert Coordinateur d'accompagnement agricole (Côte d'Ivoire)
 
+**Site public** : https://agroguidci.vercel.app · **Agent specs** :
+https://agroguidci.vercel.app/specs.html
+
 Système multi-agents local qui accompagne les producteurs ivoiriens (agriculture
 et élevage) : il **clarifie** la demande, **sélectionne** les compétences
 nécessaires, **coordonne** le travail des experts et rend une réponse **unique,
 prudente et traçable**.
+
+> Le site Vercel présente le système et sa spécification ; il n'exécute aucun agent.
+> Le moteur (orchestrateur local + 7 agents Python) tourne sur un poste, pas dans un
+> environnement serverless — voir « Déploiement » en fin de document.
 
 ## Composition
 
@@ -258,3 +265,28 @@ Aucune modification du moteur (coordinateur, boucle d'agent) n'est nécessaire.
 | `verifier_rappels.py` | relit `data/automatisations/rappels.json` et liste les échéances échues/à venir (tâche planifiée possible) |
 | `data/producteurs/`, `data/automatisations/`, `data/validations/` | données locales : dossiers producteurs, file de rappels, demandes de validation |
 | `logs/`, `out/` | journaux d'exécution et livrables |
+| `web/` | page publique du projet (`index.html`, `specs.html`, `agent-specs.html`) + `build_docs.py` qui rend `SOUL.md` en HTML |
+
+## Déploiement
+
+| Où | Quoi | État |
+|---|---|---|
+| **GitHub** — https://github.com/aicmaxter/agroguidci | le code complet (moteur, agents, outils, tests, `SOUL.md`) | publié, branche `main` |
+| **Vercel** — https://agroguidci.vercel.app | la **vitrine et la spécification** (`web/`) | déployé, `READY` |
+
+**Pourquoi le moteur n'est pas sur Vercel** : AGROGUIDCI est un runtime *local* — un
+orchestrateur FastAPI (`127.0.0.1:8000`, SQLite), **sept processus d'agents** qui tournent en
+continu, un état disque (`data/`, `out/`) et une action Windows (`schtasks`). Un environnement
+serverless ne fournit ni processus longue durée, ni orchestrateur local, ni disque persistant,
+ni `schtasks` : y déployer le moteur demanderait de le réécrire (orchestrateur hébergé, état en
+base, file d'attente). Le site Vercel ne prétend donc pas exécuter d'agent — il décrit le
+système et publie ses spécifications.
+
+**Pour rendre le moteur accessible en ligne** (étape suivante, non faite) : héberger
+l'orchestrateur et les agents sur un conteneur (VPS, Fly.io, Render), garder ce site Vercel
+comme interface, et exposer `coordinateur.py` derrière une API HTTP authentifiée. Les clés
+resteraient côté serveur, jamais dans le dépôt ni dans le navigateur.
+
+**Contenus exclus de la publication** (`.gitignore`) : `.env`, `.agent-token*.json` (jetons
+d'enrôlement), `data/` (dossiers producteurs — données personnelles), `out/`, `logs/`.
+
