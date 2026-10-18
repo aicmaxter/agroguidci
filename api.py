@@ -1,29 +1,28 @@
-# api.py — version Render : lance l'orchestrateur en arrière-plan
+# api.py — version Render avec attente de l'orchestrateur
 import subprocess
 import sys
 import time
+import os
+import uuid
+import re
+import urllib.request
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
-import uuid, re, os
 
-# --- 1. Lancer l'orchestrateur en arrière-plan au démarrage ---
-# On vérifie qu'on est bien sur Render (variable PORT définie)
+# --- 1. Lancer l'orchestrateur en arrière-plan ---
 if os.environ.get("PORT"):
-    print("Démarrage de l'orchestrateur en arrière-plan...")
+    print("Démarrage de l'orchestrateur...")
     subprocess.Popen(
         [sys.executable, "demarrer_agroguidci.py"],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE
     )
-    time.sleep(5)  # Attendre que l'orchestrateur démarre
 
 # --- 2. Importer le moteur ---
 from coordinateur import Coordonnateur
 
 app = FastAPI(title="AGROGUIDCI — démo")
 coord = Coordonnateur()
-MISSIONS = {}
 CHEMIN_INTERDIT = re.compile(r"(\.csv|:\\|/|\\\\)", re.IGNORECASE)
 
 class Demande(BaseModel):
@@ -33,19 +32,33 @@ class Demande(BaseModel):
 def lancer(d: Demande):
     texte = (d.texte or "").strip()
     if CHEMIN_INTERDIT.search(texte):
-        raise HTTPException(400, "Chemins de fichiers non autorisés.")
-    if len(texte) < 20:
-        raise HTTPException(400, "Demande trop courte.")
+        raise HTTPException(400, "Chemins interdits.")
     
+    # --- 3. Attendre que l'orchestrateur soit prêt ---
+    # On boucle pendant 20 secondes max pour voir si le port 8000 répond
+    orchestrateur_pret = False
+    for _ in range(20):
+        try:
+            req = urllib.request.Request("http://127.0.0.1:8000/health", method="GET")
+            with urllib.request.urlopen(req, timeout=1) as response:
+                if response.status == 200:
+                    orchestrateur_pret = True
+                    break
+        except Exception:
+            time.sleep(1) # On attend 1 seconde et on réessaie
+    
+    if not orchestrateur_pret:
+        return {"id": "error", "erreur": "L'orchestrateur met trop de temps à démarrer sur Render."}
+
     mid = str(uuid.uuid4())[:8]
     debut = time.time()
     
     try:
+        # Appel du moteur (l'orchestrateur est maintenant prêt)
         resultat = coord.traiter(texte, etiquette=mid)
     except Exception as e:
         return {"id": mid, "demande": texte, "erreur": f"{type(e).__name__}: {e}"}
     
-    # Mapping tolérant
     def _get(d, *cles):
         if not isinstance(d, dict): return None
         for c in cles:
@@ -64,7 +77,7 @@ def lancer(d: Demande):
 
 @app.get("/")
 def page():
-    return {"status": "API AGROGUIDCI en ligne", "orchestrateur": "démarré" if os.environ.get("PORT") else "local"}
+    return {"status": "API AGROGUIDCI en ligne"}
 
 if __name__ == "__main__":
     import uvicorn
