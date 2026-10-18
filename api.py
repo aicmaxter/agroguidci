@@ -1,32 +1,31 @@
-# api.py — version Render avec attente de l'orchestrateur
-import subprocess
 import sys
 import time
 import os
 import uuid
 import re
-import urllib.request
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-# --- 1. Lancer l'orchestrateur en arrière-plan ---
-if os.environ.get("PORT"):
-    print("Démarrage de l'orchestrateur...")
-    subprocess.Popen(
-        [sys.executable, "demarrer_agroguidci.py"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE
-    )
-
-# --- 2. Importer le moteur ---
 from coordinateur import Coordonnateur
 
 app = FastAPI(title="AGROGUIDCI — démo")
+
+# --- CORS : indispensable pour que Lovable (ou ton navigateur) puisse parler à ton PC ---
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 coord = Coordonnateur()
 CHEMIN_INTERDIT = re.compile(r"(\.csv|:\\|/|\\\\)", re.IGNORECASE)
 
 class Demande(BaseModel):
     texte: str
+    langue: str = "Français"
 
 @app.post("/api/demande")
 def lancer(d: Demande):
@@ -34,28 +33,14 @@ def lancer(d: Demande):
     if CHEMIN_INTERDIT.search(texte):
         raise HTTPException(400, "Chemins interdits.")
     
-    # --- 3. Attendre que l'orchestrateur soit prêt ---
-    # On boucle pendant 20 secondes max pour voir si le port 8000 répond
-    orchestrateur_pret = False
-    for _ in range(20):
-        try:
-            req = urllib.request.Request("http://127.0.0.1:8000/health", method="GET")
-            with urllib.request.urlopen(req, timeout=1) as response:
-                if response.status == 200:
-                    orchestrateur_pret = True
-                    break
-        except Exception:
-            time.sleep(1) # On attend 1 seconde et on réessaie
-    
-    if not orchestrateur_pret:
-        return {"id": "error", "erreur": "L'orchestrateur met trop de temps à démarrer sur Render."}
-
     mid = str(uuid.uuid4())[:8]
     debut = time.time()
     
+    # On ajoute la langue au début pour que le moteur réponde dans la bonne langue
+    demande_enrichie = f"[Langue de réponse demandée : {d.langue}] {texte}"
+    
     try:
-        # Appel du moteur (l'orchestrateur est maintenant prêt)
-        resultat = coord.traiter(texte, etiquette=mid)
+        resultat = coord.traiter(demande_enrichie, etiquette=mid)
     except Exception as e:
         return {"id": mid, "demande": texte, "erreur": f"{type(e).__name__}: {e}"}
     
@@ -81,5 +66,5 @@ def page():
 
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.environ.get("PORT", 8080))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    # On écoute sur 0.0.0.0 pour être accessible par ton navigateur local
+    uvicorn.run(app, host="0.0.0.0", port=8080)
