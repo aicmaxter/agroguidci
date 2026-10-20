@@ -29,6 +29,14 @@
 
 	log {
 		output stdout
-		format console
+		# Les en-têtes porteurs de secrets (clé du moteur, jeton d'autorisation) sont
+		# supprimés avant écriture : les journaux ne doivent jamais contenir la clé.
+		format filter {
+			wrap console
+			fields {
+				request>headers>X-Api-Key delete
+				request>headers>Authorization delete
+			}
+		}
 	}
 }
