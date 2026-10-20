@@ -21,6 +21,7 @@ import io
 import json
 import os
 import re
+import stat
 import statistics
 import subprocess
 import sys
@@ -248,23 +249,149 @@ def _nombre(txt: str) -> float | None:
         return None
 
 
+RE_NOM_CSV_CITE = re.compile(r"(?i)([A-Za-z0-9_][A-Za-z0-9_.\-]{0,80}\.csv)")
+RE_CHEMIN_SUSPECT = re.compile(r"(?i)((?:[a-z]:[\\/]|\\\\|\.\.[\\/]|[\\/])[^\s\"'|<>]{0,120})")
+
+
+def _dossier_import() -> Path:
+    """Dossier du canal d'import autorise (R1). Surchargeable pour les tests."""
+    brut = (os.environ.get("AGRO_IMPORT_DIR") or "").strip()
+    return Path(brut).expanduser() if brut else (DATA / "imports")
+
+
+def _description_canal() -> str:
+    """Libelle du canal d'import, sans divulguer de chemin absolu du poste."""
+    try:
+        return str(_dossier_import().resolve().relative_to(ROOT))
+    except (OSError, ValueError):
+        return "(dossier defini par AGRO_IMPORT_DIR)"
+
+
+def _refus_import(motif: str, titre: str = "FICHIER ABSENT") -> str:
+    """Bloc de refus unique : marqueur d'echec, aucune donnee produite."""
+    return (f"{MARQUEUR_ECHEC} analyser_tableau — {motif}\n"
+            f"### Analyse de tableau — {titre}\n"
+            "Aucun chemin ecrit dans la demande n'est ouvert par cet outil. Seul un "
+            f"fichier depose dans le canal d'import autorise `{_description_canal()}` est "
+            "lu, et uniquement par son nom (sans separateur ni lettre de lecteur). "
+            "Transmettre le fichier par ce canal, ou coller les lignes du tableau dans la "
+            "demande. Aucune donnee n'a ete produite : ne rien affirmer sur ce tableau.")
+
+
+def _nom_import_valide(nom: str) -> str | None:
+    """Nom de fichier acceptable : simple nom .csv, sans separateur ni ':' (R1)."""
+    base = (nom or "").strip()
+    if not base or base in (".", ".."):
+        return None
+    if any(c in base for c in ("/", "\\", ":", "\x00")):
+        return None
+    if not base.lower().endswith(".csv"):
+        return None
+    return base
+
+
+def _chemin_import_autorise(nom: str) -> Path | None:
+    """Resout un nom de fichier DANS le canal d'import, jamais ailleurs (R1 / R1-B).
+
+    - refuse tout separateur, ':' (lecteur de disque, flux alternatif NTFS), NUL ;
+    - resout les liens puis verifie le confinement sous le dossier d'import ;
+    - refuse un fichier portant plusieurs liens durs (st_nlink > 1) : un lien dur
+      permet d'atteindre un fichier hors du canal tout en restant dans son chemin ;
+    - fichier absent, illisible ou modifie pendant le controle -> None.
+    """
+    base = _nom_import_valide(nom)
+    if base is None:
+        return None
+    try:
+        racine = _dossier_import().resolve()
+        cible = (racine / base).resolve(strict=False)
+        cible.relative_to(racine)      # confinement : un lien sortant est refuse
+        if not cible.is_file():
+            return None
+        if os.stat(cible).st_nlink > 1:
+            return None
+    except (OSError, ValueError):
+        return None
+    return cible
+
+
+def _lire_import_autorise(nom: str) -> tuple[str | None, str]:
+    """Lit un fichier du canal d'import en validant le DESCRIPTEUR, pas le chemin (R1-B).
+
+    Le chemin est controle une premiere fois (confinement + liens durs), puis le
+    fichier est ouvert et recontrole sur le descripteur obtenu : type de fichier,
+    nombre de liens, identite (numero d'inode + peripherique) comparee au chemin.
+    La lecture se fait depuis ce meme descripteur : remplacer le chemin entre le
+    controle et la lecture n'a aucun effet, et faire disparaitre le fichier ne
+    provoque pas de fuite (erreur declaree).
+
+    Renvoie (texte, "") en cas de succes, (None, motif) sinon.
+    """
+    base = _nom_import_valide(nom)
+    if base is None:
+        return None, "nom de fichier refuse"
+    cible = _chemin_import_autorise(base)
+    if cible is None:
+        # message precis : lien dur detecte, ou fichier absent du canal
+        try:
+            liens = os.stat(_dossier_import() / base).st_nlink
+        except OSError:
+            return None, "hors_canal"
+        if liens > 1:
+            return None, f"lien dur refuse ({liens} liens)"
+        return None, "hors_canal"
+    drapeaux = os.O_RDONLY | getattr(os, "O_BINARY", 0) | getattr(os, "O_NOFOLLOW", 0)
+    try:
+        fd = os.open(str(cible), drapeaux)
+    except OSError as e:
+        return None, f"ouverture refusee ({type(e).__name__})"
+    try:
+        try:
+            etat = os.fstat(fd)
+            etat_chemin = os.stat(str(cible))
+        except OSError as e:
+            return None, f"fichier disparu pendant le controle ({type(e).__name__})"
+        if not stat.S_ISREG(etat.st_mode):
+            return None, "n'est pas un fichier ordinaire"
+        if etat.st_nlink > 1:
+            return None, f"lien dur refuse ({etat.st_nlink} liens)"
+        if (etat.st_ino, etat.st_dev) != (etat_chemin.st_ino, etat_chemin.st_dev):
+            return None, "fichier remplace pendant le controle"
+        try:
+            fichier = os.fdopen(fd, "r", encoding="utf-8", errors="replace")
+        except OSError as e:
+            return None, f"lecture refusee ({type(e).__name__})"
+        fd = -1                     # le descripteur appartient desormais au fichier
+        with fichier:
+            return fichier.read(), ""
+    finally:
+        if fd >= 0:
+            os.close(fd)
+
+
 def analyser_tableau(demande: str, contexte: str, dossier: Path) -> str:
-    """Statistiques descriptives calculées sur un tableau CSV fourni (fichier ou texte)."""
+    """Statistiques descriptives sur un tableau CSV fourni (texte) ou importe (R1).
+
+    Aucun chemin ecrit dans la demande n'est ouvert. Un fichier n'est lu que s'il
+    a ete depose dans le canal d'import autorise (`AGRO_IMPORT_DIR`, par defaut
+    `data/imports`), cite par son seul nom, et valide sur le descripteur ouvert
+    (R1-B : liens durs refuses, remplacement du chemin sans effet).
+    """
     texte, origine = "", ""
-    m = re.search(r"([A-Za-z]:[\\/][^\"'|<>\n]+?\.csv|[\w./\\-]+\.csv)", demande)
-    if m:
-        chemin = Path(m.group(1))
-        if chemin.exists():
-            origine = str(chemin)
-            texte = chemin.read_text(encoding="utf-8", errors="replace")
-            sep = ";" if texte.count(";") >= texte.count(",") else ","
-        else:
-            # LAB 18 « chemin inconnu » : on dit que le fichier est absent, on n'invente rien.
-            return (f"{MARQUEUR_ECHEC} analyser_tableau — fichier cite mais introuvable : {chemin}\n"
-                    f"### Analyse de tableau — FICHIER ABSENT\n"
-                    f"Le chemin `{chemin}` n'existe pas sur le poste. Aucun contenu ne sera "
-                    "invente : demander le fichier (ou les chiffres) au producteur, ou fournir un "
-                    "chemin valide.")
+    nom_cite = RE_NOM_CSV_CITE.search(demande)
+    if nom_cite:
+        nom = nom_cite.group(1).strip()
+        chemin_suspect = RE_CHEMIN_SUSPECT.search(demande)
+        if chemin_suspect:
+            return _refus_import("reference de chemin refusee "
+                                 f"({chemin_suspect.group(1).strip()[:120]})")
+        texte, motif = _lire_import_autorise(nom)
+        if texte is None:
+            if motif == "hors_canal":
+                return _refus_import(f"fichier absent du canal d'import autorise ({nom[:120]})")
+            return _refus_import(f"{motif} ({nom[:120]})", "FICHIER REFUSE")
+        origine = f"canal d'import autorise : {_nom_import_valide(nom) or nom}"
+        sep = ";" if texte.count(";") >= texte.count(",") else ","
     else:
         lignes_csv = [l for l in demande.splitlines()
                       if len(re.findall(r"[;,\t]", l)) >= 1 and len(re.findall(r"-?\d", l)) >= 2]
