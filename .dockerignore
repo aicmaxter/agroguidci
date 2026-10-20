@@ -1,0 +1,19 @@
+# Contexte de build du moteur : ne rien envoyer d'inutile ni de sensible.
+.git
+.github
+.vercel
+.env
+.env.*
+.agent-token*.json
+data/
+out/
+logs/
+__pycache__/
+*.pyc
+web/assets/*.jpg
+vps/orchestrateur/.git
+vps/orchestrateur/data
+vps/orchestrateur/logs
+vps/orchestrateur/*.db*
+tests_*.py
+dev/

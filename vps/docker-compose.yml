@@ -1,0 +1,73 @@
+# AGROGUIDCI — moteur sur VPS : orchestrateur + agents + API, derrière Caddy (TLS).
+#
+#   cp .env.example .env    # puis renseigner les clés
+#   docker compose up -d --build
+#
+# La vitrine Vercel appelle ce service via ses fonctions api/ (la clé reste côté serveur).
+
+name: agroguidci
+
+services:
+  orchestrateur:
+    build:
+      context: ..
+      dockerfile: vps/Dockerfile.orchestrateur
+    environment:
+      ORCH_HOST: 0.0.0.0
+      ORCH_PORT: "8000"
+      ORCH_LEASE: "900"                 # une coordination enchaîne plusieurs appels de modèle
+      ORCH_DELEGATE_TIMEOUT: "420"
+      ORCH_ADMIN_KEY: ${ORCH_ADMIN_KEY}
+    volumes:
+      - orch-etat:/app                  # .keys.json + base SQLite : à conserver
+    expose:
+      - "8000"
+    restart: unless-stopped
+
+  moteur:
+    build:
+      context: ..
+      dockerfile: vps/Dockerfile.moteur
+    depends_on:
+      - orchestrateur
+    environment:
+      AGRO_ORCH: http://orchestrateur:8000
+      AGRO_KEYS: /cles/.keys.json       # clés écrites par l'orchestrateur (lecture seule)
+      AGRO_API_KEY: ${AGRO_API_KEY}     # clé exigée par l'API (et par la vitrine)
+      AGRO_CORS_ORIGINS: ${AGRO_CORS_ORIGINS}
+      AGRO_MAX_CONCURRENCE: ${AGRO_MAX_CONCURRENCE:-2}
+      AGRO_BUDGET_S: ${AGRO_BUDGET_S:-300}
+      AGRO_LLM_MODEL: ${AGRO_LLM_MODEL:-}
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY}
+      ORCH_ATTENTE_S: "120"
+    volumes:
+      - orch-etat:/cles:ro
+      - agro-data:/app/data             # dossiers producteurs, missions
+      - agro-out:/app/out               # rapports, traces, pièces justificatives
+      - agro-logs:/app/logs
+    ports:
+      - "127.0.0.1:8080:8080"           # jamais exposé directement : Caddy fait le TLS
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2-alpine
+    depends_on:
+      - moteur
+    environment:
+      AGRO_DOMAINE: ${AGRO_DOMAINE}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    restart: unless-stopped
+
+volumes:
+  orch-etat:
+  agro-data:
+  agro-out:
+  agro-logs:
+  caddy-data:
+  caddy-config:

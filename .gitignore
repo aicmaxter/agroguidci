@@ -29,3 +29,7 @@ venv/
 
 .vercel
 .env*
+
+# --- deploiement VPS (copies locales, jamais commitées) ---
+vps/.env
+vps/orchestrateur/

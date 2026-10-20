@@ -5,9 +5,10 @@
 (function () {
   "use strict";
 
-  // Moteur AGROGUIDCI (agents hébergés). Appel same-origin : /api/* est proxifié
-  // vers agroguidci-saas par vercel.json. Surchargeable : window.AGRO_API = "…".
+  // Moteur AGROGUIDCI. Appel same-origin : /api/* est relayé au moteur hébergé (VPS)
+  // par les fonctions de api/ — la clé du moteur reste côté serveur Vercel.
   var API = window.AGRO_API || "/api/demande";
+  var SUIVI = window.AGRO_SUIVI || API.replace(/\/demande\/?$/, "/missions/");
   var TIMEOUT_MS = 240000;   // une coordination enchaîne plusieurs appels de modèle
 
   /* ---------- menu mobile ---------- */
@@ -292,26 +293,72 @@
 
       btn.disabled = true;
       btn.innerHTML = '<span class="spin" aria-hidden="true"></span> Analyse en cours…';
-      setStatut("Les agents travaillent (météo, base de connaissances, vérification) — comptez 15 à 60 secondes.");
+      setStatut("Les agents travaillent (météo, base de connaissances, vérification) — comptez 20 à 120 secondes.");
 
       var ctrl = new AbortController();
-      var minuteur = setTimeout(function () { ctrl.abort(); }, TIMEOUT_MS);
+      var minuteur = setTimeout(function () { ctrl.abort(); }, 30000);
+
+      // Suivi d'une mission asynchrone : le moteur rend un identifiant, on interroge
+      // son état toutes les 3 s (aucune limite de durée d'exécution intermédiaire).
+      function suivre(jid) {
+        var debut = Date.now();
+        return new Promise(function (resoudre, rejeter) {
+          function tour() {
+            var ecoule = Math.round((Date.now() - debut) / 1000);
+            setStatut("Mission " + jid + " en cours — " + ecoule + " s. Les agents travaillent…");
+            fetch(SUIVI + encodeURIComponent(jid), { cache: "no-store" })
+              .then(function (r) {
+                return r.text().then(function (t) {
+                  var j = {};
+                  try { j = t ? JSON.parse(t) : {}; } catch (e) {}
+                  return { ok: r.ok, code: r.status, corps: j };
+                });
+              })
+              .then(function (o) {
+                if (o.code === 404) throw new Error("mission expirée ou inconnue côté moteur");
+                if (!o.ok) throw new Error((o.corps && (o.corps.erreur || o.corps.detail)) || ("HTTP " + o.code));
+                var st = o.corps && o.corps.statut;
+                if (st === "termine" && o.corps.data) {
+                  afficherReponse(o.corps.data);
+                  setStatut("Réponse rendue en " + (o.corps.duree_s || ecoule) + " s.");
+                  return resoudre();
+                }
+                if (st === "echec") {
+                  afficherEchec((o.corps && o.corps.erreur) || "échec du moteur");
+                  setStatut("Aucune réponse produite : " + ((o.corps && o.corps.erreur) || "échec"), true);
+                  return resoudre();
+                }
+                if (ecoule > 300) throw new Error("le moteur n'a pas conclu dans le délai imparti");
+                setTimeout(tour, 3000);
+              })
+              .catch(rejeter);
+          }
+          tour();
+        });
+      }
 
       fetch(API, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ texte: payload.texte, profil: payload.profil, async: true }),
         signal: ctrl.signal
       }).then(function (r) {
-        return r.json().catch(function () { return {}; }).then(function (j) {
-          if (!r.ok) throw new Error((j && (j.erreur || j.error)) || ("HTTP " + r.status));
+        return r.text().then(function (t) {
+          var j = {};
+          try { j = t ? JSON.parse(t) : {}; } catch (e) {}
+          if (!r.ok && r.status !== 202) {
+            throw new Error((j && (j.erreur || j.detail)) || ("HTTP " + r.status));
+          }
           return j;
         });
       }).then(function (j) {
-        var d = j && j.data ? j.data : j;
-        if (!d || (!d.rapport && !d.etat_final)) throw new Error("réponse inattendue du moteur");
-        afficherReponse(d);
-        setStatut("Réponse rendue en " + (d.duree_s != null ? d.duree_s + " s" : "quelques secondes") + ".");
+        if (j && j.data) {                    // moteur synchrone : réponse directe
+          afficherReponse(j.data);
+          setStatut("Réponse rendue en " + (j.data.duree_s != null ? j.data.duree_s + " s" : "quelques secondes") + ".");
+          return;
+        }
+        if (j && j.id) return suivre(j.id);   // moteur asynchrone : on suit la mission
+        throw new Error("réponse inattendue du moteur");
       }).catch(function (err) {
         var msg = err && err.name === "AbortError"
           ? "Le moteur n'a pas répondu dans le délai imparti."

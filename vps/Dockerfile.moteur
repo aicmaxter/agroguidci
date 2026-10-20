@@ -1,0 +1,33 @@
+# Moteur AGROGUIDCI — agents + API HTTP.
+# Contexte de build : la racine du dépôt (voir vps/docker-compose.yml).
+FROM python:3.12-slim
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    AGRO_API_HOST=0.0.0.0 \
+    AGRO_API_PORT=8080
+
+WORKDIR /app
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends curl \
+ && rm -rf /var/lib/apt/lists/*
+
+COPY requirements-moteur.txt ./requirements-moteur.txt
+RUN pip install --no-cache-dir -r requirements-moteur.txt
+
+COPY . .
+
+# Utilisateur non privilégié ; les volumes nommés héritent de ces droits au 1er montage.
+RUN useradd --create-home --uid 10001 agro \
+ && mkdir -p data out logs \
+ && chown -R agro:agro /app
+USER agro
+
+EXPOSE 8080
+HEALTHCHECK --interval=20s --timeout=5s --start-period=40s --retries=5 \
+    CMD curl -fsS http://127.0.0.1:8080/health || exit 1
+
+# superviseur : six sous-agents + agent principal + API, enfants relancés si besoin
+CMD ["python", "-u", "vps/superviseur.py"]

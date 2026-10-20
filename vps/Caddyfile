@@ -1,0 +1,34 @@
+# TLS automatique (Let's Encrypt) devant le moteur AGROGUIDCI.
+# Renseigner AGRO_DOMAINE dans .env (ex. api.agroguidci.org) et pointer son
+# enregistrement A vers l'IP du VPS avant de lancer Caddy.
+
+{$AGRO_DOMAINE} {
+	encode zstd gzip
+
+	# L'API n'a que trois routes utiles : on ferme tout le reste.
+	@autorise path /health /api/demande /api/demande/ /api/missions/* /api/etat
+	handle @autorise {
+		reverse_proxy moteur:8080 {
+			# une coordination peut durer 2 minutes côté moteur
+			transport http {
+				read_timeout 300s
+				write_timeout 300s
+			}
+		}
+	}
+	handle {
+		respond "Rien ici." 404
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		-Server
+	}
+
+	log {
+		output stdout
+		format console
+	}
+}

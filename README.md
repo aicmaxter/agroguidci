@@ -175,6 +175,43 @@ présentées comme faites, montants sans source. Le résultat est joint au rappo
 | t6 information manquante | ni localité ni filière | `EN_ATTENTE_INFORMATION` + questions |
 | t7 intégration indisponible | clé du modèle invalide | échec déclaré, aucun conseil inventé |
 
+## API HTTP du moteur (pour un VPS)
+
+Le moteur s'expose derrière HTTP, avec authentification par clé :
+
+```bash
+AGRO_API_KEY=… python serveur_api.py        # 0.0.0.0:8080
+
+GET  /health            état du service, orchestrateur et agents en ligne (public)
+GET  /api/demande       mode d'emploi du POST (public)
+POST /api/demande       { texte, profil? } → rapport complet (clé requise)
+GET  /api/missions/{id} suivi d'une mission lancée avec {"async": true} (clé requise)
+GET  /api/etat          réseau d'agents vu par l'orchestrateur (clé requise)
+```
+
+- **Clé obligatoire** (`X-API-Key` ou `Authorization: Bearer`), comparaison à temps
+  constant ; le service refuse de démarrer sans `AGRO_API_KEY`.
+- **Deux modes** : synchrone (la réponse arrive en 40-120 s) et **asynchrone**
+  (`{"async": true}` → `202 {id, suivi}`, puis interrogation toutes les 3 s). Le mode
+  asynchrone est celui qu'utilise la vitrine : une fonction serverless ne peut pas
+  attendre deux minutes.
+- **Bornes** : concurrence (`AGRO_MAX_CONCURRENCE`, 2 par défaut), durée
+  (`AGRO_BUDGET_S`, 300 s), taille de texte (4000 caractères), CORS limité aux
+  origines déclarées. Une erreur est toujours déclarée (429 / 503 / 504 / 500) —
+  jamais compensée par une réponse inventée.
+
+    python tests_api.py          # 21 tests : auth, validation, CORS, enveloppe, async
+
+Déploiement complet (Docker Compose, Caddy/TLS, systemd, bascule de la vitrine) :
+**`DEPLOIEMENT-VPS.md`**. En résumé :
+
+```bash
+# sur le VPS
+cd /opt/agroguidci/vps && cp .env.example .env && docker compose up -d --build
+# depuis le poste de dev : branche la vitrine sur ce moteur
+AGRO_API_KEY=… ./scripts/basculer-moteur.sh https://api.<domaine>
+```
+
 ## Utiliser
 
 ```bash
@@ -265,10 +302,17 @@ Aucune modification du moteur (coordinateur, boucle d'agent) n'est nécessaire.
 | `AGENT-SPECS.md` | même contenu hors contexte « SOUL.md », pour partage/revue |
 | `supervision.py` | **supervision** : `--etat` (agents réels), `--charte` (gouvernance), `--runs`, `--validations`, `--journal` |
 | `verifier_rappels.py` | relit `data/automatisations/rappels.json` et liste les échéances échues/à venir (tâche planifiée possible) |
+| `serveur_api.py` | **API HTTP du moteur** : `/health`, `POST /api/demande` (sync + `async`), `GET /api/missions/{id}`, `GET /api/etat` — clé d'API, CORS, bornes de concurrence et de durée |
+| `tests_api.py` | **tests de l'API** (21 cas : auth, validation, CORS, enveloppe, mode asynchrone) — aucun appel réseau, moteur doublé |
+| `vps/` | **déploiement VPS** : `docker-compose.yml`, `Dockerfile.moteur`, `Dockerfile.orchestrateur`, `superviseur.py`, `Caddyfile` (TLS), `agroguidci.service` (systemd), `.env.example` |
+| `api/` | fonctions Vercel qui relaient la vitrine au moteur (`demande.js`, `missions/[id].js`) en gardant la clé côté serveur |
+| `scripts/basculer-moteur.sh` | vérifie le moteur, écrit `AGRO_ENGINE_URL`/`AGRO_ENGINE_KEY` sur Vercel, redéploie et teste la chaîne complète |
+| `dev/serveur_local.js` | serveur de dev : sert `web/` **et** exécute les fonctions `api/` (chaîne complète sans déployer) |
+| `DEPLOIEMENT-VPS.md` | procédure complète : VPS, DNS, secrets, Docker, vérifications, exploitation, sauvegardes |
 | `data/producteurs/`, `data/automatisations/`, `data/validations/` | données locales : dossiers producteurs, file de rappels, demandes de validation |
 | `logs/`, `out/` | journaux d'exécution et livrables |
 | `web/` | page publique du projet (`index.html` = vitrine, `specs.html`, `agent-specs.html`) + `assets/` (styles, script, photos, géographie) + `build_docs.py` qui rend `SOUL.md` en HTML |
-| `vercel.json` | publie `web/` et proxifie `/api/*` vers le moteur hébergé (`agroguidci-saas`) — le formulaire de la vitrine appelle ainsi le moteur en same-origin, sans CORS |
+| `vercel.json` | publie `web/` et déclare les fonctions `api/*` (durées d'exécution) — la clé du moteur reste dans les variables Vercel |
 
 ## Déploiement
 
@@ -296,10 +340,16 @@ orchestrateur FastAPI (`127.0.0.1:8000`, SQLite), **sept processus d'agents** qu
 continu, un état disque (`data/`, `out/`) et une action Windows (`schtasks`). Ce mode donne la
 supervision, les validations humaines et les tests de rupture décrits plus haut.
 
-**Variante hébergée** : `agroguidci-saas.vercel.app` expose le moteur derrière
-`POST /api/demande` (`{ texte, profil }` → rapport, état final, sources, limites), sans
-supervision ni état disque. C'est ce que la vitrine appelle. Les clés restent côté serveur,
-jamais dans le dépôt ni dans le navigateur.
+**Moteur hébergé sur VPS** : `serveur_api.py` expose le moteur derrière
+`POST /api/demande` (`{ texte, profil }` → rapport, état final, sources, limites,
+étapes), avec clé d'API et mode asynchrone. La vitrine ne l'appelle pas directement :
+les fonctions `api/demande.js` et `api/missions/[id].js` du projet Vercel relaient les
+requêtes et détiennent seules `AGRO_ENGINE_URL` / `AGRO_ENGINE_KEY` — la clé n'apparaît
+ni dans la page, ni dans le dépôt. Procédure complète : `DEPLOIEMENT-VPS.md`.
+
+Tant que `AGRO_ENGINE_URL` n'est pas renseignée, les fonctions retombent sur le moteur
+hébergé `agroguidci-saas.vercel.app` (autre projet Next.js, même corpus `knowledge/`,
+sans supervision ni état disque) : c'est un repli, pas la cible.
 
 **Contenus exclus de la publication** (`.gitignore`) : `.env`, `.agent-token*.json` (jetons
 d'enrôlement), `data/` (dossiers producteurs — données personnelles), `out/`, `logs/`.

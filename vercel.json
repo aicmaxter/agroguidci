@@ -2,9 +2,10 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "outputDirectory": "web",
   "cleanUrls": true,
-  "rewrites": [
-    { "source": "/api/:path*", "destination": "https://agroguidci-saas.vercel.app/api/:path*" }
-  ],
+  "functions": {
+    "api/demande.js": { "maxDuration": 30 },
+    "api/missions/[id].js": { "maxDuration": 15 }
+  },
   "headers": [
     {
       "source": "/assets/(.*)",

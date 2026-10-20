@@ -1,0 +1,33 @@
+[Unit]
+Description=AGROGUIDCI — moteur multi-agents (agents + API HTTP)
+Documentation=https://github.com/aicmaxter/agroguidci
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Alternative sans Docker : le même superviseur, dans un venv.
+User=agro
+Group=agro
+WorkingDirectory=/opt/agroguidci
+EnvironmentFile=/opt/agroguidci/vps/.env
+# L'orchestrateur tourne alors comme service séparé (agroguidci-orchestrateur.service)
+# et écoute sur 127.0.0.1:8000.
+Environment=AGRO_ORCH=http://127.0.0.1:8000
+Environment=AGRO_API_HOST=127.0.0.1
+Environment=AGRO_API_PORT=8080
+Environment=AGRO_KEYS=/opt/orchestrateur/.keys.json
+ExecStart=/opt/agroguidci/.venv/bin/python -u vps/superviseur.py
+Restart=always
+RestartSec=5
+TimeoutStopSec=30
+KillSignal=SIGTERM
+# Durcissement
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=read-only
+ReadWritePaths=/opt/agroguidci/data /opt/agroguidci/out /opt/agroguidci/logs
+
+[Install]
+WantedBy=multi-user.target
