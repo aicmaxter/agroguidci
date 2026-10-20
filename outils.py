@@ -74,19 +74,22 @@ def entete_source(titre: str, url: str) -> str:
 def extraire_localite(texte: str) -> str | None:
     """Repère une localité ivoirienne citée dans le texte (accents ignorés).
 
-    La localité citée EN PREMIER gagne : une région du type « Haut-Sassandra »
-    ne doit pas l'emporter sur la ville réellement annoncée (« Daloa »).
+    Correspondance sur MOT ENTIER : « manioc » ne doit jamais produire « Man »
+    (bug constaté en production : « 2 ha de manioc à Daloa » était géocodé
+    Manchester, Royaume-Uni). La localité citée EN PREMIER gagne ; à position
+    égale, la plus longue (« grand-bassam » avant « bassam »).
     """
     t = sans_accents(texte)
     trouves: list[tuple[int, int, str]] = []
     for v in VILLES_CI:
-        i = t.find(v)
-        if i < 0:
+        motif = r"(?<![a-z0-9])" + re.escape(sans_accents(v)) + r"(?![a-z0-9])"
+        m = re.search(motif, t)
+        if not m:
             continue
-        prefixe = t[max(0, i - 10):i]
+        prefixe = t[max(0, m.start() - 10):m.start()]
         if v in ("sassandra", "bandama") and prefixe.rstrip().endswith(("haut-", "bas-", "haut", "bas")):
             continue                       # région, pas une ville : on l'ignore
-        trouves.append((i, -len(v), v))
+        trouves.append((m.start(), -len(v), v))
     if trouves:
         return sorted(trouves)[0][2].title()
     m = re.search(r"(?:a|à|vers|sur|depuis)\s+([A-ZÉÈÎÔÛ][\w'’\-éèêôûîàç]+)", texte)
@@ -101,15 +104,42 @@ def _get(url: str, timeout: float = 25.0) -> tuple[int, object]:
 
 
 # --------------------------------------------------------------------------- recherche : climat
+LIEN_CI = "https://geocoding-api.open-meteo.com/v1/search"
+
+
+def _geocoder_ci(lieu: str) -> tuple[dict | None, str]:
+    """Géocode une localité en n'acceptant qu'un résultat ivoirien.
+
+    Le géocodeur est mondial : « Man » (ville de Côte d'Ivoire) y sort Manchester.
+    On demande plusieurs résultats et on ne retient que country_code == CI ; sans
+    résultat ivoirien, on rend un motif d'échec plutôt qu'un climat étranger.
+    """
+    c, geo = _get(f"{BASE_GEO}/v1/search?name={quote(lieu)}&count=8&language=fr&format=json")
+    if c != 200 or not isinstance(geo, dict) or not geo.get("results"):
+        return None, f"geocodage impossible pour « {lieu} » (HTTP {c})"
+    resultats = geo["results"]
+    for g in resultats:
+        if str(g.get("country_code") or "").upper() == "CI":
+            return g, ""
+    etrangers = ", ".join(sorted({f"{g.get('name')} ({g.get('country')})" for g in resultats[:3]}))
+    return None, (f"« {lieu} » n'est pas reconnue en Côte d'Ivoire "
+                  f"(résultats hors pays : {etrangers})")
+
+
 def meteo_et_pluies(demande: str, contexte: str, dossier: Path) -> str:
     """Pluies des 12 derniers mois + prévision 7 jours + déficit hydrique, pour la localité citée."""
-    lieu = extraire_localite(f"{demande}\n{contexte}") or "abidjan"
-    c, geo = _get(f"{BASE_GEO}/v1/search?name={quote(lieu)}&count=1&language=fr&format=json")
-    if c != 200 or not isinstance(geo, dict) or not geo.get("results"):
-        return (f"{MARQUEUR_ECHEC} meteo_et_pluies — geocodage impossible pour « {lieu} » (HTTP {c})\n"
-                f"### Meteo — ECHEC OUTIL\nLocalite « {lieu} » non geocodee. "
+    lieu = extraire_localite(f"{demande}\n{contexte}")
+    if not lieu:
+        return (f"{MARQUEUR_INSUFFISANT} meteo_et_pluies — aucune localité citée\n"
+                "### Meteo — LOCALITE MANQUANTE\n"
+                "Aucune localité ivoirienne reconnue dans la demande : aucune donnée climatique "
+                "n'est produite (on ne prend pas Abidjan par défaut). Demander au producteur sa "
+                "localité (ville ou village) avant de parler de pluie, de saison ou d'irrigation.")
+    g, motif = _geocoder_ci(lieu)
+    if g is None:
+        return (f"{MARQUEUR_ECHEC} meteo_et_pluies — {motif}\n"
+                f"### Meteo — ECHEC OUTIL\n{motif}. "
                 "Aucune donnee climatique produite : ne rien affirmer sur la pluie de cette zone.")
-    g = geo["results"][0]
     lat, lon = g["latitude"], g["longitude"]
     nom = f"{g['name']} ({g.get('admin1') or g.get('country')})"
     auj = date.today()

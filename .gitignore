@@ -21,6 +21,9 @@ __pycache__/
 venv/
 .pytest_cache/
 
+# --- sauvegardes horodatees d'audit ---
+*.bak-*
+
 # --- outils ---
 .vercel
 .idea/
