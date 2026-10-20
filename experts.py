@@ -159,6 +159,7 @@ TECH = Expertise(
     fichiers=("techniques_agricoles.md", "agronomie.md"),
     role_supervision="Il propose des operations, jamais des produits ni des doses : seuls les "
                      "produits homologues valides par l'echelon local sont utilisables.",
+    outils=("calculer_agro", "lire_document"),   # densites, semences, eau, fiche technique
     mots_cles=(
         "comment", "technique", "itineraire", "itinéraire", "prepar", "prépar", "labour",
         "buttage", "billonn", "semis", "densite", "densité", "espacement", "repiqu", "pepiniere",
@@ -208,6 +209,7 @@ ELEVAGE = Expertise(
     fichiers=("production_animale.md",),
     role_supervision="Aucune prescription de medicament ni de protocole vaccinal : tout animal "
                      "malade ou mort releve du veterinaire ou du mandataire sanitaire.",
+    outils=("calculer_agro", "lire_document"),   # chargement, ration, eau, fiche d'elevage
     mots_cles=(
         "elevage", "élevage", "animaux", "animal", "poulet", "poulets", "volaille", "poussin",
         "pondeuse", "oeuf", "œuf", "poule", "pintade", "porc", "porcin", "cochon", "truie",
@@ -324,7 +326,7 @@ ANALYSTE = Expertise(
         "moyenne", "médiane", "mediane", "total", "budget", "charge", "charges", "cout", "coût",
         "depense", "dépense", "recette", "prix unitaire", "rentabilite", "rentabilité", "combien",
     ),
-    outils=("analyser_tableau", "calculer_marge"),
+    outils=("analyser_tableau", "calculer_marge", "lire_document"),
     role_supervision="Il calcule, il ne pronostique pas : aucune projection pluriannuelle, aucun "
                      "taux d'interet, aucune promesse de revenu.",
     competences=("validation_donnees", "detection_anomalies", "statistiques_descriptives",

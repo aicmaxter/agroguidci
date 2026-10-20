@@ -498,13 +498,15 @@ def _normaliser(qte: float | None, u_qte: str | None, u_prix: str | None) -> tup
 def calculer_marge(demande: str, contexte: str, dossier: Path) -> str:
     """Arithmétique de marge : recette, charges, marge, seuil de rentabilité. Tout est calculé ici."""
     t = f"{demande}\n{contexte}"
-    unite = r"(kg|tonnes?|litres?|sacs?|sujets?|poulets?|t[êe]tes?|bottes?|tas?|pi[eè]ces?)"
+    # « t » et « l » sont des abréviations courantes au marché : « 3 t de riz à
+    # 250 000 FCFA la tonne » doit etre lue (c'etait un echec DONNEE_INSUFFISANTE).
+    unite = r"(kg|tonnes?|t|litres?|l|sacs?|sujets?|poulets?|t[êe]tes?|bottes?|tas?|pi[eè]ces?)"
+    uprix = r"(kg|tonnes?|t|litres?|l|sacs?|sujets?|poulets?|t[êe]tes?|pi[eè]ces?)"
     couples = []
     # 1) couple explicite : « 800 kg de maïs à 250 FCFA » / « 2 tonnes à 300 FCFA le kg »
     for m in re.finditer(r"(\d[\d\s.,]*)\s*" + unite + r"\b[^\d\n]{0,30}?"
                          r"(\d[\d\s.,]{1,})\s*(?:FCFA|fcfa|francs)"
-                         r"(?:\s*(?:/|par|le)\s*(kg|tonnes?|litres?|sacs?|sujets?|poulets?|"
-                         r"t[êe]tes?|pi[eè]ces?))?", t, flags=re.I):
+                         r"(?:\s*(?:/|par|le)\s*" + uprix + r")?", t, flags=re.I):
         qte, pu = _nombre(m.group(1)), _nombre(m.group(3))
         qte, note = _normaliser(qte, m.group(2), m.group(4))
         if qte and pu and qte > 0 and pu > 0:
@@ -516,8 +518,7 @@ def calculer_marge(demande: str, contexte: str, dossier: Path) -> str:
         mq = re.search(r"(\d[\d\s.,]*)\s*" + unite + r"\b", t, flags=re.I)
         mp = re.search(r"(?:prix|à|a|le|chaque)\s*(?:unitaire\s*)?(?:de\s*)?(\d[\d\s.,]{1,})\s*"
                        r"(?:FCFA|fcfa|francs)"
-                       r"(?:\s*(?:/|par|le)\s*(kg|tonnes?|litres?|sacs?|sujets?|poulets?|"
-                       r"t[êe]tes?|pi[eè]ces?))?", t, flags=re.I)
+                       r"(?:\s*(?:/|par|le)\s*" + uprix + r")?", t, flags=re.I)
         if mq and mp:
             qte, pu = _nombre(mq.group(1)), _nombre(mp.group(1))
             qte, note = _normaliser(qte, mq.group(2), mp.group(2))
@@ -926,7 +927,7 @@ def calculer_agro(demande: str, contexte: str, dossier: Path) -> str:
                 # = 1 plant, hypothese ecrite dans la sortie.
                 semences_kg = total_plants * pmg / 1_000_000.0
                 lignes.append(f"- **Semences** : {total_plants:,.0f} plants x {pmg:g} g / 1 000 "
-                              f"grains = **{semences_kg:,.1f} kg** ({semences_kg / 1000:,.3f} t) — "
+                              f"grains = **{semences_kg:,.2f} kg** ({semences_kg / 1000:,.3f} t) — "
                               "formule : plants x PMG / 1 000 000 (PMG en g) ; hypothese : "
                               "1 graine = 1 plant, sans taux de germination ni semis en poquet")
                 resultats += 1
@@ -1065,6 +1066,35 @@ OUTILS = {
     "calendrier_et_rappels": calendrier_et_rappels,
     "activer_rappels": activer_rappels,
 }
+
+
+# --------------------------------------------------------------------------- pertinence
+# Un outil declare par un agent n'est pas toujours applicable : lire un document sans
+# fichier cite, calculer une marge sans montant en FCFA ou une meteo sans localite ne
+# produit qu'un marqueur d'echec. On verifie donc la precondition AVANT l'execution :
+# l'outil est saute, l'etat est journalise « NON_PERTINENT » et le modele sait pourquoi.
+def pertinent(nom: str, demande: str, contexte: str) -> tuple[bool, str]:
+    """La precondition de l'outil est-elle remplie par cette demande ?"""
+    t = f"{demande}\n{contexte}"
+    bas = sans_accents(t)
+    if nom == "meteo_et_pluies":
+        if not extraire_localite(t):
+            return False, "aucune localite ivoirienne citee : demander la localite au producteur"
+    elif nom == "lire_document":
+        if not RE_NOM_DOC.search(t):
+            return False, "aucun document cite par son nom"
+    elif nom == "analyser_tableau":
+        lignes = [l for l in t.splitlines()
+                  if len(re.findall(r"[;,\t]", l)) >= 1 and len(re.findall(r"-?\d", l)) >= 2]
+        if not RE_NOM_CSV_CITE.search(t) and len(lignes) < 3:
+            return False, "ni fichier CSV cite ni lignes de tableau dans la demande"
+    elif nom == "calculer_marge":
+        if not re.search(r"(fcfa|francs|f\b)", bas):
+            return False, "aucun montant en FCFA dans la demande"
+    elif nom == "calculer_agro":
+        if _surface_ha(t)[0] is None and _ecartement(t)[0] is None:
+            return False, "ni surface ni ecartement cite"
+    return True, ""
 
 
 def executer_outil(nom: str, demande: str, contexte: str, dossier: Path) -> str:

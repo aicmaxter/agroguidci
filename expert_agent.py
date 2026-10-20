@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
 import threading
@@ -31,7 +32,8 @@ from agrokit import (ROOT, BaseConnaissances, ErreurLLM, LLM, Orchestrateur,  # 
 from experts import EXPERTISES, Expertise  # noqa: E402
 from permissions import intentions_interdites, verifier as verifier_permission  # noqa: E402
 
-JOURNAL = ROOT / "out" / "journal-experts.jsonl"
+JOURNAL = Path(os.environ.get("AGRO_JOURNAL")
+              or (ROOT / "out" / "journal-experts.jsonl"))   # surchargeable pour les tests
 
 
 # --------------------------------------------------------------------------- execution d'une tache
@@ -47,11 +49,12 @@ def executer(expert: Expertise, instruction: str, llm: LLM, kb: BaseConnaissance
     # Outils : les donnees reelles sont collectees AVANT tout raisonnement, et
     # chaque usage passe d'abord par la matrice de permissions (LAB 09).
     donnees_outils: list[str] = []
-    etats_outils: dict[str, tuple[str, int]] = {}
+    notes_outils: list[str] = []          # outils sautes : aucune donnee produite
+    etats_outils: dict[str, tuple[str, int, str]] = {}
     dossier_outils = ROOT / "out" / "outils" / f"{time.strftime('%Y%m%d-%H%M%S')}-{expert.cle}"
     if getattr(expert, "outils", ()):
         dossier_outils.mkdir(parents=True, exist_ok=True)
-        from outils import MARQUEUR_ECHEC, MARQUEUR_INSUFFISANT, executer_outil
+        from outils import MARQUEUR_ECHEC, MARQUEUR_INSUFFISANT, executer_outil, pertinent
         for nom_outil in expert.outils:
             perm = verifier_permission(nom_outil)
             if perm["mode"] == "interdit":
@@ -61,6 +64,14 @@ def executer(expert: Expertise, instruction: str, llm: LLM, kb: BaseConnaissance
                 donnees_outils.append(f"#### Outil « {nom_outil} »\n{bloc}")
                 etats_outils[nom_outil] = ("ARRETEE_PERMISSION", 0, "0")
                 dire("PERMISSION", f"{nom_outil} refuse par la matrice de permissions")
+                continue
+            # Precondition : ne pas lancer un outil qui ne peut rien produire ici
+            # (ni document cite, ni localite, ni montant...). Etat journalise.
+            ok, motif = pertinent(nom_outil, instruction, contexte)
+            if not ok:
+                etats_outils[nom_outil] = ("NON_PERTINENT", 0, "-")
+                notes_outils.append(f"- `{nom_outil}` : non execute — {motif}.")
+                dire("OUTIL", f"{nom_outil} — non pertinent ({motif})")
                 continue
             dire("OUTIL", f"{nom_outil} en execution (permission: {perm['mode']})...")
             bloc = executer_outil(nom_outil, instruction, contexte, dossier_outils)
@@ -101,6 +112,10 @@ def executer(expert: Expertise, instruction: str, llm: LLM, kb: BaseConnaissance
             "recalcule pas, n'arrondis pas, ne complete jamais une valeur manquante ; cite "
             "la source et la date de releve ; si un outil a echoue, ecris-le) :\n\n"
             + "\n\n".join(donnees_outils)})
+    if notes_outils:
+        messages.append({"role": "user", "content":
+            "OUTILS NON EXECUTES POUR CETTE DEMANDE (aucune donnee produite : ne rien "
+            "en deduire, ne pas les citer comme source) :\n" + "\n".join(notes_outils)})
     messages.append({"role": "user", "content":
         f"DEMANDE A TRAITER ({expert.role}, capacite « {expert.capacite} »)\n{question}\n\n"
         "Reponds avec le format impose. Sois concret, prudent, et dis clairement ce qui "
