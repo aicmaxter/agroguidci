@@ -63,11 +63,16 @@ MATRICE: dict[str, dict] = {
 }
 
 # Nature de chaque outil -> action(s) de la matrice (LAB 05 / PARTIE C).
+# DOIT couvrir EXACTEMENT registre `OUTILS` de outils.py : un outil absent d'ici
+# est refuse par defaut a l'execution (mode « interdit ») et invisible pour la
+# supervision. Le controle est automatique (voir supervision.py --coherence).
 NATURE_OUTILS: dict[str, tuple[str, ...]] = {
     "meteo_et_pluies": ("lire_documents",),
     "contexte_documentaire": ("lire_documents",),
     "analyser_tableau": ("calculer", "lire_documents"),
     "calculer_marge": ("calculer",),
+    "calculer_agro": ("calculer",),
+    "lire_document": ("lire_documents",),
     "registre_producteur": ("preparer_rapport",),
     "calendrier_et_rappels": ("generer_fichier_local",),
     "activer_rappels": ("tache_systeme",),

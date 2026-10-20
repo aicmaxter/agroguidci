@@ -96,14 +96,23 @@ def coherence() -> str:
     """
     from experts import EXPERTISES
     from permissions import MATRICE, NATURE_OUTILS
+    from outils import OUTILS
 
     soul = ROOT / "SOUL.md"
     texte = soul.read_text(encoding="utf-8") if soul.exists() else ""
+    installes = set(OUTILS)
     reels = set(NATURE_OUTILS)
     alertes: list[str] = []
+    # Un outil present dans outils.py mais absent de NATURE_OUTILS est bloque a
+    # l'execution (mode « interdit » par defaut) : il ne doit jamais passer inapercu.
+    for o in sorted(installes - reels):
+        alertes.append(f"`{o}` existe dans outils.py mais n'a aucune nature dans "
+                       f"NATURE_OUTILS : il serait refuse a l'execution (mode interdit)")
+    for o in sorted(reels - installes):
+        alertes.append(f"`{o}` est declare dans NATURE_OUTILS mais n'existe pas dans outils.py")
     lignes = ["# Coherence constitution / gouvernance / outils", "",
               f"Source : `{'SOUL.md' if texte else 'ABSENT'}` · {len(EXPERTISES)} agents · "
-              f"{len(reels)} outils reellement installes", "",
+              f"{len(installes)} outils installes · {len(reels)} outils gouvernees", "",
               "| agent | documente dans SOUL.md | outils declares | competences | conduite d'echec |",
               "|---|---|---|---|---|"]
     utilises: set[str] = set()
@@ -137,10 +146,10 @@ def coherence() -> str:
 
     lignes += ["", "## Outils reellement installes et leur titulaire", "",
                "| outil | agents autorises | actions de la matrice |", "|---|---|---|"]
-    for o in sorted(reels):
+    for o in sorted(installes | reels):
         titulaires = [e.cle for e in EXPERTISES.values() if o in e.outils]
         lignes.append(f"| `{o}` | {', '.join(titulaires) or '**personne**'} "
-                      f"| {', '.join(NATURE_OUTILS[o])} |")
+                      f"| {', '.join(NATURE_OUTILS.get(o, ())) or '**aucune nature**'} |")
 
     lignes += ["", "## Verdict", ""]
     if alertes:

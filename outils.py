@@ -19,6 +19,7 @@ from __future__ import annotations
 import csv
 import io
 import json
+import math
 import os
 import re
 import stat
@@ -297,10 +298,11 @@ def _description_canal() -> str:
         return "(dossier defini par AGRO_IMPORT_DIR)"
 
 
-def _refus_import(motif: str, titre: str = "FICHIER ABSENT") -> str:
+def _refus_import(motif: str, titre: str = "FICHIER ABSENT", outil: str = "analyser_tableau") -> str:
     """Bloc de refus unique : marqueur d'echec, aucune donnee produite."""
-    return (f"{MARQUEUR_ECHEC} analyser_tableau — {motif}\n"
-            f"### Analyse de tableau — {titre}\n"
+    genre = "Analyse de tableau" if outil == "analyser_tableau" else "Lecture de document"
+    return (f"{MARQUEUR_ECHEC} {outil} — {motif}\n"
+            f"### {genre} — {titre}\n"
             "Aucun chemin ecrit dans la demande n'est ouvert par cet outil. Seul un "
             f"fichier depose dans le canal d'import autorise `{_description_canal()}` est "
             "lu, et uniquement par son nom (sans separateur ni lettre de lecteur). "
@@ -308,28 +310,30 @@ def _refus_import(motif: str, titre: str = "FICHIER ABSENT") -> str:
             "demande. Aucune donnee n'a ete produite : ne rien affirmer sur ce tableau.")
 
 
-def _nom_import_valide(nom: str) -> str | None:
-    """Nom de fichier acceptable : simple nom .csv, sans separateur ni ':' (R1)."""
+def _nom_import_valide(nom: str, exts: tuple[str, ...] = (".csv",)) -> str | None:
+    """Nom de fichier acceptable : simple nom, extension autorisee, sans separateur (R1)."""
     base = (nom or "").strip()
     if not base or base in (".", ".."):
         return None
     if any(c in base for c in ("/", "\\", ":", "\x00")):
         return None
-    if not base.lower().endswith(".csv"):
+    if not base.lower().endswith(tuple(e.lower() for e in exts)):
         return None
     return base
 
 
-def _chemin_import_autorise(nom: str) -> Path | None:
+def _chemin_import_autorise(nom: str, exts: tuple[str, ...] = (".csv",)) -> Path | None:
     """Resout un nom de fichier DANS le canal d'import, jamais ailleurs (R1 / R1-B).
 
     - refuse tout separateur, ':' (lecteur de disque, flux alternatif NTFS), NUL ;
+    - refuse toute extension hors de `exts` (CSV pour les tableaux, formats texte
+      supplementaires pour la lecture de document) ;
     - resout les liens puis verifie le confinement sous le dossier d'import ;
     - refuse un fichier portant plusieurs liens durs (st_nlink > 1) : un lien dur
       permet d'atteindre un fichier hors du canal tout en restant dans son chemin ;
     - fichier absent, illisible ou modifie pendant le controle -> None.
     """
-    base = _nom_import_valide(nom)
+    base = _nom_import_valide(nom, exts)
     if base is None:
         return None
     try:
@@ -345,7 +349,7 @@ def _chemin_import_autorise(nom: str) -> Path | None:
     return cible
 
 
-def _lire_import_autorise(nom: str) -> tuple[str | None, str]:
+def _lire_import_autorise(nom: str, exts: tuple[str, ...] = (".csv",)) -> tuple[str | None, str]:
     """Lit un fichier du canal d'import en validant le DESCRIPTEUR, pas le chemin (R1-B).
 
     Le chemin est controle une premiere fois (confinement + liens durs), puis le
@@ -357,10 +361,10 @@ def _lire_import_autorise(nom: str) -> tuple[str | None, str]:
 
     Renvoie (texte, "") en cas de succes, (None, motif) sinon.
     """
-    base = _nom_import_valide(nom)
+    base = _nom_import_valide(nom, exts)
     if base is None:
         return None, "nom de fichier refuse"
-    cible = _chemin_import_autorise(base)
+    cible = _chemin_import_autorise(base, exts)
     if cible is None:
         # message precis : lien dur detecte, ou fichier absent du canal
         try:
@@ -917,10 +921,14 @@ def calculer_agro(demande: str, contexte: str, dossier: Path) -> str:
                           f"**{total_plants:,.0f} plants**")
             resultats += 1
             if pmg:
-                semences = total_plants * pmg / 1_000_000.0        # g -> tonnes
-                lignes.append(f"- **Semences** : {total_plants:,.0f} plants x {pmg:g} g / 1000 = "
-                              f"**{semences * 1000:,.1f} kg** ({semences:,.3f} t) — "
-                              f"formule : plants x PMG / 1 000 000 (PMG en g)")
+                # plants x (PMG g / 1 000 grains) donne des GRAMMES ; /1000 pour des kg.
+                # soit plants x PMG / 1 000 000. Taux de germination non fourni : 1 graine
+                # = 1 plant, hypothese ecrite dans la sortie.
+                semences_kg = total_plants * pmg / 1_000_000.0
+                lignes.append(f"- **Semences** : {total_plants:,.0f} plants x {pmg:g} g / 1 000 "
+                              f"grains = **{semences_kg:,.1f} kg** ({semences_kg / 1000:,.3f} t) — "
+                              "formule : plants x PMG / 1 000 000 (PMG en g) ; hypothese : "
+                              "1 graine = 1 plant, sans taux de germination ni semis en poquet")
                 resultats += 1
     if dose and surface:
         total_engrais = dose * surface
@@ -973,7 +981,8 @@ def lire_document(demande: str, contexte: str, dossier: Path) -> str:
     ext = Path(nom).suffix.lower()
     chemin_suspect = RE_CHEMIN_SUSPECT.search(demande)
     if chemin_suspect:
-        return _refus_import(f"reference de chemin refusee ({chemin_suspect.group(1).strip()[:120]})")
+        return _refus_import(f"reference de chemin refusee ({chemin_suspect.group(1).strip()[:120]})",
+                             outil="lire_document")
     if ext in FORMATS_NON_LUS:
         return (f"{MARQUEUR_INSUFFISANT} lire_document — format {FORMATS_NON_LUS[ext]} non lu\n"
                 f"### Lecture de document — FORMAT NON LISIBLE ({ext})\n"
@@ -984,8 +993,9 @@ def lire_document(demande: str, contexte: str, dossier: Path) -> str:
     texte, motif = _lire_import_autorise(nom, exts=FORMATS_LUS)
     if texte is None:
         if motif == "hors_canal":
-            return _refus_import(f"fichier absent du canal d'import autorise ({nom[:120]})")
-        return _refus_import(f"{motif} ({nom[:120]})", "FICHIER REFUSE")
+            return _refus_import(f"fichier absent du canal d'import autorise ({nom[:120]})",
+                                 outil="lire_document")
+        return _refus_import(f"{motif} ({nom[:120]})", "FICHIER REFUSE", outil="lire_document")
 
     propre, neutralisees = neutraliser_instructions(texte, f"document {nom}")
     lignes = [l for l in propre.splitlines() if l.strip()]
