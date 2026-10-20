@@ -1,0 +1,13 @@
+# Ne rien envoyer du poste local au déploiement : la vitrine est dans web/.
+.env
+.env.*
+.agent-token*.json
+data/
+out/
+logs/
+__pycache__/
+*.pyc
+*.py
+requirements.txt
+tests_*.py
+.git/

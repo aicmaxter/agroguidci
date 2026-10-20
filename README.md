@@ -8,9 +8,11 @@ et élevage) : il **clarifie** la demande, **sélectionne** les compétences
 nécessaires, **coordonne** le travail des experts et rend une réponse **unique,
 prudente et traçable**.
 
-> Le site Vercel présente le système et sa spécification ; il n'exécute aucun agent.
-> Le moteur (orchestrateur local + 7 agents Python) tourne sur un poste, pas dans un
-> environnement serverless — voir « Déploiement » en fin de document.
+> Le site Vercel (`agroguidci.vercel.app`) est la vitrine : il présente le système et
+> publie sa spécification. Son formulaire « Conseil IA » interroge le moteur hébergé
+> (`agroguidci-saas.vercel.app`, `POST /api/demande`). Le runtime complet — orchestrateurs,
+> sept agents, supervision, validations humaines — tourne sur un poste, pas dans
+> l'environnement serverless : voir « Déploiement » en fin de document.
 
 ## Composition
 
@@ -265,7 +267,8 @@ Aucune modification du moteur (coordinateur, boucle d'agent) n'est nécessaire.
 | `verifier_rappels.py` | relit `data/automatisations/rappels.json` et liste les échéances échues/à venir (tâche planifiée possible) |
 | `data/producteurs/`, `data/automatisations/`, `data/validations/` | données locales : dossiers producteurs, file de rappels, demandes de validation |
 | `logs/`, `out/` | journaux d'exécution et livrables |
-| `web/` | page publique du projet (`index.html`, `specs.html`, `agent-specs.html`) + `build_docs.py` qui rend `SOUL.md` en HTML |
+| `web/` | page publique du projet (`index.html` = vitrine, `specs.html`, `agent-specs.html`) + `assets/` (styles, script, photos, géographie) + `build_docs.py` qui rend `SOUL.md` en HTML |
+| `vercel.json` | publie `web/` et proxifie `/api/*` vers le moteur hébergé (`agroguidci-saas`) — le formulaire de la vitrine appelle ainsi le moteur en same-origin, sans CORS |
 
 ## Déploiement
 
@@ -273,19 +276,30 @@ Aucune modification du moteur (coordinateur, boucle d'agent) n'est nécessaire.
 |---|---|---|
 | **GitHub** — https://github.com/aicmaxter/agroguidci | le code complet (moteur, agents, outils, tests, `SOUL.md`) | publié, branche `main` |
 | **Vercel** — https://agroguidci.vercel.app | la **vitrine et la spécification** (`web/`) | déployé, `READY` |
+| **Vercel** — https://agroguidci-saas.vercel.app | le **moteur en ligne** : `POST /api/demande` (agents hébergés) | déployé, `READY` |
 
-**Pourquoi le moteur n'est pas sur Vercel** : AGROGUIDCI est un runtime *local* — un
+La vitrine est un site statique (aucun build) : `web/index.html` + `web/assets/`. Son
+formulaire « Conseil IA » n'appelle pas un faux service — il poste sur `/api/demande`,
+que `vercel.json` réécrit vers `agroguidci-saas.vercel.app/api/demande`. Sans réponse du
+moteur, la page affiche l'échec tel quel et n'invente aucun conseil.
+
+Projet Vercel `agroguidci-site` **non lié à Git** : un `git push` ne déploie rien.
+
+```bash
+cd ~/agents/agroguidci
+vercel link --yes --project agroguidci-site   # une fois
+vercel deploy --prod --yes                    # publie web/ (vercel.json + .vercelignore)
+```
+
+**Le runtime de référence reste local** : AGROGUIDCI est un runtime *local* — un
 orchestrateur FastAPI (`127.0.0.1:8000`, SQLite), **sept processus d'agents** qui tournent en
-continu, un état disque (`data/`, `out/`) et une action Windows (`schtasks`). Un environnement
-serverless ne fournit ni processus longue durée, ni orchestrateur local, ni disque persistant,
-ni `schtasks` : y déployer le moteur demanderait de le réécrire (orchestrateur hébergé, état en
-base, file d'attente). Le site Vercel ne prétend donc pas exécuter d'agent — il décrit le
-système et publie ses spécifications.
+continu, un état disque (`data/`, `out/`) et une action Windows (`schtasks`). Ce mode donne la
+supervision, les validations humaines et les tests de rupture décrits plus haut.
 
-**Pour rendre le moteur accessible en ligne** (étape suivante, non faite) : héberger
-l'orchestrateur et les agents sur un conteneur (VPS, Fly.io, Render), garder ce site Vercel
-comme interface, et exposer `coordinateur.py` derrière une API HTTP authentifiée. Les clés
-resteraient côté serveur, jamais dans le dépôt ni dans le navigateur.
+**Variante hébergée** : `agroguidci-saas.vercel.app` expose le moteur derrière
+`POST /api/demande` (`{ texte, profil }` → rapport, état final, sources, limites), sans
+supervision ni état disque. C'est ce que la vitrine appelle. Les clés restent côté serveur,
+jamais dans le dépôt ni dans le navigateur.
 
 **Contenus exclus de la publication** (`.gitignore`) : `.env`, `.agent-token*.json` (jetons
 d'enrôlement), `data/` (dossiers producteurs — données personnelles), `out/`, `logs/`.
