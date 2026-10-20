@@ -112,14 +112,15 @@ def main() -> int:
         # On démarre quand même l'API : /health dira « degradé », les missions échoueront
         # proprement (aucune réponse inventée).
 
-    recul = {nom: 5 for nom, _ in plans_de_lancement()}
-    for nom, args in plans_de_lancement():
+    plans = plans_de_lancement()
+    recul = {nom: 5 for nom, _ in plans}
+    for nom, args in plans:
         lancer(nom, args)
         time.sleep(0.5)
 
     while not arret:
         time.sleep(2)
-        for nom, args in plans_de_lancement():
+        for nom, args in plans:
             p = enfants.get(nom)
             if p is None:
                 lancer(nom, args)

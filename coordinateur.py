@@ -53,7 +53,9 @@ ROLE = PRINCIPAL.role                    # « agent_principal »
 CAPACITE = "coordination_agroguidci"     # capacite de coordination (en plus de l'agronomie)
 CAPACITES = list(PRINCIPAL.capacites)
 VERSION = "1.1"
-DOMAINES = sorted(SOUS_AGENTS)
+# Capacités réellement routables (les identifiants d'expertise ne sont pas des
+# capacités : « recherche » est servi par la capacité « recherche_agricole »).
+DOMAINES = sorted({e.capacite for e in EXPERTISES.values()})
 
 
 def en_attente_validation() -> list[dict]:
