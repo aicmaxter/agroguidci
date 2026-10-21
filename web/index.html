@@ -30,8 +30,9 @@
     <nav class="nav" aria-label="Navigation principale">
       <a href="#conseil">Conseil</a>
       <a href="#actualites">Actualités</a>
-      <a href="#prix">Prix du kilo</a>
-      <a href="#cultures">Cultures à découvrir</a>
+      <a href="#prix">Prix</a>
+      <a href="#cultures">Cultures</a>
+      <a href="#epices">Épices</a>
       <a href="#tarifs">Tarifs</a>
       <a href="confidentialite.html">Confidentialité</a>
     </nav>
@@ -45,6 +46,7 @@
     <a href="#actualites">Actualités</a>
     <a href="#prix">Prix du kilo</a>
     <a href="#cultures">Cultures à découvrir</a>
+    <a href="#epices">Épices</a>
     <a href="#tarifs">Tarifs &amp; crédits</a>
     <a href="confidentialite.html">Confidentialité</a>
   </div>
@@ -102,6 +104,12 @@
     </div>
   </section>
 
+  <div class="ticker" aria-label="Prix du marché en continu">
+    <div class="ticker-track" id="prixTicker">
+      <span class="ticker-item">Chargement des prix du marché…</span>
+    </div>
+  </div>
+
   <section class="section-tight">
     <div class="wrap">
       <div class="stats reveal">
@@ -145,7 +153,7 @@
   </section>
 
   <!-- ============================================================ PRIX -->
-  <section class="section" id="prix">
+  <section class="section band-green" id="prix">
     <div class="wrap">
       <div class="section-head reveal">
         <span class="eyebrow">Prix au kilogramme</span>
@@ -182,58 +190,162 @@
       <div class="section-head reveal">
         <span class="eyebrow">Cultures à découvrir</span>
         <h2>Quatre cultures peu plantées, qui ont un marché.</h2>
-        <p class="section-sub">Moins connues ne veut pas dire sans débouché : ces cultures demandent peu d'intrants, résistent mieux à la sécheresse ou se vendent plus cher au kilo. À valider avec votre conseiller avant de changer d'assolement.</p>
+        <p class="section-sub">Moins connues ne veut pas dire sans débouché : peu d'intrants, meilleure résistance au sec, meilleur prix au kilo. À valider avec votre conseiller avant de changer d'assolement.</p>
       </div>
-      <div class="cultures-grid">
-        <article class="culture reveal">
-          <span class="rare">Peu cultivée</span>
-          <h3>Voandzou</h3>
-          <p class="surnom">Pois bambara, pois de terre</p>
-          <p>Légumineuse très rustique : elle fixe l'azote, supporte la sécheresse et se conserve longtemps sans traitement. Utile en rotation avant une céréale, et en association avec le maïs ou le sorgho.</p>
-          <dl>
-            <dt>Cycle</dt><dd>90 à 120 jours</dd>
-            <dt>Atouts</dt><dd>peu d'intrants, résiste au sec, enrichit le sol</dd>
-            <dt>Débouché</dt><dd>graines, farine, bouillie ; demande urbaine stable</dd>
-          </dl>
+      <div class="crops-grid">
+        <article class="crop reveal">
+          <figure class="crop-img">
+            <img src="assets/cultures/voandzou.jpg" alt="Voandzou — photographie réelle" width="1200" height="750" loading="lazy">
+            <span class="crop-badge">Peu cultivée</span>
+          </figure>
+          <div class="crop-body">
+            <h3>Voandzou</h3>
+            <p class="surnom">Pois bambara, pois de terre</p>
+            <p class="desc">Légumineuse très rustique : elle fixe l'azote, supporte la sécheresse et se conserve longtemps sans traitement. Utile en rotation avant une céréale.</p>
+            <dl>
+              <dt>Cycle</dt><dd>90 à 120 jours</dd>
+              <dt>Atouts</dt><dd>peu d'intrants, résiste au sec, enrichit le sol</dd>
+              <dt>Débouché</dt><dd>graines, farine, bouillie ; demande urbaine stable</dd>
+            </dl>
+            <p class="crop-credit">Photo : Crop Trust · CC BY-SA 4.0 · <a href="https://commons.wikimedia.org/wiki/File:Traditional_deshelling_of_Bambara_groundnut,_Singida,_Tanzania.jpg" target="_blank" rel="noreferrer">Wikimedia Commons</a></p>
+          </div>
         </article>
-        <article class="culture reveal">
-          <span class="rare">Peu cultivée</span>
-          <h3>Fonio</h3>
-          <p class="surnom">Céréale fine, sans gluten</p>
-          <p>La céréale la plus fine d'Afrique de l'Ouest. Elle pousse sur des sols pauvres et sableux, mûrit vite et demande peu d'eau — un recours intéressant quand la saison est courte.</p>
-          <dl>
-            <dt>Cycle</dt><dd>60 à 90 jours</dd>
-            <dt>Atouts</dt><dd>rustique, très précoce, valorisation au kilo élevée</dd>
-            <dt>Débouché</dt><dd>restauration, farines, marchés urbains et export</dd>
-          </dl>
+        <article class="crop reveal">
+          <figure class="crop-img">
+            <img src="assets/cultures/fonio.jpg" alt="Fonio — photographie réelle" width="1200" height="750" loading="lazy">
+            <span class="crop-badge">Peu cultivée</span>
+          </figure>
+          <div class="crop-body">
+            <h3>Fonio</h3>
+            <p class="surnom">La céréale la plus fine</p>
+            <p class="desc">Pousse sur des sols pauvres et sableux, mûrit vite et demande peu d'eau — un recours quand la saison est courte.</p>
+            <dl>
+              <dt>Cycle</dt><dd>60 à 90 jours</dd>
+              <dt>Atouts</dt><dd>rustique, très précoce, bon prix au kilo</dd>
+              <dt>Débouché</dt><dd>restauration, farines, marchés urbains et export</dd>
+            </dl>
+            <p class="crop-credit">Photo : Crop Trust · CC BY-SA 4.0 · <a href="https://commons.wikimedia.org/wiki/File:Fonio_panicles_maturing_in_Natitingou,_northern_Benin.jpg" target="_blank" rel="noreferrer">Wikimedia Commons</a></p>
+          </div>
         </article>
-        <article class="culture reveal">
-          <span class="rare">Peu cultivée</span>
-          <h3>Sésame</h3>
-          <p class="surnom">Culture de rente à petit cycle</p>
-          <p>Oléagineux exportable, cultivé en pluvial. Le point critique n'est pas la production mais la récolte : choisir des variétés à capsules qui ne s'ouvrent pas, récolter dès maturité et sécher sur bâche pour éviter les pertes.</p>
-          <dl>
-            <dt>Cycle</dt><dd>90 à 110 jours</dd>
-            <dt>Atouts</dt><dd>peu d'eau, demande à l'export, prix au kilo élevé</dd>
-            <dt>Débouché</dt><dd>huile, pâtisserie, export (qualité et propreté du lot)</dd>
-          </dl>
+        <article class="crop reveal">
+          <figure class="crop-img">
+            <img src="assets/cultures/sesame.jpg" alt="Sésame — photographie réelle" width="1200" height="750" loading="lazy">
+            <span class="crop-badge">Peu cultivée</span>
+          </figure>
+          <div class="crop-body">
+            <h3>Sésame</h3>
+            <p class="surnom">Oléagineux d'export</p>
+            <p class="desc">Le point critique n'est pas la production mais la récolte : choisir des variétés à capsules qui ne s'ouvrent pas, récolter dès maturité, sécher sur bâche.</p>
+            <dl>
+              <dt>Cycle</dt><dd>90 à 110 jours</dd>
+              <dt>Atouts</dt><dd>peu d'eau, demande à l'export, prix au kilo élevé</dd>
+              <dt>Débouché</dt><dd>huile, pâtisserie, export (qualité et propreté du lot)</dd>
+            </dl>
+            <p class="crop-credit">Photo : Joydeep · CC BY-SA 3.0 · <a href="https://commons.wikimedia.org/wiki/File:Sesamum_indicum_13062014.jpg" target="_blank" rel="noreferrer">Wikimedia Commons</a></p>
+          </div>
         </article>
-        <article class="culture reveal">
-          <span class="rare">Peu cultivée</span>
-          <h3>Patate douce à chair orange</h3>
-          <p class="surnom">Vitamine A, transformation</p>
-          <p>Rendement rapide sur sol léger, riche en bêta-carotène. Elle ouvre deux marchés : la consommation fraîche et la transformation en farine ou purée, très demandée par les programmes de nutrition infantile.</p>
-          <dl>
-            <dt>Cycle</dt><dd>90 à 120 jours</dd>
-            <dt>Atouts</dt><dd>couverture du sol, peu d'intrants, bonne valeur nutritionnelle</dd>
-            <dt>Débouché</dt><dd>frais, farine, programmes nutrition, écoles</dd>
-          </dl>
+        <article class="crop reveal">
+          <figure class="crop-img">
+            <img src="assets/cultures/patatedouce.jpg" alt="Patate douce à chair orange — photographie réelle" width="1200" height="750" loading="lazy">
+            <span class="crop-badge">Peu cultivée</span>
+          </figure>
+          <div class="crop-body">
+            <h3>Patate douce à chair orange</h3>
+            <p class="surnom">Vitamine A, transformation</p>
+            <p class="desc">Rendement rapide sur sol léger, riche en bêta-carotène. Deux marchés : le frais et la transformation en farine ou purée.</p>
+            <dl>
+              <dt>Cycle</dt><dd>90 à 120 jours</dd>
+              <dt>Atouts</dt><dd>couvre le sol, peu d'intrants, bonne valeur nutritionnelle</dd>
+              <dt>Débouché</dt><dd>frais, farine, programmes nutrition, écoles</dd>
+            </dl>
+            <p class="crop-credit">Photo : Prosperosity · CC BY 4.0 · <a href="https://commons.wikimedia.org/wiki/File:20230227_161110_Ipomoea_batatas_%27Beauregard%27.jpg" target="_blank" rel="noreferrer">Wikimedia Commons</a></p>
+          </div>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- ============================================================ CONSEIL -->
+  <section class="section" id="epices">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Épices à fort potentiel</span>
+        <h2>Poivre, gingembre, curcuma, piment : peu de surface, forte valeur.</h2>
+        <p class="section-sub">Une épice se vend au kilo, pas à la tonne : quelques ares bien conduits peuvent peser plus qu'un hectare de culture vivrière. Contrepartie : la transformation (séchage, tri) fait la valeur, et le débouché doit être trouvé avant la plantation.</p>
+      </div>
+      <div class="crops-grid">
+        <article class="crop reveal">
+          <figure class="crop-img">
+            <img src="assets/cultures/poivre.jpg" alt="Poivre noir — photographie réelle" width="1200" height="750" loading="lazy">
+            <span class="crop-badge epice">Épice</span>
+          </figure>
+          <div class="crop-body">
+            <h3>Poivre noir</h3>
+            <p class="surnom">Piper nigrum — liane à tuteurer</p>
+            <p class="desc">Liane tropicale conduite sur tuteur, à l'ombre légère. Baies vertes séchées = poivre noir ; baies dépulpées = poivre blanc. Production ivoirienne encore marginale : valider le débouché avant de planter.</p>
+            <dl>
+              <dt>Cycle</dt><dd>entrée en production 3 à 4 ans</dd>
+              <dt>Atouts</dt><dd>prix au kilo très élevé, valorise l'ombrage</dd>
+              <dt>Débouché</dt><dd>épiceries fines, restauration, export</dd>
+            </dl>
+            <p class="crop-credit">Photo : K Hari Krishnan · CC BY-SA 3.0 · <a href="https://commons.wikimedia.org/wiki/File:Black_Pepper_(Piper_nigrum)_fruits.jpg" target="_blank" rel="noreferrer">Wikimedia Commons</a></p>
+          </div>
+        </article>
+        <article class="crop reveal">
+          <figure class="crop-img">
+            <img src="assets/cultures/gingembre.jpg" alt="Gingembre — photographie réelle" width="1200" height="750" loading="lazy">
+            <span class="crop-badge epice">Épice</span>
+          </figure>
+          <div class="crop-body">
+            <h3>Gingembre</h3>
+            <p class="surnom">Zingiber officinale — rhizome</p>
+            <p class="desc">Rhizome cultivé sur sol meuble et humide, récolté à maturité des tiges. Forte demande locale pour les jus et boissons, et bonne valeur une fois séché et broyé.</p>
+            <dl>
+              <dt>Cycle</dt><dd>8 à 10 mois</dd>
+              <dt>Atouts</dt><dd>demande locale forte, transformation simple</dd>
+              <dt>Débouché</dt><dd>marchés urbains, jus et boissons, cosmétique</dd>
+            </dl>
+            <p class="crop-credit">Photo : Kayleemariev · CC0 · <a href="https://commons.wikimedia.org/wiki/File:Zingiber_officinale_rhizome.jpg" target="_blank" rel="noreferrer">Wikimedia Commons</a></p>
+          </div>
+        </article>
+        <article class="crop reveal">
+          <figure class="crop-img">
+            <img src="assets/cultures/curcuma.jpg" alt="Curcuma — photographie réelle" width="1200" height="750" loading="lazy">
+            <span class="crop-badge epice">Épice</span>
+          </figure>
+          <div class="crop-body">
+            <h3>Curcuma</h3>
+            <p class="surnom">Curcuma longa — rhizome orangé</p>
+            <p class="desc">Proche du gingembre, rhizome orangé séché puis broyé : épice, colorant, usage cosmétique. Transformation possible avec un simple séchoir et un moulin.</p>
+            <dl>
+              <dt>Cycle</dt><dd>8 à 9 mois</dd>
+              <dt>Atouts</dt><dd>transformation simple, demande croissante</dd>
+              <dt>Débouché</dt><dd>poudre, épiceries, cosmétique</dd>
+            </dl>
+            <p class="crop-credit">Photo : Simon A. Eugster · CC BY-SA 3.0 · <a href="https://commons.wikimedia.org/wiki/File:Curcuma_longa_roots.jpg" target="_blank" rel="noreferrer">Wikimedia Commons</a></p>
+          </div>
+        </article>
+        <article class="crop reveal">
+          <figure class="crop-img">
+            <img src="assets/cultures/piment.jpg" alt="Piment — photographie réelle" width="1200" height="750" loading="lazy">
+            <span class="crop-badge epice">Épice</span>
+          </figure>
+          <div class="crop-body">
+            <h3>Piment</h3>
+            <p class="surnom">Capsicum spp. — frais ou séché</p>
+            <p class="desc">Arbuste à récolte étalée : le séchage permet de lisser les ventes et d'éviter de brader au pic de production. Choisir une variété dont le piquant correspond au marché local.</p>
+            <dl>
+              <dt>Cycle</dt><dd>4 à 6 mois, récolte étalée</dd>
+              <dt>Atouts</dt><dd>cycle court, demande urbaine constante</dd>
+              <dt>Débouché</dt><dd>frais, séché, transformation</dd>
+            </dl>
+            <p class="crop-credit">Photo : Prenn · CC BY-SA 3.0 · <a href="https://commons.wikimedia.org/wiki/File:Capsicum_frutescens_(3).jpg" target="_blank" rel="noreferrer">Wikimedia Commons</a></p>
+          </div>
+        </article>
+      </div>
+      <p class="pricing-note reveal">Prix des épices : aucun relevé officiel ivoirien n'est publié régulièrement. Nous ne donnons donc aucun prix au kilo pour ces cultures — demandez un devis à un acheteur ou renseignez-vous auprès de l'ANADER avant de planter.</p>
+    </div>
+  </section>
+
   <section class="section" id="conseil">
     <div class="wrap">
       <div class="section-head reveal">

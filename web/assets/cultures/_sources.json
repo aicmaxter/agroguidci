@@ -1,0 +1,58 @@
+{
+  "gingembre": {
+    "fichier": "assets/cultures/gingembre.jpg",
+    "titre": "File:Zingiber officinale rhizome.jpg",
+    "auteur": "Kayleemariev",
+    "licence": "CC0",
+    "page": "https://commons.wikimedia.org/wiki/File:Zingiber_officinale_rhizome.jpg"
+  },
+  "curcuma": {
+    "fichier": "assets/cultures/curcuma.jpg",
+    "titre": "File:Curcuma longa roots.jpg",
+    "auteur": "Simon A. Eugster",
+    "licence": "CC BY-SA 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Curcuma_longa_roots.jpg"
+  },
+  "piment": {
+    "fichier": "assets/cultures/piment.jpg",
+    "titre": "File:Capsicum frutescens (3).jpg",
+    "auteur": "Prenn",
+    "licence": "CC BY-SA 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Capsicum_frutescens_(3).jpg"
+  },
+  "voandzou": {
+    "fichier": "assets/cultures/voandzou.jpg",
+    "titre": "File:Traditional deshelling of Bambara groundnut, Singida, Tanzania.jpg",
+    "auteur": "Crop Trust",
+    "licence": "CC BY-SA 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Traditional_deshelling_of_Bambara_groundnut,_Singida,_Tanzania.jpg"
+  },
+  "fonio": {
+    "fichier": "assets/cultures/fonio.jpg",
+    "titre": "File:Fonio panicles maturing in Natitingou, northern Benin.jpg",
+    "auteur": "Crop Trust",
+    "licence": "CC BY-SA 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Fonio_panicles_maturing_in_Natitingou,_northern_Benin.jpg"
+  },
+  "sesame": {
+    "fichier": "assets/cultures/sesame.jpg",
+    "titre": "File:Sesamum indicum 13062014.jpg",
+    "auteur": "Joydeep",
+    "licence": "CC BY-SA 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Sesamum_indicum_13062014.jpg"
+  },
+  "patatedouce": {
+    "fichier": "assets/cultures/patatedouce.jpg",
+    "titre": "File:20230227 161110 Ipomoea batatas 'Beauregard'.jpg",
+    "auteur": "Prosperosity",
+    "licence": "CC BY 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:20230227_161110_Ipomoea_batatas_%27Beauregard%27.jpg"
+  },
+  "poivre": {
+    "fichier": "assets/cultures/poivre.jpg",
+    "titre": "File:Black Pepper (Piper nigrum) fruits.jpg",
+    "auteur": "K Hari Krishnan",
+    "licence": "CC BY-SA 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Black_Pepper_(Piper_nigrum)_fruits.jpg"
+  }
+}

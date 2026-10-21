@@ -108,6 +108,20 @@ verifie("accueil : compteur de crédits", 'id="creditsCount"' in accueil)
 verifie("accueil : plus d'onglets conseillers", "Les 7 agents" not in accueil and "agents-grid" not in accueil)
 verifie("accueil : palette verte", "--green-600" in css and "--orange:" not in css)
 verifie("accueil : fichiers JS chargés", "assets/ui.js" in accueil and "assets/motion.js" in accueil)
+verifie("accueil : section épices", 'id="epices"' in accueil and "Poivre noir" in accueil)
+verifie("accueil : huit cartes cultures/épices", accueil.count('class="crop reveal"') == 8, accueil.count('class="crop reveal"'))
+verifie("accueil : photos réelles référencées",
+        all(f"assets/cultures/{c}.jpg" in accueil for c in
+            ("poivre", "gingembre", "curcuma", "piment", "voandzou", "fonio", "sesame", "patatedouce")))
+verifie("accueil : crédits photo Wikimedia", accueil.count("Wikimedia Commons") == 8, accueil.count("Wikimedia Commons"))
+verifie("accueil : bandeau de prix défilant", 'id="prixTicker"' in accueil)
+verifie("accueil : section prix sur fond vert", 'class="section band-green" id="prix"' in accueil)
+verifie("accueil : hero vert", ".hero {" in css and "#0b3a22" in css)
+verifie("photos présentes sur le disque",
+        all((ROOT / "web" / "assets" / "cultures" / f"{c}.jpg").exists() for c in
+            ("poivre", "gingembre", "curcuma", "piment", "voandzou", "fonio", "sesame", "patatedouce")))
+_lic = json.loads((ROOT / "web" / "assets" / "cultures" / "_sources.json").read_text(encoding="utf-8"))
+verifie("licences photo renseignées", all(v.get("licence") and v.get("auteur") for v in _lic.values()))
 
 # ------------------------------------------------------------------ 4. page légale
 legal_path = ROOT / "web" / "confidentialite.html"

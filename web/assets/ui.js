@@ -34,6 +34,18 @@
     }
   }
 
+
+  function rendreTicker(d) {
+    var piste = document.getElementById("prixTicker");
+    if (!piste || !d || !d.produits || !d.produits.length) return;
+    var items = d.produits.map(function (p) {
+      return '<span class="ticker-item">' + echapper(p.nom) +
+        ' <span class="val">' + fcfa(p.prix) + " FCFA/" + echapper(p.unite) + "</span>" +
+        (p.marche ? ' <span>' + echapper(p.marche) + "</span>" : "") + "</span>";
+    }).join("");
+    piste.innerHTML = items + items;   // doublé pour un défilement continu
+  }
+
   function echapper(s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
@@ -43,7 +55,7 @@
   if (document.getElementById("prixBody")) {
     fetch("assets/prix.json", { cache: "no-cache" })
       .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
-      .then(rendrePrix)
+      .then(function (d) { rendrePrix(d); rendreTicker(d); })
       .catch(function () {
         var note = document.getElementById("prixNote");
         if (note) note.textContent = "Relevé indisponible pour le moment. Aucun prix n'est affiché plutôt qu'un prix non vérifié.";
