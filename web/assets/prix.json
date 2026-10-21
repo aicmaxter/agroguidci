@@ -1,0 +1,15 @@
+{
+  "semaine": "Semaine 09 · 2026",
+  "releve": "2026-03-02",
+  "source": "OCPV-CI (Office d'aide à la commercialisation des produits vivriers), repris par PAM Agro",
+  "source_url": "https://www.pamdagro.ci/index.php/en/produits-vivriers/ocpv",
+  "avertissement": "Prix de gros indicatifs, relevés sur les marchés de référence. Le prix payé au producteur dépend du marché, de la qualité, du conditionnement et du transport : à confirmer sur votre marché avant toute décision de vente.",
+  "produits": [
+    { "nom": "Igname Kponan", "prix": 650, "unite": "kg", "marche": "Abidjan" },
+    { "nom": "Igname Kinglè", "prix": 400, "unite": "kg", "marche": "Abidjan" },
+    { "nom": "Igname Bètè bètè", "prix": 300, "unite": "kg", "marche": "Abidjan" },
+    { "nom": "Graine de palme", "prix": 470, "unite": "kg", "marche": "national" },
+    { "nom": "Huile de palme brute", "prix": 620, "unite": "kg", "marche": "national (620 000 FCFA/t)" }
+  ],
+  "non_couvert": "Cacao, café, anacarde, coton et hévéa : les prix bord champ sont fixés par des barèmes officiels (Conseil Café-Cacao, Conseil Coton Anacarde). Ils ne sont pas repris ici faute de relevé vérifié."
+}

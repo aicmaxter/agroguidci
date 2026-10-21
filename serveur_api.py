@@ -45,6 +45,7 @@ from fastapi.responses import JSONResponse  # noqa: E402
 from pydantic import BaseModel, ConfigDict, Field  # noqa: E402
 
 from coordinateur import Coordonnateur, etat_reseau  # noqa: E402
+from confidentialite import masquer_champs  # minimisation des journaux
 from agrokit import Orchestrateur  # noqa: E402
 from experts import EXPERTISES  # noqa: E402
 
@@ -118,9 +119,14 @@ def _executer_job(jid: str, texte: str, profil: Profil | None) -> None:
 
 # --------------------------------------------------------------------------- utils
 def journalise(**champs: Any) -> None:
-    """Journal JSON sur une ligne (lisible par systemd / docker logs)."""
+    """Journal JSON sur une ligne (lisible par systemd / docker logs).
+
+    Les donnees personnelles (telephone, e-mail, longues references) sont masquees
+    avant ecriture : un journal n'a pas a conserver un numero de producteur
+    (loi n° 2013-450, minimisation).
+    """
     champs.setdefault("ts", time.strftime("%Y-%m-%dT%H:%M:%S"))
-    print(json.dumps(champs, ensure_ascii=False), flush=True)
+    print(json.dumps(masquer_champs(champs), ensure_ascii=False), flush=True)
 
 
 def _egales(a: str, b: str) -> bool:

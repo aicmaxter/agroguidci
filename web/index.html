@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AGROGUIDCI — Le bon conseil agricole, au bon moment</title>
-<meta name="description" content="AGROGUIDCI : 7 agents experts pour les producteurs, coopératives et entreprises agricoles de Côte d'Ivoire. Cultures, élevage, météo, calendrier, marges. Gratuit pour les producteurs, abonnements dès 3 870 FCFA pour les coopératives.">
-<meta name="theme-color" content="#fe7b02">
+<meta name="description" content="AGROGUIDCI : conseil agricole pour la Côte d'Ivoire. Cultures, élevage, météo, prix du marché et cultures à découvrir. Gratuit (3 conseils par mois), crédits à 599 FCFA, suivi personnalisé et offres professionnelles.">
+<meta name="theme-color" content="#14663a">
 <meta property="og:title" content="AGROGUIDCI — Le bon conseil agricole, au bon moment">
-<meta property="og:description" content="Cultures, élevage, météo et calendrier pour la Côte d'Ivoire. 7 agents experts, une réponse unique, sourcée et traçable.">
+<meta property="og:description" content="Cultures, élevage, météo, prix au kilo et cultures à découvrir en Côte d'Ivoire. Données réelles, limites dites clairement.">
 <meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23FE7B02'/%3E%3Cstop offset='.6' stop-color='%23FE3F21'/%3E%3Cstop offset='1' stop-color='%23F858BC'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='24' height='24' rx='7' fill='url(%23g)'/%3E%3Cpath d='M11 19A6.5 6.5 0 0 1 9.9 6.1C15.4 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 9-10 9Z' stroke='%23fff' stroke-width='1.6' fill='none'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2314633A'/%3E%3Cstop offset='1' stop-color='%237BB661'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='24' height='24' rx='7' fill='url(%23g)'/%3E%3Cpath d='M12 21v-7' stroke='%23fff' stroke-width='1.7' fill='none' stroke-linecap='round'/%3E%3Cpath d='M12 14c0-3.4 2.4-5.8 5.8-5.8 0 3.4-2.4 5.8-5.8 5.8Z' stroke='%23fff' stroke-width='1.7' fill='none'/%3E%3Cpath d='M12 14c0-2.6-1.9-4.5-4.7-4.5 0 2.6 1.9 4.5 4.7 4.5Z' stroke='%23fff' stroke-width='1.7' fill='none'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -28,12 +28,12 @@
       <span class="brand-text">AGROGUID<span class="ci">CI</span></span>
     </a>
     <nav class="nav" aria-label="Navigation principale">
-      <a href="#conseil">Conseil IA</a>
-      <a href="#cultures">Cultures</a>
-      <a href="#elevage">Élevage</a>
+      <a href="#conseil">Conseil</a>
+      <a href="#actualites">Actualités</a>
+      <a href="#prix">Prix du kilo</a>
+      <a href="#cultures">Cultures à découvrir</a>
       <a href="#tarifs">Tarifs</a>
-      <a href="#agents">Les 7 agents</a>
-      <a href="specs.html">Documentation</a>
+      <a href="confidentialite.html">Confidentialité</a>
     </nav>
     <a class="btn btn-primary header-cta" href="#conseil">Conseil gratuit</a>
     <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMobile" aria-label="Ouvrir le menu">
@@ -41,17 +41,18 @@
     </button>
   </div>
   <div class="nav-mobile" id="navMobile">
-    <a href="#conseil">Conseil IA</a>
-    <a href="#cultures">Cultures</a>
-    <a href="#elevage">Élevage</a>
-    <a href="#tarifs">Tarifs &amp; abonnements</a>
-    <a href="#agents">Les 7 agents</a>
-    <a href="specs.html">Documentation</a>
+    <a href="#conseil">Conseil</a>
+    <a href="#actualites">Actualités</a>
+    <a href="#prix">Prix du kilo</a>
+    <a href="#cultures">Cultures à découvrir</a>
+    <a href="#tarifs">Tarifs &amp; crédits</a>
+    <a href="confidentialite.html">Confidentialité</a>
   </div>
 </header>
 
 <main id="contenu">
 
+  <!-- ============================================================ HERO -->
   <section class="hero">
     <div class="hero-blobs" aria-hidden="true">
       <span class="blob blob-1" data-parallax="0.06"></span>
@@ -60,18 +61,18 @@
     </div>
     <div class="wrap hero-grid">
       <div class="hero-copy">
-        <p class="badge-pill"><span class="dot" aria-hidden="true"></span> Gratuit pour les producteurs · sans inscription</p>
+        <p class="badge-pill"><span class="dot" aria-hidden="true"></span> 3 conseils gratuits par mois · sans carte bancaire</p>
         <h1>Le bon conseil agricole, <span class="accent">au bon moment</span>.</h1>
-        <p class="lead">Sept agents experts — agronomie, élevage, recherche, calculs, automatisation — répondent à votre question sur votre parcelle, votre localité et votre budget. Une seule réponse, sourcée, avec ses limites.</p>
+        <p class="lead">Culture, élevage, pluie, marge, prix du marché : décrivez votre situation, les agents experts répondent avec des données réelles, des sources et leurs limites. Gratuit pour commencer, crédits à 599 FCFA quand vous en voulez plus.</p>
         <div class="hero-actions">
           <a class="btn btn-primary btn-lg" href="#conseil">Demander un conseil</a>
-          <a class="btn btn-outline btn-lg" href="#tarifs">Voir les abonnements</a>
+          <a class="btn btn-outline btn-lg" href="#prix">Voir les prix du marché</a>
         </div>
         <div class="hero-trust">
           <div><strong data-count="7">7</strong> agents experts</div>
-          <div><strong data-count="33">33</strong> régions et districts</div>
+          <div><strong data-count="33">33</strong> régions couvertes</div>
           <div><strong data-count="111">111</strong> départements</div>
-          <div><strong>0 FCFA</strong> pour un producteur</div>
+          <div><strong>599 F</strong> les 10 conseils</div>
         </div>
       </div>
 
@@ -83,13 +84,13 @@
           <span class="ico" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="M20 12h2"/><path d="m19.07 4.93-1.41 1.41"/><path d="M15.947 12.65a4 4 0 0 0-5.925-4.128"/><path d="M13 22H7a5 5 0 1 1 4.9-6H13a3 3 0 0 1 0 6Z"/></svg>
           </span>
-          <span>Pluie 12 mois<small>Daloa · 1 383,6 mm</small></span>
+          <span>Pluie 12 mois<small>Daloa · relevé ERA5</small></span>
         </div>
         <div class="float-chip chip-2">
           <span class="ico" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 5-6"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 7H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
           </span>
-          <span>Marge calculée<small>3 t × 250 000 = 750 000 F</small></span>
+          <span>Prix du kilo<small>OCPV, dernière semaine</small></span>
         </div>
         <div class="float-chip chip-3">
           <span class="ico" aria-hidden="true">
@@ -105,82 +106,150 @@
     <div class="wrap">
       <div class="stats reveal">
         <div class="stat"><b data-count="7">7</b><span>agents spécialisés</span></div>
-        <div class="stat"><b data-count="33">33</b><span>régions couvertes</span></div>
         <div class="stat"><b data-count="9">9</b><span>outils de calcul et de données</span></div>
-        <div class="stat"><b>24/7</b><span>conseil disponible</span></div>
+        <div class="stat"><b data-count="33">33</b><span>régions couvertes</span></div>
+        <div class="stat"><b>599 F</b><span>les 10 conseils, sans abonnement</span></div>
       </div>
     </div>
   </section>
 
-  <section class="section" aria-label="Ce que fait AGROGUIDCI">
+  <!-- ============================================================ ACTUALITÉS -->
+  <section class="section" id="actualites">
     <div class="wrap">
       <div class="section-head reveal">
-        <span class="eyebrow">Ce que vous pouvez demander</span>
-        <h2>Un seul endroit, six réponses utiles.</h2>
-        <p class="section-sub">Cliquez sur une carte : la question est pré-remplie dans le formulaire. Vous n'avez plus qu'à préciser votre localité et votre parcelle.</p>
+        <span class="eyebrow">Actualités &amp; repères de campagne</span>
+        <h2>Ce qui compte en ce moment dans les filières.</h2>
+        <p class="section-sub">Des repères vérifiables, pas des rumeurs de marché. Chaque carte indique l'organisme qui fait référence sur le sujet.</p>
       </div>
-      <div class="card-grid">
-        <a class="card reveal" href="#conseil">
-          <span class="ico" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg></span>
-          <h3>Conseil IA</h3>
-          <p>Posez votre question : les agents utiles y répondent, les autres se taisent.</p>
-        </a>
-        <a class="card reveal" href="#conseil" data-prefill="Je cultive … sur … hectares à … et je voudrais des conseils de conduite de la culture : ">
-          <span class="ico" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9.536V7a4 4 0 0 1 4-4h1.5a.5.5 0 0 1 .5.5V5a4 4 0 0 1-4 4 4 4 0 0 0-4 4c0 2 1 3 1 5a5 5 0 0 1-1 3"/><path d="M4 9a5 5 0 0 1 8 4 5 5 0 0 1-8-4"/><path d="M5 21h14"/></svg></span>
-          <h3>Cultures</h3>
-          <p>Cacao, igname, manioc, anacarde, riz, maraîchage : variétés, densités, entretien.</p>
-        </a>
-        <a class="card reveal" href="#conseil" data-prefill="J'élève … (nombre d'animaux : …) à … et j'observe le problème suivant : ">
-          <span class="ico" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.4 13.7A6.5 6.5 0 1 0 6.28 6.6c-1.1 3.13-.78 3.9-3.18 6.08A3 3 0 0 0 5 18c4 0 8.4-1.8 11.4-4.3"/><path d="m18.5 6 2.19 4.5a6.48 6.48 0 0 1-2.29 7.2C15.4 20.2 11 22 7 22a3 3 0 0 1-2.68-1.66L2.4 16.5"/><circle cx="12.5" cy="8.5" r="2.5"/></svg></span>
-          <h3>Élevage</h3>
-          <p>Volaille, porcs, petits ruminants, pisciculture : conduite, ration, biosécurité.</p>
-        </a>
-        <a class="card reveal" href="#conseil" data-prefill="Quelles sont les pluies et prévisions des prochains jours à … ? ">
-          <span class="ico" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="M20 12h2"/><path d="m19.07 4.93-1.41 1.41"/><path d="M15.947 12.65a4 4 0 0 0-5.925-4.128"/><path d="M13 22H7a5 5 0 1 1 4.9-6H13a3 3 0 0 1 0 6Z"/></svg></span>
-          <h3>Météo</h3>
-          <p>Pluies cumulées sur 12 mois et prévision 7 jours pour votre localité.</p>
-        </a>
-        <a class="card reveal" href="#conseil" data-prefill="À … , à quelle période faut-il semer / entretenir / récolter … ? ">
-          <span class="ico" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg></span>
-          <h3>Calendrier</h3>
-          <p>Quand semer, entretenir, récolter — et les rappels qui vont avec.</p>
-        </a>
-        <a class="card reveal" href="https://github.com/aicmaxter/agroguidci/tree/main/knowledge" target="_blank" rel="noreferrer">
-          <span class="ico" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></span>
-          <h3>Bibliothèque</h3>
-          <p>Les fiches techniques et leurs sources, en clair et en accès libre.</p>
-        </a>
+      <div class="actus-grid">
+        <article class="actu reveal">
+          <div class="actu-top"><span class="actu-tag">Campagne</span><span class="actu-date">Campagne 2026-2027</span></div>
+          <h3>Cacao et café : le prix bord champ est fixé, pas négocié</h3>
+          <p>Le prix bord champ de la campagne est annoncé par le Conseil Café-Cacao avant l'ouverture. Avant de vendre, faites peser votre produit au peson homologué, demandez le barème de la campagne en cours et gardez le ticket de pesée : c'est votre seule preuve en cas de litige.</p>
+          <p class="actu-source">Référence : <a href="https://www.ccc-ivoirien.com/" target="_blank" rel="noreferrer">Conseil Café-Cacao</a></p>
+        </article>
+        <article class="actu reveal">
+          <div class="actu-top"><span class="actu-tag">Filière</span><span class="actu-date">Récolte 2026</span></div>
+          <h3>Anacarde : le tri change le prix plus que la quantité</h3>
+          <p>Un lot bien séché et trié (grains remplis, coques propres, humidité maîtrisée) se valorise nettement mieux qu'un lot humide vendu en vrac. Séchage à l'ombre sur claies, tri des noix vides, sacs propres et cousus : trois gestes qui pèsent plus lourd que d'ajouter un sac.</p>
+          <p class="actu-source">Référence : <a href="https://www.conseilcotonanacarde.ci/" target="_blank" rel="noreferrer">Conseil Coton Anacarde</a></p>
+        </article>
+        <article class="actu reveal">
+          <div class="actu-top"><span class="actu-tag">Climat</span><span class="actu-date">Octobre 2026</span></div>
+          <h3>Fin de la petite saison des pluies : à intégrer avant de semer</h3>
+          <p>Quand les pluies faiblissent, un semis de variété à cycle long prend un risque hydrique en décembre. Avant de semer, regardez la pluie réellement tombée sur les 12 derniers mois et la prévision à 7 jours pour votre localité — l'outil météo de la plateforme donne ces deux valeurs, par ville.</p>
+          <p class="actu-source">Référence : <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open-Meteo (réanalyse ERA5)</a> · <a href="https://www.anader.ci/" target="_blank" rel="noreferrer">ANADER</a></p>
+        </article>
       </div>
     </div>
   </section>
 
-  <section class="section-tight" aria-label="Fiches techniques">
+  <!-- ============================================================ PRIX -->
+  <section class="section" id="prix">
     <div class="wrap">
-      <div class="fiche-grid">
-        <a class="fiche reveal" id="cultures" href="https://github.com/aicmaxter/agroguidci/blob/main/knowledge/agronomie.md" target="_blank" rel="noreferrer">
-          <img src="assets/fiches-cultures.jpg" alt="Cacao, bananes plantain, manioc et mangues" width="1024" height="768" loading="lazy">
-          <h3>Fiches cultures</h3>
-          <span class="hint">Ouvrir →</span>
-        </a>
-        <a class="fiche reveal" id="elevage" href="https://github.com/aicmaxter/agroguidci/blob/main/knowledge/production_animale.md" target="_blank" rel="noreferrer">
-          <img src="assets/fiches-elevage.jpg" alt="Chèvres et volailles dans une ferme ivoirienne" width="1024" height="768" loading="lazy">
-          <h3>Fiches élevage</h3>
-          <span class="hint">Ouvrir →</span>
-        </a>
+      <div class="section-head reveal">
+        <span class="eyebrow">Prix au kilogramme</span>
+        <h2>Combien vaut votre produit cette semaine ?</h2>
+        <p class="section-sub">Relevés de gros publiés par l'OCPV pour les produits vivriers. Un prix affiché ici n'est pas un prix garanti : il sert à négocier en connaissance de cause.</p>
+      </div>
+      <div class="prix-panel reveal">
+        <div class="prix-head">
+          <span class="titre">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 5-6"/></svg>
+            Prix de gros — produits vivriers
+          </span>
+          <span class="prix-week" id="prixSemaine">Semaine 09 · 2026</span>
+        </div>
+        <table class="prix-table">
+          <thead>
+            <tr><th scope="col">Produit</th><th scope="col">Prix</th><th scope="col">Marché</th></tr>
+          </thead>
+          <tbody id="prixBody">
+            <tr><td class="produit">Igname Kponan</td><td class="prix">650 <span class="unite">FCFA/kg</span></td><td class="marche">Abidjan</td></tr>
+            <tr><td class="produit">Graine de palme</td><td class="prix">470 <span class="unite">FCFA/kg</span></td><td class="marche">national</td></tr>
+          </tbody>
+        </table>
+        <div class="prix-foot" id="prixNote">
+          Prix de gros indicatifs, à confirmer sur votre marché avant toute décision de vente.
+        </div>
       </div>
     </div>
   </section>
 
+  <!-- ============================================================ CULTURES À DÉCOUVRIR -->
+  <section class="section" id="cultures">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Cultures à découvrir</span>
+        <h2>Quatre cultures peu plantées, qui ont un marché.</h2>
+        <p class="section-sub">Moins connues ne veut pas dire sans débouché : ces cultures demandent peu d'intrants, résistent mieux à la sécheresse ou se vendent plus cher au kilo. À valider avec votre conseiller avant de changer d'assolement.</p>
+      </div>
+      <div class="cultures-grid">
+        <article class="culture reveal">
+          <span class="rare">Peu cultivée</span>
+          <h3>Voandzou</h3>
+          <p class="surnom">Pois bambara, pois de terre</p>
+          <p>Légumineuse très rustique : elle fixe l'azote, supporte la sécheresse et se conserve longtemps sans traitement. Utile en rotation avant une céréale, et en association avec le maïs ou le sorgho.</p>
+          <dl>
+            <dt>Cycle</dt><dd>90 à 120 jours</dd>
+            <dt>Atouts</dt><dd>peu d'intrants, résiste au sec, enrichit le sol</dd>
+            <dt>Débouché</dt><dd>graines, farine, bouillie ; demande urbaine stable</dd>
+          </dl>
+        </article>
+        <article class="culture reveal">
+          <span class="rare">Peu cultivée</span>
+          <h3>Fonio</h3>
+          <p class="surnom">Céréale fine, sans gluten</p>
+          <p>La céréale la plus fine d'Afrique de l'Ouest. Elle pousse sur des sols pauvres et sableux, mûrit vite et demande peu d'eau — un recours intéressant quand la saison est courte.</p>
+          <dl>
+            <dt>Cycle</dt><dd>60 à 90 jours</dd>
+            <dt>Atouts</dt><dd>rustique, très précoce, valorisation au kilo élevée</dd>
+            <dt>Débouché</dt><dd>restauration, farines, marchés urbains et export</dd>
+          </dl>
+        </article>
+        <article class="culture reveal">
+          <span class="rare">Peu cultivée</span>
+          <h3>Sésame</h3>
+          <p class="surnom">Culture de rente à petit cycle</p>
+          <p>Oléagineux exportable, cultivé en pluvial. Le point critique n'est pas la production mais la récolte : choisir des variétés à capsules qui ne s'ouvrent pas, récolter dès maturité et sécher sur bâche pour éviter les pertes.</p>
+          <dl>
+            <dt>Cycle</dt><dd>90 à 110 jours</dd>
+            <dt>Atouts</dt><dd>peu d'eau, demande à l'export, prix au kilo élevé</dd>
+            <dt>Débouché</dt><dd>huile, pâtisserie, export (qualité et propreté du lot)</dd>
+          </dl>
+        </article>
+        <article class="culture reveal">
+          <span class="rare">Peu cultivée</span>
+          <h3>Patate douce à chair orange</h3>
+          <p class="surnom">Vitamine A, transformation</p>
+          <p>Rendement rapide sur sol léger, riche en bêta-carotène. Elle ouvre deux marchés : la consommation fraîche et la transformation en farine ou purée, très demandée par les programmes de nutrition infantile.</p>
+          <dl>
+            <dt>Cycle</dt><dd>90 à 120 jours</dd>
+            <dt>Atouts</dt><dd>couverture du sol, peu d'intrants, bonne valeur nutritionnelle</dd>
+            <dt>Débouché</dt><dd>frais, farine, programmes nutrition, écoles</dd>
+          </dl>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ CONSEIL -->
   <section class="section" id="conseil">
     <div class="wrap">
       <div class="section-head reveal">
-        <span class="eyebrow">Conseil gratuit</span>
+        <span class="eyebrow">Conseil</span>
         <h2>Décrivez votre situation, on s'occupe du reste.</h2>
         <p class="section-sub">Choisissez votre localité, puis décrivez la parcelle ou l'élevage. La réponse est rendue par l'Agent Agronome Expert, avec ses sources, ses hypothèses et ses limites.</p>
       </div>
 
       <div class="panel-wrap">
         <form class="panel reveal" id="conseilForm" novalidate>
+          <div class="credits-bar" id="creditsBar">
+            <span class="pill">Crédits : <strong id="creditsCount">3</strong></span>
+            <span id="creditsTexte">Crédits disponibles : gratuit 3/3 ce mois-ci.</span>
+            <a href="#tarifs" id="creditsRecharge">Recharger — 599 FCFA les 10 conseils</a>
+          </div>
+
           <div class="panel-head">
             <p class="pin">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
@@ -221,6 +290,11 @@
             <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">Demander un conseil</button>
             <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
           </div>
+
+          <label class="consent">
+            <input type="checkbox" id="consent" name="consent">
+            <span>J'accepte que ma question, ma localité et ma surface soient traitées pour produire la réponse, conformément à la <a href="confidentialite.html">politique de confidentialité</a>. Je peux demander leur suppression à tout moment.</span>
+          </label>
         </form>
 
         <article class="answer" id="answer" aria-live="polite">
@@ -234,6 +308,7 @@
     </div>
   </section>
 
+  <!-- ============================================================ ÉTAPES -->
   <section class="section-tight">
     <div class="wrap">
       <div class="section-head reveal">
@@ -248,13 +323,14 @@
     </div>
   </section>
 
+  <!-- ============================================================ TARIFS -->
   <section class="section" id="tarifs">
     <div class="wrap">
       <div class="pricing-head reveal">
         <div class="section-head" style="margin-bottom:0">
-          <span class="eyebrow">Tarifs &amp; abonnements</span>
-          <h2>Gratuit pour le producteur. Un abonnement pour la structure.</h2>
-          <p class="section-sub">Les coopératives et les entreprises paient pour l'organisation, jamais pour l'accès de base : le conseil reste gratuit pour chaque producteur.</p>
+          <span class="eyebrow">Tarifs, crédits et abonnements</span>
+          <h2>Commencez gratuitement. Payez seulement si vous en voulez plus.</h2>
+          <p class="section-sub">Le conseil de base reste accessible à tous. Les crédits servent au-delà de 3 conseils par mois ; le suivi personnalisé et les offres professionnelles ajoutent un accompagnement humain et des exports.</p>
         </div>
         <div class="toggle-billing" role="group" aria-label="Période de facturation">
           <button type="button" class="active" data-billing="mensuel" aria-pressed="true">Mensuel</button>
@@ -265,77 +341,75 @@
 
       <div class="plans">
         <article class="plan reveal">
-          <h3>Producteur</h3>
-          <p class="who">Pour un champ, un élevage, une famille.</p>
+          <h3>Découverte</h3>
+          <p class="who">Pour essayer, sans engagement ni carte bancaire.</p>
           <p class="price"><span class="amount" data-price-mensuel="0" data-price-annuel="0">0</span><span class="cur">FCFA</span></p>
-          <p class="per">toujours gratuit · sans inscription</p>
+          <p class="per">3 conseils par mois</p>
           <ul>
-            <li>Conseil IA illimité</li>
-            <li>Météo et calendrier de votre localité</li>
-            <li>Calculs de marge et de densité</li>
-            <li>Fiches techniques en accès libre</li>
+            <li>3 conseils IA par mois, quota remis à zéro chaque mois</li>
+            <li>Météo 12 mois et prévision 7 jours</li>
+            <li>Calculs de marge, densité et semences</li>
+            <li>Prix du marché et fiches techniques</li>
           </ul>
-          <a class="btn btn-outline btn-block plan-cta" href="#conseil">Commencer maintenant</a>
+          <p class="credits-note">Au-delà de 3 conseils : passez aux crédits.</p>
+          <a class="btn btn-outline btn-block plan-cta" href="#conseil">Commencer gratuitement</a>
+        </article>
+
+        <article class="plan reveal">
+          <h3>Crédits</h3>
+          <p class="who">Pour payer à l'usage, sans abonnement.</p>
+          <p class="price"><span class="amount" data-price-mensuel="599" data-price-annuel="599">599</span><span class="cur">FCFA</span></p>
+          <p class="per">les 10 conseils · valables 12 mois</p>
+          <ul>
+            <li>10 conseils, à utiliser quand vous voulez</li>
+            <li>Pas d'abonnement, pas de reconduction</li>
+            <li>Se cumulent avec les 3 conseils gratuits du mois</li>
+            <li>Paiement mobile money (Orange Money, MTN, Wave)</li>
+          </ul>
+          <p class="credits-note">Soit 59,90 FCFA le conseil.</p>
+          <a class="btn btn-outline btn-block plan-cta" href="#contact">Acheter 10 crédits</a>
         </article>
 
         <article class="plan featured reveal">
           <span class="tag">Le plus choisi</span>
-          <h3>Coopérative</h3>
-          <p class="who">Pour une coopérative, une union ou un groupement de producteurs.</p>
-          <p class="price"><span class="amount" data-price-mensuel="3870" data-price-annuel="3225">3 870</span><span class="cur">FCFA</span></p>
-          <p class="per" data-per-mensuel="par mois, jusqu'à 50 membres" data-per-annuel="par mois, facturé 38 700 FCFA par an">par mois, jusqu'à 50 membres</p>
+          <h3>Suivi personnalisé</h3>
+          <p class="who">Pour un producteur qui veut être suivi, pas seulement dépanné.</p>
+          <p class="price"><span class="amount" data-price-mensuel="9900" data-price-annuel="8250">9 900</span><span class="cur">FCFA</span></p>
+          <p class="per" data-per-mensuel="par mois, sans engagement" data-per-annuel="par mois, facturé 99 000 FCFA par an">par mois, sans engagement</p>
           <ul>
-            <li>Tout le plan Producteur, pour chaque membre</li>
-            <li>Dossiers producteurs regroupés et historiques</li>
-            <li>Calendriers culturaux partagés + rappels</li>
-            <li>Rapport mensuel de la coopérative (export CSV)</li>
-            <li>Accompagnement à la prise en main</li>
+            <li>Conseils illimités</li>
+            <li>2 parcelles ou ateliers suivis, avec historique</li>
+            <li>Calendrier cultural personnalisé et rappels</li>
+            <li>Revue mensuelle de la situation avec un conseiller</li>
+            <li>Réponse prioritaire</li>
           </ul>
-          <a class="btn btn-primary btn-block plan-cta" href="#contact">Choisir Coopérative</a>
+          <a class="btn btn-primary btn-block plan-cta" href="#contact">Choisir le suivi</a>
         </article>
 
         <article class="plan reveal">
-          <h3>Entreprise</h3>
-          <p class="who">Agro-industrie, ONG, projet, institution.</p>
-          <p class="price"><span class="amount">Sur devis</span></p>
-          <p class="per">selon le nombre de sites et de bénéficiaires</p>
+          <h3>Professionnels</h3>
+          <p class="who">Coopératives, agro-industrie, ONG, projets.</p>
+          <p class="price"><span class="amount" data-price-mensuel="24900" data-price-annuel="20750">24 900</span><span class="cur">FCFA</span></p>
+          <p class="per" data-per-mensuel="par mois, selon le nombre de bénéficiaires" data-per-annuel="par mois, facturé 249 000 FCFA par an">par mois, selon le nombre de bénéficiaires</p>
           <ul>
-            <li>Tout le plan Coopérative, sans limite de membres</li>
-            <li>Accès API et exports automatisés</li>
-            <li>Multi-sites et multi-filières</li>
-            <li>Marque blanche et rapports personnalisés</li>
-            <li>Engagement de service et formation des équipes</li>
+            <li>Tout le suivi personnalisé, multi-exploitations</li>
+            <li>Dossiers producteurs regroupés et exports CSV / PDF</li>
+            <li>Accès API et rapports personnalisés</li>
+            <li>Facturation et convention de service</li>
+            <li>Formation des équipes de terrain</li>
           </ul>
           <a class="btn btn-outline btn-block plan-cta" href="#contact">Demander une proposition</a>
         </article>
       </div>
 
       <p class="pricing-note reveal">
-        <span class="momo">Paiement mobile money : Orange Money · MTN MoMo · Wave</span> — facture annuelle disponible.
-        Tarifs de lancement indicatifs, hors taxes, à confirmer lors de la souscription.
+        <span class="momo">Paiement mobile money : Orange Money · MTN MoMo · Wave</span> — facture disponible.
+        Tarifs de lancement indicatifs, hors taxes, à confirmer lors de la souscription. Le quota gratuit est réinitialisé chaque mois.
       </p>
     </div>
   </section>
 
-  <section class="section-tight" id="agents">
-    <div class="wrap">
-      <div class="agents-panel reveal">
-        <span class="eyebrow">L'équipe</span>
-        <h2>7 agents experts, un seul interlocuteur.</h2>
-        <p class="section-sub">L'Agent Agronome Expert coordonne les spécialistes utiles à votre question. Il ne convoque pas tout le monde à chaque demande : il sélectionne, vérifie, puis assemble.</p>
-        <div class="agents-grid">
-          <div class="agent-card lead"><p class="role">Agent principal</p><p class="name">Agent Agronome Expert</p></div>
-          <div class="agent-card"><p class="role">Spécialiste</p><p class="name">Techniques Agricoles</p></div>
-          <div class="agent-card"><p class="role">Spécialiste</p><p class="name">Production Animale</p></div>
-          <div class="agent-card"><p class="role">Spécialiste</p><p class="name">Recherche Agricole</p></div>
-          <div class="agent-card"><p class="role">Spécialiste</p><p class="name">Analyse de Données</p></div>
-          <div class="agent-card"><p class="role">Spécialiste</p><p class="name">Relation Producteurs</p></div>
-          <div class="agent-card"><p class="role">Spécialiste</p><p class="name">Automatisation</p></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
+  <!-- ============================================================ FAQ -->
   <section class="section-tight" id="faq">
     <div class="wrap">
       <div class="section-head reveal">
@@ -344,37 +418,38 @@
       </div>
       <div class="faq reveal">
         <details>
-          <summary>Est-ce vraiment gratuit ?</summary>
-          <p>Oui pour un producteur : le conseil, la météo, les calculs et les fiches restent gratuits, sans inscription. Les abonnements financent l'accompagnement des coopératives et des entreprises (dossiers regroupés, rapports, exports, API).</p>
+          <summary>Qu'est-ce qui est gratuit exactement ?</summary>
+          <p>Trois conseils par mois, sans carte bancaire : météo, calendrier, calculs de marge, prix du marché et fiches techniques. Au-delà, deux options : un pack de 10 crédits à 599 FCFA (valable 12 mois, sans abonnement) ou un suivi personnalisé à 9 900 FCFA par mois.</p>
         </details>
         <details>
-          <summary>D'où viennent les chiffres de pluie et de météo ?</summary>
-          <p>Des modèles ouverts Open-Meteo (réanalyse ERA5 sur 12 mois et prévision à 7 jours), rattachés à la localité ivoirienne que vous citez. Ce sont des modèles, pas des mesures de station : la réponse le dit explicitement et invite à confirmer avec la station la plus proche.</p>
+          <summary>Comment sont appliqués les 3 conseils gratuits ?</summary>
+          <p>Le compteur est tenu dans votre navigateur et remis à zéro chaque mois. Il sert à donner le bon ordre de grandeur tant que les comptes utilisateurs ne sont pas ouverts : une limite stricte par compte sera appliquée côté serveur à ce moment-là. Aucun paiement n'est demandé pour essayer.</p>
         </details>
         <details>
-          <summary>Puis-je envoyer mes chiffres (relevés, ventes) ?</summary>
-          <p>Oui : déposez un fichier CSV dans le canal d'import, puis citez son nom dans la question. Les calculs de marge, de densité et de rendement sont faits par des outils arithmétiques, pas par le modèle de langage.</p>
+          <summary>D'où viennent les prix au kilo ?</summary>
+          <p>Des relevés hebdomadaires de gros publiés par l'OCPV (Office d'aide à la commercialisation des produits vivriers) et repris par PAM Agro. Nous affichons la semaine du relevé et le marché concerné. Un prix affiché n'est jamais un prix garanti : il sert à négocier, pas à promettre.</p>
         </details>
         <details>
-          <summary>Que se passe-t-il si une donnée manque ?</summary>
-          <p>Le système ne comble pas les trous : il signale la donnée manquante, pose la question, ou marque la réponse comme partielle. Une recommandation de produit phytosanitaire ou de médicament vétérinaire n'est jamais délivrée : elle relève d'un agent homologué ou d'un vétérinaire.</p>
+          <summary>Et les cultures de rente (cacao, café, anacarde) ?</summary>
+          <p>Leurs prix bord champ relèvent de barèmes officiels fixés par le Conseil Café-Cacao et le Conseil Coton Anacarde. Nous ne les reprenons pas tant que nous n'avons pas de relevé vérifié : mieux vaut renvoyer vers le barème officiel que d'afficher un chiffre approximatif.</p>
         </details>
         <details>
-          <summary>Comment régler un abonnement coopérative ?</summary>
-          <p>Par mobile money (Orange Money, MTN MoMo, Wave) ou facture annuelle. Écrivez-nous via la section contact : nous confirmons le nombre de membres, la période et le moyen de paiement avant toute activation.</p>
+          <summary>Que faites-vous de mes données ?</summary>
+          <p>Votre question, votre localité et votre surface servent uniquement à produire la réponse. Elles ne sont pas revendues, ni utilisées pour de la publicité. Vous pouvez demander l'accès, la rectification ou la suppression à tout moment : voir la <a href="confidentialite.html">politique de confidentialité</a>, conforme à la loi ivoirienne n° 2013-450 du 19 juin 2013.</p>
         </details>
       </div>
     </div>
   </section>
 
+  <!-- ============================================================ CTA -->
   <section class="section-tight" id="contact">
     <div class="wrap">
       <div class="cta-band reveal">
-        <h2>Prêt à poser votre première question ?</h2>
-        <p>C'est gratuit, sans inscription, et ça prend deux minutes. Pour un abonnement coopérative ou entreprise, écrivez-nous : nous répondons avec une proposition chiffrée.</p>
+        <h2>Poser une question, ça ne coûte rien.</h2>
+        <p>Trois conseils gratuits par mois, sans inscription. Pour un pack de crédits, un suivi personnalisé ou une offre professionnelle, écrivez-nous : nous répondons avec une proposition chiffrée.</p>
         <div class="hero-actions">
           <a class="btn btn-primary btn-lg" href="#conseil">Demander un conseil</a>
-          <a class="btn btn-ghost btn-lg" href="mailto:aicmaxter@gmail.com?subject=AGROGUIDCI%20—%20abonnement%20coop%C3%A9rative%20ou%20entreprise">Écrire pour un abonnement</a>
+          <a class="btn btn-ghost btn-lg" href="mailto:aicmaxter@gmail.com?subject=AGROGUIDCI%20—%20cr%C3%A9dits%20ou%20abonnement">Écrire pour un abonnement</a>
         </div>
       </div>
     </div>
@@ -392,43 +467,44 @@
           </span>
           <span class="brand-text">AGROGUID<span class="ci">CI</span></span>
         </a>
-        <p style="margin:.8rem 0 0;font-size:.86rem;color:var(--muted);max-width:34ch">Conseil agricole pour la Côte d'Ivoire. Sept agents experts, des données réelles, des limites dites clairement.</p>
+        <p style="margin:.8rem 0 0;font-size:.86rem;color:var(--muted);max-width:34ch">Conseil agricole pour la Côte d'Ivoire. Données réelles, prix du marché, cultures à découvrir — et des limites dites clairement.</p>
       </div>
       <div>
         <h4>Produit</h4>
         <ul>
-          <li><a href="#conseil">Conseil IA</a></li>
-          <li><a href="#tarifs">Tarifs</a></li>
-          <li><a href="#agents">Les 7 agents</a></li>
-          <li><a href="#faq">Questions fréquentes</a></li>
+          <li><a href="#conseil">Conseil</a></li>
+          <li><a href="#prix">Prix du kilo</a></li>
+          <li><a href="#cultures">Cultures à découvrir</a></li>
+          <li><a href="#tarifs">Tarifs &amp; crédits</a></li>
         </ul>
       </div>
       <div>
         <h4>Ressources</h4>
         <ul>
-          <li><a href="specs.html">Spécification</a></li>
-          <li><a href="agent-specs.html">Fiches agents</a></li>
+          <li><a href="specs.html">Spécification technique</a></li>
           <li><a href="https://github.com/aicmaxter/agroguidci/tree/main/knowledge" target="_blank" rel="noreferrer">Bibliothèque</a></li>
+          <li><a href="#actualites">Repères de campagne</a></li>
         </ul>
       </div>
       <div>
-        <h4>Contact</h4>
+        <h4>Légal &amp; contact</h4>
         <ul>
+          <li><a href="confidentialite.html">Politique de confidentialité</a></li>
+          <li><a href="confidentialite.html#droits">Vos droits sur vos données</a></li>
           <li><a href="mailto:aicmaxter@gmail.com">aicmaxter@gmail.com</a></li>
-          <li><a href="#contact">Abonnement structure</a></li>
-          <li><a href="https://github.com/aicmaxter/agroguidci" target="_blank" rel="noreferrer">Code source</a></li>
         </ul>
       </div>
     </div>
     <div class="foot-note">
       <span>AGROGUIDCI — conseils indicatifs, à confirmer avec l'ANADER, le CNRA ou le vétérinaire de votre zone.</span>
-      <span>Côte d'Ivoire · 7 agents experts</span>
+      <span>Données personnelles : loi n° 2013-450 du 19 juin 2013 · <a href="confidentialite.html">confidentialité</a></span>
     </div>
   </div>
 </footer>
 
 <script src="assets/geo.js"></script>
 <script src="assets/motion.js"></script>
+<script src="assets/ui.js"></script>
 <script src="assets/app.js"></script>
 </body>
 </html>

@@ -41,6 +41,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from agrokit import (ROOT, LLM, SERVICE, BaseConnaissances, ErreurLLM, Orchestrateur,  # noqa: E402
                      Trace, dire, dossier_sortie, horodate)
+from confidentialite import masquer_champs  # noqa: E402  minimisation des journaux
 from expert_agent import executer as executer_agent  # noqa: E402
 from experts import EXPERTISES, PRINCIPAL, SOUS_AGENTS, Expertise, par_capacite  # noqa: E402
 from mission import JournalMission  # noqa: E402
@@ -704,11 +705,15 @@ class Coordonnateur:
 
     # -- pipeline complet -------------------------------------------------
     def journaliser_supervision(self, entree: dict) -> Path:
-        """Journal global de supervision : une ligne JSON par mission."""
+        """Journal global de supervision : une ligne JSON par mission.
+
+        Les identifiants directs (telephone, e-mail) sont masques : la supervision
+        n'en a pas besoin, et un journal se conserve plus longtemps qu'une mission.
+        """
         f = ROOT / "out" / "supervision.jsonl"
         f.parent.mkdir(parents=True, exist_ok=True)
         with f.open("a", encoding="utf-8") as fh:
-            fh.write(json.dumps(entree, ensure_ascii=False) + "\n")
+            fh.write(json.dumps(masquer_champs(entree), ensure_ascii=False) + "\n")
         return f
 
     def traiter(self, demande: str, domaines_forces: list[str] | None = None,

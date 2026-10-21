@@ -151,8 +151,9 @@ def executer(expert: Expertise, instruction: str, llm: LLM, kb: BaseConnaissance
 
     # Journal local : tout ce qui permet de rejouer et d'auditer cette reponse.
     JOURNAL.parent.mkdir(parents=True, exist_ok=True)
+    from confidentialite import masquer_champs
     with JOURNAL.open("a", encoding="utf-8") as f:
-        f.write(json.dumps({
+        f.write(json.dumps(masquer_champs({
             "ts": time.strftime("%Y-%m-%dT%H:%M:%S"), "expert": expert.cle,
             "agent_id": expert.agent_id, "capacite": expert.capacite, "action": action,
             "modele": llm.modele, "duree_s": round(duree, 2),
@@ -165,7 +166,7 @@ def executer(expert: Expertise, instruction: str, llm: LLM, kb: BaseConnaissance
             "donnees_outils_sha256": [sha256(d) for d in donnees_outils],
             "dossier_outils": str(dossier_outils) if donnees_outils else None,
             "statut": statut, "erreur": erreur,
-        }, ensure_ascii=False) + "\n")
+        }), ensure_ascii=False) + "\n")
 
     return {"status": statut, "action": action or "expertise", "error": erreur,
             "result": reponse + pied, "duree_s": round(duree, 2),
