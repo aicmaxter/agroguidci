@@ -220,7 +220,7 @@ def t7_integration_indisponible() -> dict:
     d = _dossier("t7-integration-indisponible")
     rc, sortie = _agent(["expert_agent.py", "--expert", "production_animale", "--question",
                          "Comment conduire 200 poulets de chair a Bouake ?"],
-                        env={"DEEPSEEK_API_KEY": "sk-cle-invalide-pour-test-j2"})
+                        env={"DEEPSEEK_API_KEY": "cle-invalide-pour-test"})
     (d / "sortie-agent.txt").write_text(sortie, encoding="utf-8")
     declare = "echec du modele" in sortie.lower() or "impossible" in sortie.lower()
     pas_de_conseil = "poussiniere" not in sortie.lower() and "33" not in sortie
