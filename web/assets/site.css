@@ -783,3 +783,222 @@ body { background: #f3f7ef; }
 .band-green .prix-foot { background: rgba(0, 0, 0, .25); color: rgba(255, 255, 255, .82); }
 .band-green .prix-foot a { color: var(--lime); }
 .band-green .prix-week { background: var(--lime); color: #0b3a22; }
+
+
+/* ==========================================================================
+   v6 — application à onglets, vert dominant, bandeau temps réel, clignotement
+   ========================================================================== */
+
+body { background: #e9f2e0; }
+
+/* ----- navigation en boutons ----- */
+.navlink {
+  background: none; border: 0; padding: .25rem 0; cursor: pointer;
+  font: inherit; color: var(--ink-soft); font-weight: 600; position: relative;
+}
+.navlink::after {
+  content: ""; position: absolute; left: 0; bottom: -2px; height: 2px; width: 100%;
+  background: var(--grad); transform: scaleX(0); transform-origin: 0 50%;
+  transition: transform .3s var(--ease);
+}
+.navlink:hover { color: var(--ink); }
+.navlink:hover::after, .navlink.actif::after { transform: scaleX(1); }
+.navlink.actif { color: var(--green-800); font-weight: 800; }
+.lien { background: none; border: 0; padding: 0; font: inherit; color: inherit; cursor: pointer; text-align: left; }
+.lien:hover { color: var(--lime); }
+
+/* ----- hero compact vert ----- */
+.app-hero {
+  position: relative; overflow: hidden; color: #fff;
+  padding: clamp(2.4rem, 5vw, 4rem) 0 clamp(2.6rem, 5vw, 3.6rem);
+  background:
+    radial-gradient(110% 90% at 10% 0%, #14663a 0%, rgba(20, 102, 58, 0) 58%),
+    linear-gradient(165deg, #0b3a22 0%, #10512f 55%, #14663a 100%);
+}
+.app-hero .blob { opacity: .26; }
+.app-hero h1 { font-size: clamp(2.1rem, 4.4vw, 3.3rem); color: #fff; max-width: 20ch; text-wrap: balance; }
+.app-hero h1 .accent {
+  background-image: linear-gradient(100deg, #a7d857 0%, #e9f7c9 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+.app-hero .lead { color: rgba(255, 255, 255, .84); max-width: 52ch; }
+.app-hero .badge-pill {
+  background: rgba(255, 255, 255, .12); border-color: rgba(255, 255, 255, .28);
+  color: #f2f7ee; box-shadow: none;
+}
+.app-hero .btn-primary { background: var(--lime); color: #0b3a22; box-shadow: 0 18px 36px -18px rgba(167, 216, 87, .8); }
+.app-hero .btn-primary:hover { background: #b9e76b; }
+.app-hero .btn-ghost { background: rgba(255, 255, 255, .95); color: #0b3a22; border-color: transparent; }
+.app-hero-grid { display: grid; grid-template-columns: 1.25fr .75fr; gap: 2rem; align-items: center; }
+.hero-mini { display: grid; gap: .7rem; }
+.mini-card {
+  display: flex; align-items: center; gap: .75rem; padding: .8rem .9rem; border-radius: 1rem;
+  background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .18);
+  backdrop-filter: blur(8px);
+}
+.mini-card strong { display: block; font-size: .95rem; color: #fff; }
+.mini-card small { color: rgba(255, 255, 255, .68); font-size: .72rem; }
+.mini-ico {
+  width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center;
+  background: var(--lime); color: #0b3a22; flex: none;
+}
+.mini-ico svg { width: 18px; height: 18px; }
+
+/* ----- barre d'onglets collante ----- */
+.tabbar-wrap {
+  position: sticky; top: 74px; z-index: 60;
+  background: rgba(233, 242, 224, .92); backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--green-tint);
+}
+.tabbar { display: flex; gap: .35rem; overflow-x: auto; scrollbar-width: none; padding: .6rem 0; }
+.tabbar::-webkit-scrollbar { display: none; }
+.tab {
+  display: inline-flex; align-items: center; gap: .45rem; white-space: nowrap;
+  padding: .6rem 1rem; border-radius: var(--radius-pill); border: 1px solid transparent;
+  background: transparent; color: var(--ink-soft); font-weight: 700; font-size: .88rem; cursor: pointer;
+  transition: background .25s, color .25s, box-shadow .25s, transform .25s;
+}
+.tab svg { width: 17px; height: 17px; }
+.tab:hover { background: #fff; color: var(--green-800); }
+.tab.active {
+  background: var(--grad); color: #fff; box-shadow: 0 10px 24px -14px rgba(20, 102, 58, .9);
+}
+.tab-count {
+  font-size: .7rem; font-weight: 900; background: rgba(255, 255, 255, .25);
+  border-radius: var(--radius-pill); padding: .05rem .4rem;
+}
+.tab.active .tab-count { background: rgba(255, 255, 255, .3); }
+.tab-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--amber);
+  box-shadow: 0 0 0 0 rgba(224, 138, 0, .6); animation: pulseDot 2.2s infinite;
+}
+@keyframes pulseDot {
+  0% { box-shadow: 0 0 0 0 rgba(224, 138, 0, .6); }
+  70% { box-shadow: 0 0 0 8px rgba(224, 138, 0, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(224, 138, 0, 0); }
+}
+
+/* ----- panneaux ----- */
+.panel { padding: clamp(1.8rem, 3.5vw, 3rem) 0; animation: monte .45s var(--ease); }
+.panel[hidden] { display: none; }
+@keyframes monte { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.panel-intro { max-width: 64ch; margin-bottom: 1.8rem; }
+.panel-intro h2 { font-size: clamp(1.6rem, 3vw, 2.3rem); margin-bottom: .5rem; }
+.panel-intro p { color: var(--ink-soft); margin: 0; }
+.panel-form {
+  border-radius: var(--radius-xl); padding: clamp(1.1rem, 2.4vw, 1.8rem);
+  background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow-md);
+  position: relative; overflow: hidden;
+}
+.panel-form::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 4px; background: var(--grad); }
+
+/* ----- filtres cultures ----- */
+.filtres { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-bottom: 1.4rem; }
+.filtre {
+  padding: .5rem .9rem; border-radius: var(--radius-pill); border: 1px solid var(--green-tint);
+  background: #fff; color: var(--ink-soft); font-weight: 700; font-size: .84rem; cursor: pointer;
+  transition: background .25s, color .25s, transform .25s;
+}
+.filtre span { font-size: .72rem; opacity: .7; margin-left: .2rem; }
+.filtre:hover { transform: translateY(-1px); border-color: var(--green-400); }
+.filtre.actif { background: var(--grad); color: #fff; border-color: transparent; }
+.recherche { margin-left: auto; }
+.recherche input {
+  padding: .55rem .9rem; border-radius: var(--radius-pill); border: 1px solid var(--green-tint);
+  background: #fff; font: inherit; font-size: .86rem; min-width: 220px;
+}
+.recherche input:focus { outline: none; border-color: var(--green-500); box-shadow: 0 0 0 3px rgba(46, 139, 87, .18); }
+
+/* ----- cartes cultures : accents et clignotement ----- */
+.crop-badge.nou {
+  background: linear-gradient(100deg, #ffe08a, #f0b429); color: #3a2500;
+  animation: clignote 1.9s ease-in-out infinite;
+}
+@keyframes clignote {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(240, 180, 41, .65); opacity: 1; }
+  50% { box-shadow: 0 0 0 10px rgba(240, 180, 41, 0); opacity: .82; }
+}
+.crop.epice { border-color: #f0dcb4; }
+.crop.epice:hover { border-color: var(--amber); }
+.crop.epice .crop-img::after { background: linear-gradient(115deg, transparent 30%, rgba(255, 224, 138, .6) 48%, transparent 62%); }
+
+/* ----- actus : cartes qui attirent l'œil ----- */
+.flash-card { position: relative; overflow: hidden; }
+.flash-card::before {
+  content: ""; position: absolute; inset: -2px; border-radius: inherit; pointer-events: none;
+  border: 2px solid transparent;
+  background: linear-gradient(120deg, rgba(167, 216, 87, 0), rgba(167, 216, 87, .75), rgba(167, 216, 87, 0)) border-box;
+  -webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  animation: bordureVive 3.4s linear infinite;
+}
+@keyframes bordureVive {
+  0% { filter: drop-shadow(0 0 0 rgba(167, 216, 87, 0)); opacity: .55; }
+  50% { filter: drop-shadow(0 0 6px rgba(167, 216, 87, .55)); opacity: 1; }
+  100% { filter: drop-shadow(0 0 0 rgba(167, 216, 87, 0)); opacity: .55; }
+}
+.actu-tag.neuf {
+  background: var(--amber); color: #2b1b00; position: relative;
+  animation: clignote 1.7s ease-in-out infinite;
+}
+
+/* ----- prix dans l'onglet (fond vert) ----- */
+#panel-prix {
+  background:
+    radial-gradient(90% 70% at 85% 0%, rgba(167, 216, 87, .16), transparent 60%),
+    linear-gradient(180deg, #0f4a2b 0%, #14663a 100%);
+  color: #fff;
+}
+#panel-prix .panel-intro h2 { color: #fff; }
+#panel-prix .panel-intro p { color: rgba(255, 255, 255, .82); }
+#panel-prix .eyebrow { color: var(--lime); }
+#panel-prix .prix-panel { background: rgba(8, 46, 27, .55); border-color: rgba(255, 255, 255, .18); }
+#panel-prix .prix-head { background: rgba(255, 255, 255, .07); border-bottom-color: rgba(255, 255, 255, .14); }
+#panel-prix .prix-head .titre svg { color: var(--lime); }
+#panel-prix .prix-table th { background: rgba(255, 255, 255, .06); color: rgba(255, 255, 255, .72); }
+#panel-prix .prix-table th, #panel-prix .prix-table td { border-bottom-color: rgba(255, 255, 255, .14); }
+#panel-prix .prix-table tbody tr:hover { background: rgba(255, 255, 255, .07); }
+#panel-prix .prix-table .produit { color: #fff; }
+#panel-prix .prix-table .prix { color: var(--lime); }
+#panel-prix .prix-table .unite, #panel-prix .prix-table .marche { color: rgba(255, 255, 255, .72); }
+#panel-prix .prix-foot { background: rgba(0, 0, 0, .25); border-top-color: rgba(255, 255, 255, .12); color: rgba(255, 255, 255, .82); }
+#panel-prix .prix-foot a { color: var(--lime); }
+#panel-prix .prix-week { background: var(--lime); color: #0b3a22; }
+
+/* ----- cartes météo ----- */
+.meteo-cartes { display: grid; grid-template-columns: repeat(4, 1fr); gap: .8rem; margin-top: 1.2rem; }
+.meteo-carte {
+  display: flex; flex-direction: column; gap: .15rem; padding: 1rem;
+  border-radius: var(--radius-md); background: rgba(255, 255, 255, .1);
+  border: 1px solid rgba(255, 255, 255, .18);
+}
+.meteo-ville { font-size: .82rem; font-weight: 800; color: rgba(255, 255, 255, .78); }
+.meteo-temp { font-family: var(--font-display); font-size: 1.9rem; line-height: 1.05; color: #fff; }
+.meteo-detail { font-size: .76rem; color: rgba(255, 255, 255, .76); }
+.meteo-heure { font-size: .68rem; color: rgba(255, 255, 255, .5); }
+
+/* ----- offres : trois cartes ----- */
+.plans-3 { grid-template-columns: repeat(3, 1fr); }
+
+/* ----- responsive ----- */
+@media (max-width: 980px) {
+  .app-hero-grid { grid-template-columns: 1fr; }
+  .hero-mini { grid-template-columns: repeat(2, 1fr); }
+  .actus-grid { grid-template-columns: 1fr 1fr; }
+  .meteo-cartes { grid-template-columns: repeat(2, 1fr); }
+  .plans-3 { grid-template-columns: 1fr; }
+  .tabbar-wrap { top: 64px; }
+}
+@media (max-width: 640px) {
+  .hero-mini { grid-template-columns: 1fr; }
+  .actus-grid { grid-template-columns: 1fr; }
+  .recherche { margin-left: 0; width: 100%; }
+  .recherche input { width: 100%; min-width: 0; }
+  .meteo-cartes { grid-template-columns: 1fr 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flash-card::before, .actu-tag.neuf, .crop-badge.nou, .tab-dot { animation: none; }
+  .panel { animation: none; }
+}

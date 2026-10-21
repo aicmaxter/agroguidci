@@ -4,19 +4,19 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AGROGUIDCI — Le bon conseil agricole, au bon moment</title>
-<meta name="description" content="AGROGUIDCI : conseil agricole pour la Côte d'Ivoire. Cultures, élevage, météo, prix du marché et cultures à découvrir. Gratuit (3 conseils par mois), crédits à 599 FCFA, suivi personnalisé et offres professionnelles.">
-<meta name="theme-color" content="#14663a">
-<meta property="og:title" content="AGROGUIDCI — Le bon conseil agricole, au bon moment">
-<meta property="og:description" content="Cultures, élevage, météo, prix au kilo et cultures à découvrir en Côte d'Ivoire. Données réelles, limites dites clairement.">
+<meta name="description" content="AGROGUIDCI : application agricole pour la Côte d'Ivoire. Conseil, cultures vivrières et épices, prix du kilo, actualités. Gratuit chaque jour, deux formules payantes seulement.">
+<meta name="theme-color" content="#0b3a22">
+<meta property="og:title" content="AGROGUIDCI — conseil, cultures, épices et prix du marché">
+<meta property="og:description" content="Conseil agricole, fiches cultures et épices, prix au kilo, actualités de campagne. Gratuit chaque jour.">
 <meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2314633A'/%3E%3Cstop offset='1' stop-color='%237BB661'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='24' height='24' rx='7' fill='url(%23g)'/%3E%3Cpath d='M12 21v-7' stroke='%23fff' stroke-width='1.7' fill='none' stroke-linecap='round'/%3E%3Cpath d='M12 14c0-3.4 2.4-5.8 5.8-5.8 0 3.4-2.4 5.8-5.8 5.8Z' stroke='%23fff' stroke-width='1.7' fill='none'/%3E%3Cpath d='M12 14c0-2.6-1.9-4.5-4.7-4.5 0 2.6 1.9 4.5 4.7 4.5Z' stroke='%23fff' stroke-width='1.7' fill='none'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%230B3A22'/%3E%3Cstop offset='1' stop-color='%237BB661'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='24' height='24' rx='7' fill='url(%23g)'/%3E%3Cpath d='M12 21v-7' stroke='%23fff' stroke-width='1.7' fill='none' stroke-linecap='round'/%3E%3Cpath d='M12 14c0-3.4 2.4-5.8 5.8-5.8 0 3.4-2.4 5.8-5.8 5.8Z' stroke='%23fff' stroke-width='1.7' fill='none'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
-<a class="skip" href="#contenu">Aller au contenu</a>
+<a class="skip" href="#app">Aller au contenu</a>
 <div class="progress" id="progress" aria-hidden="true"></div>
 
 <header class="site-header" id="siteHeader">
@@ -28,139 +28,333 @@
       <span class="brand-text">AGROGUID<span class="ci">CI</span></span>
     </a>
     <nav class="nav" aria-label="Navigation principale">
-      <a href="#conseil">Conseil</a>
-      <a href="#actualites">Actualités</a>
-      <a href="#prix">Prix</a>
-      <a href="#cultures">Cultures</a>
-      <a href="#epices">Épices</a>
+      <button class="navlink" data-tab="conseil" type="button">Conseil</button>
+      <button class="navlink" data-tab="cultures" type="button">Cultures</button>
+      <button class="navlink" data-tab="prix" type="button">Prix</button>
+      <button class="navlink" data-tab="actus" type="button">Actualités</button>
       <a href="#tarifs">Tarifs</a>
       <a href="confidentialite.html">Confidentialité</a>
     </nav>
-    <a class="btn btn-primary header-cta" href="#conseil">Conseil gratuit</a>
+    <a class="btn btn-primary header-cta" href="#conseil" data-tab="conseil">Conseil gratuit</a>
     <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMobile" aria-label="Ouvrir le menu">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg>
     </button>
   </div>
   <div class="nav-mobile" id="navMobile">
-    <a href="#conseil">Conseil</a>
-    <a href="#actualites">Actualités</a>
-    <a href="#prix">Prix du kilo</a>
-    <a href="#cultures">Cultures à découvrir</a>
-    <a href="#epices">Épices</a>
-    <a href="#tarifs">Tarifs &amp; crédits</a>
+    <button class="navlink" data-tab="conseil" type="button">Conseil</button>
+    <button class="navlink" data-tab="cultures" type="button">Cultures &amp; épices</button>
+    <button class="navlink" data-tab="prix" type="button">Prix du kilo</button>
+    <button class="navlink" data-tab="actus" type="button">Actualités</button>
+    <a href="#tarifs">Tarifs</a>
     <a href="confidentialite.html">Confidentialité</a>
   </div>
 </header>
 
-<main id="contenu">
+<div class="ticker" aria-label="Informations en temps réel">
+  <div class="ticker-track" id="prixTicker">
+    <span class="ticker-item">Chargement des prix et de la météo…</span>
+  </div>
+</div>
 
-  <!-- ============================================================ HERO -->
-  <section class="hero">
+<main id="app">
+
+  <section class="app-hero">
     <div class="hero-blobs" aria-hidden="true">
-      <span class="blob blob-1" data-parallax="0.06"></span>
-      <span class="blob blob-2" data-parallax="-0.05"></span>
-      <span class="blob blob-3" data-parallax="0.04"></span>
+      <span class="blob blob-1" data-parallax="0.05"></span>
+      <span class="blob blob-2" data-parallax="-0.04"></span>
     </div>
-    <div class="wrap hero-grid">
-      <div class="hero-copy">
-        <p class="badge-pill"><span class="dot" aria-hidden="true"></span> 3 conseils gratuits par mois · sans carte bancaire</p>
+    <div class="wrap app-hero-grid">
+      <div>
+        <p class="badge-pill"><span class="dot" aria-hidden="true"></span> Gratuit chaque jour · sans carte bancaire</p>
         <h1>Le bon conseil agricole, <span class="accent">au bon moment</span>.</h1>
-        <p class="lead">Culture, élevage, pluie, marge, prix du marché : décrivez votre situation, les agents experts répondent avec des données réelles, des sources et leurs limites. Gratuit pour commencer, crédits à 599 FCFA quand vous en voulez plus.</p>
+        <p class="lead">Une application, quatre onglets : conseil, cultures et épices, prix du kilo, actualités. Les agents experts répondent avec des données réelles, des sources et leurs limites.</p>
         <div class="hero-actions">
-          <a class="btn btn-primary btn-lg" href="#conseil">Demander un conseil</a>
-          <a class="btn btn-outline btn-lg" href="#prix">Voir les prix du marché</a>
-        </div>
-        <div class="hero-trust">
-          <div><strong data-count="7">7</strong> agents experts</div>
-          <div><strong data-count="33">33</strong> régions couvertes</div>
-          <div><strong data-count="111">111</strong> départements</div>
-          <div><strong>599 F</strong> les 10 conseils</div>
+          <button class="btn btn-primary btn-lg" type="button" data-tab="conseil">Poser ma question</button>
+          <button class="btn btn-ghost btn-lg" type="button" data-tab="cultures">Voir les cultures</button>
         </div>
       </div>
-
-      <div class="hero-visual">
-        <div class="hero-card">
-          <img src="assets/hero.jpg" alt="Plantation de cacao en Côte d'Ivoire au coucher du soleil" width="1600" height="912" fetchpriority="high">
-        </div>
-        <div class="float-chip chip-1">
-          <span class="ico" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="M20 12h2"/><path d="m19.07 4.93-1.41 1.41"/><path d="M15.947 12.65a4 4 0 0 0-5.925-4.128"/><path d="M13 22H7a5 5 0 1 1 4.9-6H13a3 3 0 0 1 0 6Z"/></svg>
+      <div class="hero-mini">
+        <div class="mini-card">
+          <span class="mini-ico" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v2"/><path d="M20 12h2"/><path d="M15.947 12.65a4 4 0 0 0-5.925-4.128"/><path d="M13 22H7a5 5 0 1 1 4.9-6H13a3 3 0 0 1 0 6Z"/></svg>
           </span>
-          <span>Pluie 12 mois<small>Daloa · relevé ERA5</small></span>
+          <div><strong id="meteoVedette">météo…</strong><small>temps réel · Open-Meteo</small></div>
         </div>
-        <div class="float-chip chip-2">
-          <span class="ico" aria-hidden="true">
+        <div class="mini-card">
+          <span class="mini-ico" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 7H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
           </span>
-          <span>Prix du kilo<small>OCPV, dernière semaine</small></span>
+          <div><strong id="prixVedette">prix…</strong><small>dernier relevé OCPV</small></div>
         </div>
-        <div class="float-chip chip-3">
-          <span class="ico" aria-hidden="true">
+        <div class="mini-card">
+          <span class="mini-ico" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
           </span>
-          <span>Réponse vérifiée<small>sources et limites citées</small></span>
+          <div><strong>Réponses vérifiées</strong><small>sources et limites citées</small></div>
         </div>
       </div>
     </div>
   </section>
 
-  <div class="ticker" aria-label="Prix du marché en continu">
-    <div class="ticker-track" id="prixTicker">
-      <span class="ticker-item">Chargement des prix du marché…</span>
+  <div class="tabbar-wrap">
+    <div class="wrap">
+      <div class="tabbar" role="tablist" aria-label="Sections de l'application">
+        <button role="tab" id="tab-conseil" aria-controls="panel-conseil" aria-selected="true" data-tab="conseil" class="tab active">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+          Conseil
+        </button>
+        <button role="tab" id="tab-cultures" aria-controls="panel-cultures" aria-selected="false" data-tab="cultures" class="tab">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21v-7"/><path d="M12 14c0-3.4 2.4-5.8 5.8-5.8 0 3.4-2.4 5.8-5.8 5.8Z"/><path d="M12 14c0-2.6-1.9-4.5-4.7-4.5 0 2.6 1.9 4.5 4.7 4.5Z"/></svg>
+          Cultures &amp; épices
+          <span class="tab-count">8</span>
+        </button>
+        <button role="tab" id="tab-prix" aria-controls="panel-prix" aria-selected="false" data-tab="prix" class="tab">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 5-6"/></svg>
+          Prix du kilo
+        </button>
+        <button role="tab" id="tab-actus" aria-controls="panel-actus" aria-selected="false" data-tab="actus" class="tab">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
+          Actualités
+          <span class="tab-dot" aria-label="nouveautés"></span>
+        </button>
+      </div>
     </div>
   </div>
 
-  <section class="section-tight">
+  <!-- ===================== ONGLET CONSEIL ===================== -->
+  <section class="panel active" id="panel-conseil" role="tabpanel" aria-labelledby="tab-conseil">
     <div class="wrap">
-      <div class="stats reveal">
-        <div class="stat"><b data-count="7">7</b><span>agents spécialisés</span></div>
-        <div class="stat"><b data-count="9">9</b><span>outils de calcul et de données</span></div>
-        <div class="stat"><b data-count="33">33</b><span>régions couvertes</span></div>
-        <div class="stat"><b>599 F</b><span>les 10 conseils, sans abonnement</span></div>
+      <div class="panel-intro">
+        <span class="eyebrow">Conseil</span>
+        <h2>Décrivez votre situation, on s'occupe du reste.</h2>
+        <p>Choisissez votre localité, puis décrivez la parcelle ou l'élevage. La réponse est rendue par l'Agent Agronome Expert, avec ses sources, ses hypothèses et ses limites.</p>
       </div>
+
+      <form class="panel-form" id="conseilForm" novalidate>
+        <div class="credits-bar" id="creditsBar">
+          <span class="pill">Crédits du jour : <strong id="creditsCount">2</strong></span>
+          <span id="creditsTexte">Gratuit chaque jour : 2 conseils, remis à zéro chaque matin.</span>
+          <a href="#tarifs" id="creditsRecharge">Crédits : 599 FCFA les 10</a>
+        </div>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>Région ou district autonome</span>
+            <select id="region" name="region" aria-label="Région ou district autonome">
+              <option value="">Toutes les régions et districts</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Département</span>
+            <select id="departement" name="departement" aria-label="Département">
+              <option value="">Tous les départements</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Localité <span class="label-hint">(facultatif)</span></span>
+            <input type="text" id="localite" name="localite" placeholder="Village, sous-préfecture…" autocomplete="off">
+          </label>
+          <label class="field">
+            <span>Surface <span class="label-hint">(hectares, facultatif)</span></span>
+            <input type="text" id="surface" name="surface" inputmode="decimal" placeholder="2" autocomplete="off">
+          </label>
+          <label class="field field-wide">
+            <span>Votre question</span>
+            <textarea id="question" name="question" placeholder="Ex. : j'ai 2 hectares à Bouaké, je débute, que puis-je cultiver en saison des pluies avec un petit budget ?" required></textarea>
+            <p class="help">Décrivez ce que vous observez, ce que vous avez déjà fait, et ce que vous voulez décider.</p>
+          </label>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">Demander un conseil</button>
+          <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+        </div>
+
+        <label class="consent">
+          <input type="checkbox" id="consent" name="consent">
+          <span>J'accepte que ma question, ma localité et ma surface soient traitées pour produire la réponse, conformément à la <a href="confidentialite.html">politique de confidentialité</a>. Je peux demander leur suppression à tout moment.</span>
+        </label>
+      </form>
+
+      <article class="answer" id="answer" aria-live="polite">
+        <div class="answer-head">
+          <span class="state-badge" id="stateBadge">—</span>
+          <span class="answer-meta" id="answerMeta"></span>
+        </div>
+        <div id="answerBody"></div>
+      </article>
     </div>
   </section>
 
-  <!-- ============================================================ ACTUALITÉS -->
-  <section class="section" id="actualites">
+  <!-- ===================== ONGLET CULTURES ===================== -->
+  <section class="panel" id="panel-cultures" role="tabpanel" aria-labelledby="tab-cultures" hidden>
     <div class="wrap">
-      <div class="section-head reveal">
-        <span class="eyebrow">Actualités &amp; repères de campagne</span>
-        <h2>Ce qui compte en ce moment dans les filières.</h2>
-        <p class="section-sub">Des repères vérifiables, pas des rumeurs de marché. Chaque carte indique l'organisme qui fait référence sur le sujet.</p>
+      <div class="panel-intro">
+        <span class="eyebrow">Cultures &amp; épices</span>
+        <h2>Huit cultures à fort potentiel, photos et repères réels.</h2>
+        <p>Vivrières peu plantées et épices : peu d'intrants, meilleure valeur au kilo. Filtrez par famille, puis ouvrez une fiche pour le cycle, les atouts et le débouché.</p>
       </div>
-      <div class="actus-grid">
-        <article class="actu reveal">
-          <div class="actu-top"><span class="actu-tag">Campagne</span><span class="actu-date">Campagne 2026-2027</span></div>
-          <h3>Cacao et café : le prix bord champ est fixé, pas négocié</h3>
-          <p>Le prix bord champ de la campagne est annoncé par le Conseil Café-Cacao avant l'ouverture. Avant de vendre, faites peser votre produit au peson homologué, demandez le barème de la campagne en cours et gardez le ticket de pesée : c'est votre seule preuve en cas de litige.</p>
-          <p class="actu-source">Référence : <a href="https://www.ccc-ivoirien.com/" target="_blank" rel="noreferrer">Conseil Café-Cacao</a></p>
-        </article>
-        <article class="actu reveal">
-          <div class="actu-top"><span class="actu-tag">Filière</span><span class="actu-date">Récolte 2026</span></div>
-          <h3>Anacarde : le tri change le prix plus que la quantité</h3>
-          <p>Un lot bien séché et trié (grains remplis, coques propres, humidité maîtrisée) se valorise nettement mieux qu'un lot humide vendu en vrac. Séchage à l'ombre sur claies, tri des noix vides, sacs propres et cousus : trois gestes qui pèsent plus lourd que d'ajouter un sac.</p>
-          <p class="actu-source">Référence : <a href="https://www.conseilcotonanacarde.ci/" target="_blank" rel="noreferrer">Conseil Coton Anacarde</a></p>
-        </article>
-        <article class="actu reveal">
-          <div class="actu-top"><span class="actu-tag">Climat</span><span class="actu-date">Octobre 2026</span></div>
-          <h3>Fin de la petite saison des pluies : à intégrer avant de semer</h3>
-          <p>Quand les pluies faiblissent, un semis de variété à cycle long prend un risque hydrique en décembre. Avant de semer, regardez la pluie réellement tombée sur les 12 derniers mois et la prévision à 7 jours pour votre localité — l'outil météo de la plateforme donne ces deux valeurs, par ville.</p>
-          <p class="actu-source">Référence : <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open-Meteo (réanalyse ERA5)</a> · <a href="https://www.anader.ci/" target="_blank" rel="noreferrer">ANADER</a></p>
-        </article>
+
+      <div class="filtres" role="group" aria-label="Filtrer les cultures">
+        <button class="filtre actif" type="button" data-filtre="tous">Toutes <span>8</span></button>
+        <button class="filtre" type="button" data-filtre="vivriere">Vivrières <span>4</span></button>
+        <button class="filtre" type="button" data-filtre="epice">Épices <span>4</span></button>
+        <label class="recherche"><span class="sr-only">Rechercher une culture</span>
+          <input type="search" id="rechercheCulture" placeholder="Rechercher : poivre, fonio…" autocomplete="off">
+        </label>
       </div>
+
+      <div class="crops-grid" id="grilleCultures">
+          <article class="crop reveal" data-type="vivriere" data-nom="voandzou">
+            <figure class="crop-img">
+              <img src="assets/cultures/voandzou.jpg" alt="Voandzou — photographie réelle" width="1200" height="750" loading="lazy">
+              <span class="crop-badge">Peu cultivée</span>
+            </figure>
+            <div class="crop-body">
+              <h3>Voandzou</h3>
+              <p class="surnom">Pois bambara, pois de terre</p>
+              <p class="desc">Légumineuse très rustique : elle fixe l'azote, supporte la sécheresse et se conserve longtemps sans traitement. Utile en rotation avant une céréale.</p>
+              <dl>
+                <dt>Cycle</dt><dd>90 à 120 jours</dd>
+                <dt>Atouts</dt><dd>peu d'intrants, résiste au sec, enrichit le sol</dd>
+                <dt>Débouché</dt><dd>graines, farine, bouillie ; demande urbaine stable</dd>
+              </dl>
+              <p class="crop-credit">Photo : Crop Trust · CC BY-SA 4.0 · <a href="https://commons.wikimedia.org/wiki/File:Traditional_deshelling_of_Bambara_groundnut,_Singida,_Tanzania.jpg" target="_blank" rel="noreferrer">Wikimedia</a></p>
+            </div>
+          </article>
+          <article class="crop reveal" data-type="vivriere" data-nom="fonio">
+            <figure class="crop-img">
+              <img src="assets/cultures/fonio.jpg" alt="Fonio — photographie réelle" width="1200" height="750" loading="lazy">
+              <span class="crop-badge">Peu cultivée</span>
+            </figure>
+            <div class="crop-body">
+              <h3>Fonio</h3>
+              <p class="surnom">La céréale la plus fine</p>
+              <p class="desc">Pousse sur des sols pauvres et sableux, mûrit vite et demande peu d'eau — un recours quand la saison est courte.</p>
+              <dl>
+                <dt>Cycle</dt><dd>60 à 90 jours</dd>
+                <dt>Atouts</dt><dd>rustique, très précoce, bon prix au kilo</dd>
+                <dt>Débouché</dt><dd>restauration, farines, marchés urbains et export</dd>
+              </dl>
+              <p class="crop-credit">Photo : Crop Trust · CC BY-SA 4.0 · <a href="https://commons.wikimedia.org/wiki/File:Fonio_panicles_maturing_in_Natitingou,_northern_Benin.jpg" target="_blank" rel="noreferrer">Wikimedia</a></p>
+            </div>
+          </article>
+          <article class="crop reveal" data-type="vivriere" data-nom="sésame">
+            <figure class="crop-img">
+              <img src="assets/cultures/sesame.jpg" alt="Sésame — photographie réelle" width="1200" height="750" loading="lazy">
+              <span class="crop-badge">Peu cultivée</span>
+            </figure>
+            <div class="crop-body">
+              <h3>Sésame</h3>
+              <p class="surnom">Oléagineux d'export</p>
+              <p class="desc">Le point critique n'est pas la production mais la récolte : choisir des variétés à capsules qui ne s'ouvrent pas, récolter dès maturité, sécher sur bâche.</p>
+              <dl>
+                <dt>Cycle</dt><dd>90 à 110 jours</dd>
+                <dt>Atouts</dt><dd>peu d'eau, demande à l'export, prix au kilo élevé</dd>
+                <dt>Débouché</dt><dd>huile, pâtisserie, export (qualité et propreté du lot)</dd>
+              </dl>
+              <p class="crop-credit">Photo : Joydeep · CC BY-SA 3.0 · <a href="https://commons.wikimedia.org/wiki/File:Sesamum_indicum_13062014.jpg" target="_blank" rel="noreferrer">Wikimedia</a></p>
+            </div>
+          </article>
+          <article class="crop reveal" data-type="vivriere" data-nom="patate douce à chair orange">
+            <figure class="crop-img">
+              <img src="assets/cultures/patatedouce.jpg" alt="Patate douce à chair orange — photographie réelle" width="1200" height="750" loading="lazy">
+              <span class="crop-badge">Peu cultivée</span>
+            </figure>
+            <div class="crop-body">
+              <h3>Patate douce à chair orange</h3>
+              <p class="surnom">Vitamine A, transformation</p>
+              <p class="desc">Rendement rapide sur sol léger, riche en bêta-carotène. Deux marchés : le frais et la transformation en farine ou purée.</p>
+              <dl>
+                <dt>Cycle</dt><dd>90 à 120 jours</dd>
+                <dt>Atouts</dt><dd>couvre le sol, peu d'intrants, bonne valeur nutritionnelle</dd>
+                <dt>Débouché</dt><dd>frais, farine, programmes nutrition, écoles</dd>
+              </dl>
+              <p class="crop-credit">Photo : Prosperosity · CC BY 4.0 · <a href="https://commons.wikimedia.org/wiki/File:20230227_161110_Ipomoea_batatas_%27Beauregard%27.jpg" target="_blank" rel="noreferrer">Wikimedia</a></p>
+            </div>
+          </article>
+          <article class="crop reveal epice" data-type="epice" data-nom="poivre noir">
+            <figure class="crop-img">
+              <img src="assets/cultures/poivre.jpg" alt="Poivre noir — photographie réelle" width="1200" height="750" loading="lazy">
+              <span class="crop-badge epice nou">Épice</span>
+            </figure>
+            <div class="crop-body">
+              <h3>Poivre noir</h3>
+              <p class="surnom">Piper nigrum — liane à tuteurer</p>
+              <p class="desc">Liane tropicale conduite sur tuteur, à l'ombre légère. Baies vertes séchées = poivre noir ; baies dépulpées = poivre blanc. Production ivoirienne encore marginale : valider le débouché avant de planter.</p>
+              <dl>
+                <dt>Cycle</dt><dd>entrée en production 3 à 4 ans</dd>
+                <dt>Atouts</dt><dd>prix au kilo très élevé, valorise l'ombrage</dd>
+                <dt>Débouché</dt><dd>épiceries fines, restauration, export</dd>
+              </dl>
+              <p class="crop-credit">Photo : K Hari Krishnan · CC BY-SA 3.0 · <a href="https://commons.wikimedia.org/wiki/File:Black_Pepper_(Piper_nigrum)_fruits.jpg" target="_blank" rel="noreferrer">Wikimedia</a></p>
+            </div>
+          </article>
+          <article class="crop reveal epice" data-type="epice" data-nom="gingembre">
+            <figure class="crop-img">
+              <img src="assets/cultures/gingembre.jpg" alt="Gingembre — photographie réelle" width="1200" height="750" loading="lazy">
+              <span class="crop-badge epice nou">Épice</span>
+            </figure>
+            <div class="crop-body">
+              <h3>Gingembre</h3>
+              <p class="surnom">Zingiber officinale — rhizome</p>
+              <p class="desc">Rhizome cultivé sur sol meuble et humide, récolté à maturité des tiges. Forte demande locale pour les jus et boissons, et bonne valeur une fois séché et broyé.</p>
+              <dl>
+                <dt>Cycle</dt><dd>8 à 10 mois</dd>
+                <dt>Atouts</dt><dd>demande locale forte, transformation simple</dd>
+                <dt>Débouché</dt><dd>marchés urbains, jus et boissons, cosmétique</dd>
+              </dl>
+              <p class="crop-credit">Photo : Kayleemariev · CC0 · <a href="https://commons.wikimedia.org/wiki/File:Zingiber_officinale_rhizome.jpg" target="_blank" rel="noreferrer">Wikimedia</a></p>
+            </div>
+          </article>
+          <article class="crop reveal epice" data-type="epice" data-nom="curcuma">
+            <figure class="crop-img">
+              <img src="assets/cultures/curcuma.jpg" alt="Curcuma — photographie réelle" width="1200" height="750" loading="lazy">
+              <span class="crop-badge epice nou">Épice</span>
+            </figure>
+            <div class="crop-body">
+              <h3>Curcuma</h3>
+              <p class="surnom">Curcuma longa — rhizome orangé</p>
+              <p class="desc">Proche du gingembre, rhizome orangé séché puis broyé : épice, colorant, usage cosmétique. Transformation possible avec un simple séchoir et un moulin.</p>
+              <dl>
+                <dt>Cycle</dt><dd>8 à 9 mois</dd>
+                <dt>Atouts</dt><dd>transformation simple, demande croissante</dd>
+                <dt>Débouché</dt><dd>poudre, épiceries, cosmétique</dd>
+              </dl>
+              <p class="crop-credit">Photo : Simon A. Eugster · CC BY-SA 3.0 · <a href="https://commons.wikimedia.org/wiki/File:Curcuma_longa_roots.jpg" target="_blank" rel="noreferrer">Wikimedia</a></p>
+            </div>
+          </article>
+          <article class="crop reveal epice" data-type="epice" data-nom="piment">
+            <figure class="crop-img">
+              <img src="assets/cultures/piment.jpg" alt="Piment — photographie réelle" width="1200" height="750" loading="lazy">
+              <span class="crop-badge epice nou">Épice</span>
+            </figure>
+            <div class="crop-body">
+              <h3>Piment</h3>
+              <p class="surnom">Capsicum spp. — frais ou séché</p>
+              <p class="desc">Arbuste à récolte étalée : le séchage permet de lisser les ventes et d'éviter de brader au pic de production. Choisir une variété dont le piquant correspond au marché local.</p>
+              <dl>
+                <dt>Cycle</dt><dd>4 à 6 mois, récolte étalée</dd>
+                <dt>Atouts</dt><dd>cycle court, demande urbaine constante</dd>
+                <dt>Débouché</dt><dd>frais, séché, transformation</dd>
+              </dl>
+              <p class="crop-credit">Photo : Prenn · CC BY-SA 3.0 · <a href="https://commons.wikimedia.org/wiki/File:Capsicum_frutescens_(3).jpg" target="_blank" rel="noreferrer">Wikimedia</a></p>
+            </div>
+          </article>
+      </div>
+      <p class="pricing-note">Prix des épices : aucun relevé officiel ivoirien n'est publié régulièrement. Nous ne donnons donc aucun prix au kilo pour ces cultures — demandez un devis à un acheteur ou renseignez-vous auprès de l'ANADER avant de planter.</p>
     </div>
   </section>
 
-  <!-- ============================================================ PRIX -->
-  <section class="section band-green" id="prix">
+  <!-- ===================== ONGLET PRIX ===================== -->
+  <section class="panel" id="panel-prix" role="tabpanel" aria-labelledby="tab-prix" hidden>
     <div class="wrap">
-      <div class="section-head reveal">
+      <div class="panel-intro">
         <span class="eyebrow">Prix au kilogramme</span>
         <h2>Combien vaut votre produit cette semaine ?</h2>
-        <p class="section-sub">Relevés de gros publiés par l'OCPV pour les produits vivriers. Un prix affiché ici n'est pas un prix garanti : il sert à négocier en connaissance de cause.</p>
+        <p>Relevés de gros publiés par l'OCPV pour les produits vivriers. Un prix affiché n'est pas un prix garanti : il sert à négocier en connaissance de cause.</p>
       </div>
-      <div class="prix-panel reveal">
+      <div class="prix-panel">
         <div class="prix-head">
           <span class="titre">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 5-6"/></svg>
@@ -169,399 +363,160 @@
           <span class="prix-week" id="prixSemaine">Semaine 09 · 2026</span>
         </div>
         <table class="prix-table">
-          <thead>
-            <tr><th scope="col">Produit</th><th scope="col">Prix</th><th scope="col">Marché</th></tr>
-          </thead>
+          <thead><tr><th scope="col">Produit</th><th scope="col">Prix</th><th scope="col">Marché</th></tr></thead>
           <tbody id="prixBody">
             <tr><td class="produit">Igname Kponan</td><td class="prix">650 <span class="unite">FCFA/kg</span></td><td class="marche">Abidjan</td></tr>
             <tr><td class="produit">Graine de palme</td><td class="prix">470 <span class="unite">FCFA/kg</span></td><td class="marche">national</td></tr>
           </tbody>
         </table>
-        <div class="prix-foot" id="prixNote">
-          Prix de gros indicatifs, à confirmer sur votre marché avant toute décision de vente.
-        </div>
+        <div class="prix-foot" id="prixNote">Prix de gros indicatifs, à confirmer sur votre marché avant toute décision de vente.</div>
       </div>
+      <div class="meteo-cartes" id="meteoCartes"></div>
     </div>
   </section>
 
-  <!-- ============================================================ CULTURES À DÉCOUVRIR -->
-  <section class="section" id="cultures">
+  <!-- ===================== ONGLET ACTUALITÉS ===================== -->
+  <section class="panel" id="panel-actus" role="tabpanel" aria-labelledby="tab-actus" hidden>
     <div class="wrap">
-      <div class="section-head reveal">
-        <span class="eyebrow">Cultures à découvrir</span>
-        <h2>Quatre cultures peu plantées, qui ont un marché.</h2>
-        <p class="section-sub">Moins connues ne veut pas dire sans débouché : peu d'intrants, meilleure résistance au sec, meilleur prix au kilo. À valider avec votre conseiller avant de changer d'assolement.</p>
+      <div class="panel-intro">
+        <span class="eyebrow">Actualités &amp; nouveautés</span>
+        <h2>Ce qui bouge dans les filières.</h2>
+        <p>Repères vérifiables, chacun rattaché à l'organisme qui fait référence. Les encarts qui clignotent signalent une nouveauté ou une culture à surveiller.</p>
       </div>
-      <div class="crops-grid">
-        <article class="crop reveal">
-          <figure class="crop-img">
-            <img src="assets/cultures/voandzou.jpg" alt="Voandzou — photographie réelle" width="1200" height="750" loading="lazy">
-            <span class="crop-badge">Peu cultivée</span>
-          </figure>
-          <div class="crop-body">
-            <h3>Voandzou</h3>
-            <p class="surnom">Pois bambara, pois de terre</p>
-            <p class="desc">Légumineuse très rustique : elle fixe l'azote, supporte la sécheresse et se conserve longtemps sans traitement. Utile en rotation avant une céréale.</p>
-            <dl>
-              <dt>Cycle</dt><dd>90 à 120 jours</dd>
-              <dt>Atouts</dt><dd>peu d'intrants, résiste au sec, enrichit le sol</dd>
-              <dt>Débouché</dt><dd>graines, farine, bouillie ; demande urbaine stable</dd>
-            </dl>
-            <p class="crop-credit">Photo : Crop Trust · CC BY-SA 4.0 · <a href="https://commons.wikimedia.org/wiki/File:Traditional_deshelling_of_Bambara_groundnut,_Singida,_Tanzania.jpg" target="_blank" rel="noreferrer">Wikimedia Commons</a></p>
-          </div>
+
+      <div class="actus-grid">
+        <article class="actu reveal flash-card">
+          <div class="actu-top"><span class="actu-tag neuf">Nouveau</span><span class="actu-date">Épices</span></div>
+          <h3>Le curcuma et le gingembre entrent dans la bibliothèque</h3>
+          <p>Deux rhizomes à forte demande locale, transformables en poudre avec un séchoir et un moulin. Fiches complètes : cycle, atouts, débouché.</p>
+          <p class="actu-source"><a href="#cultures" data-tab="cultures">Ouvrir les fiches cultures →</a></p>
         </article>
-        <article class="crop reveal">
-          <figure class="crop-img">
-            <img src="assets/cultures/fonio.jpg" alt="Fonio — photographie réelle" width="1200" height="750" loading="lazy">
-            <span class="crop-badge">Peu cultivée</span>
-          </figure>
-          <div class="crop-body">
-            <h3>Fonio</h3>
-            <p class="surnom">La céréale la plus fine</p>
-            <p class="desc">Pousse sur des sols pauvres et sableux, mûrit vite et demande peu d'eau — un recours quand la saison est courte.</p>
-            <dl>
-              <dt>Cycle</dt><dd>60 à 90 jours</dd>
-              <dt>Atouts</dt><dd>rustique, très précoce, bon prix au kilo</dd>
-              <dt>Débouché</dt><dd>restauration, farines, marchés urbains et export</dd>
-            </dl>
-            <p class="crop-credit">Photo : Crop Trust · CC BY-SA 4.0 · <a href="https://commons.wikimedia.org/wiki/File:Fonio_panicles_maturing_in_Natitingou,_northern_Benin.jpg" target="_blank" rel="noreferrer">Wikimedia Commons</a></p>
-          </div>
+        <article class="actu reveal flash-card">
+          <div class="actu-top"><span class="actu-tag neuf">Nouveau</span><span class="actu-date">Poivre</span></div>
+          <h3>Le poivre noir, culture d'ombre à très forte valeur</h3>
+          <p>Une liane qui valorise l'ombrage d'une plantation : 3 à 4 ans avant la pleine production, puis un prix au kilo sans commune mesure avec le vivrier.</p>
+          <p class="actu-source">Référence : <a href="https://www.anader.ci/" target="_blank" rel="noreferrer">ANADER</a></p>
         </article>
-        <article class="crop reveal">
-          <figure class="crop-img">
-            <img src="assets/cultures/sesame.jpg" alt="Sésame — photographie réelle" width="1200" height="750" loading="lazy">
-            <span class="crop-badge">Peu cultivée</span>
-          </figure>
-          <div class="crop-body">
-            <h3>Sésame</h3>
-            <p class="surnom">Oléagineux d'export</p>
-            <p class="desc">Le point critique n'est pas la production mais la récolte : choisir des variétés à capsules qui ne s'ouvrent pas, récolter dès maturité, sécher sur bâche.</p>
-            <dl>
-              <dt>Cycle</dt><dd>90 à 110 jours</dd>
-              <dt>Atouts</dt><dd>peu d'eau, demande à l'export, prix au kilo élevé</dd>
-              <dt>Débouché</dt><dd>huile, pâtisserie, export (qualité et propreté du lot)</dd>
-            </dl>
-            <p class="crop-credit">Photo : Joydeep · CC BY-SA 3.0 · <a href="https://commons.wikimedia.org/wiki/File:Sesamum_indicum_13062014.jpg" target="_blank" rel="noreferrer">Wikimedia Commons</a></p>
-          </div>
+        <article class="actu reveal">
+          <div class="actu-top"><span class="actu-tag">Campagne</span><span class="actu-date">2026-2027</span></div>
+          <h3>Cacao et café : le prix bord champ est fixé, pas négocié</h3>
+          <p>Le prix bord champ est annoncé par le Conseil Café-Cacao avant l'ouverture. Faites peser au peson homologué et gardez le ticket de pesée.</p>
+          <p class="actu-source">Référence : <a href="https://www.ccc-ivoirien.com/" target="_blank" rel="noreferrer">Conseil Café-Cacao</a></p>
         </article>
-        <article class="crop reveal">
-          <figure class="crop-img">
-            <img src="assets/cultures/patatedouce.jpg" alt="Patate douce à chair orange — photographie réelle" width="1200" height="750" loading="lazy">
-            <span class="crop-badge">Peu cultivée</span>
-          </figure>
-          <div class="crop-body">
-            <h3>Patate douce à chair orange</h3>
-            <p class="surnom">Vitamine A, transformation</p>
-            <p class="desc">Rendement rapide sur sol léger, riche en bêta-carotène. Deux marchés : le frais et la transformation en farine ou purée.</p>
-            <dl>
-              <dt>Cycle</dt><dd>90 à 120 jours</dd>
-              <dt>Atouts</dt><dd>couvre le sol, peu d'intrants, bonne valeur nutritionnelle</dd>
-              <dt>Débouché</dt><dd>frais, farine, programmes nutrition, écoles</dd>
-            </dl>
-            <p class="crop-credit">Photo : Prosperosity · CC BY 4.0 · <a href="https://commons.wikimedia.org/wiki/File:20230227_161110_Ipomoea_batatas_%27Beauregard%27.jpg" target="_blank" rel="noreferrer">Wikimedia Commons</a></p>
-          </div>
+        <article class="actu reveal">
+          <div class="actu-top"><span class="actu-tag">Filière</span><span class="actu-date">Récolte 2026</span></div>
+          <h3>Anacarde : le tri change le prix plus que la quantité</h3>
+          <p>Séchage à l'ombre, tri des noix vides, sacs propres et cousus : trois gestes qui pèsent plus lourd qu'ajouter un sac.</p>
+          <p class="actu-source">Référence : <a href="https://www.conseilcotonanacarde.ci/" target="_blank" rel="noreferrer">Conseil Coton Anacarde</a></p>
+        </article>
+        <article class="actu reveal">
+          <div class="actu-top"><span class="actu-tag">Climat</span><span class="actu-date">Octobre 2026</span></div>
+          <h3>Fin de la petite saison des pluies : à intégrer avant de semer</h3>
+          <p>Quand les pluies faiblissent, un semis de variété à cycle long prend un risque hydrique en décembre. Regardez la pluie réelle et la prévision 7 jours pour votre localité.</p>
+          <p class="actu-source">Référence : <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open-Meteo (ERA5)</a> · <a href="https://www.anader.ci/" target="_blank" rel="noreferrer">ANADER</a></p>
         </article>
       </div>
     </div>
   </section>
 
-  <section class="section" id="epices">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <span class="eyebrow">Épices à fort potentiel</span>
-        <h2>Poivre, gingembre, curcuma, piment : peu de surface, forte valeur.</h2>
-        <p class="section-sub">Une épice se vend au kilo, pas à la tonne : quelques ares bien conduits peuvent peser plus qu'un hectare de culture vivrière. Contrepartie : la transformation (séchage, tri) fait la valeur, et le débouché doit être trouvé avant la plantation.</p>
-      </div>
-      <div class="crops-grid">
-        <article class="crop reveal">
-          <figure class="crop-img">
-            <img src="assets/cultures/poivre.jpg" alt="Poivre noir — photographie réelle" width="1200" height="750" loading="lazy">
-            <span class="crop-badge epice">Épice</span>
-          </figure>
-          <div class="crop-body">
-            <h3>Poivre noir</h3>
-            <p class="surnom">Piper nigrum — liane à tuteurer</p>
-            <p class="desc">Liane tropicale conduite sur tuteur, à l'ombre légère. Baies vertes séchées = poivre noir ; baies dépulpées = poivre blanc. Production ivoirienne encore marginale : valider le débouché avant de planter.</p>
-            <dl>
-              <dt>Cycle</dt><dd>entrée en production 3 à 4 ans</dd>
-              <dt>Atouts</dt><dd>prix au kilo très élevé, valorise l'ombrage</dd>
-              <dt>Débouché</dt><dd>épiceries fines, restauration, export</dd>
-            </dl>
-            <p class="crop-credit">Photo : K Hari Krishnan · CC BY-SA 3.0 · <a href="https://commons.wikimedia.org/wiki/File:Black_Pepper_(Piper_nigrum)_fruits.jpg" target="_blank" rel="noreferrer">Wikimedia Commons</a></p>
-          </div>
-        </article>
-        <article class="crop reveal">
-          <figure class="crop-img">
-            <img src="assets/cultures/gingembre.jpg" alt="Gingembre — photographie réelle" width="1200" height="750" loading="lazy">
-            <span class="crop-badge epice">Épice</span>
-          </figure>
-          <div class="crop-body">
-            <h3>Gingembre</h3>
-            <p class="surnom">Zingiber officinale — rhizome</p>
-            <p class="desc">Rhizome cultivé sur sol meuble et humide, récolté à maturité des tiges. Forte demande locale pour les jus et boissons, et bonne valeur une fois séché et broyé.</p>
-            <dl>
-              <dt>Cycle</dt><dd>8 à 10 mois</dd>
-              <dt>Atouts</dt><dd>demande locale forte, transformation simple</dd>
-              <dt>Débouché</dt><dd>marchés urbains, jus et boissons, cosmétique</dd>
-            </dl>
-            <p class="crop-credit">Photo : Kayleemariev · CC0 · <a href="https://commons.wikimedia.org/wiki/File:Zingiber_officinale_rhizome.jpg" target="_blank" rel="noreferrer">Wikimedia Commons</a></p>
-          </div>
-        </article>
-        <article class="crop reveal">
-          <figure class="crop-img">
-            <img src="assets/cultures/curcuma.jpg" alt="Curcuma — photographie réelle" width="1200" height="750" loading="lazy">
-            <span class="crop-badge epice">Épice</span>
-          </figure>
-          <div class="crop-body">
-            <h3>Curcuma</h3>
-            <p class="surnom">Curcuma longa — rhizome orangé</p>
-            <p class="desc">Proche du gingembre, rhizome orangé séché puis broyé : épice, colorant, usage cosmétique. Transformation possible avec un simple séchoir et un moulin.</p>
-            <dl>
-              <dt>Cycle</dt><dd>8 à 9 mois</dd>
-              <dt>Atouts</dt><dd>transformation simple, demande croissante</dd>
-              <dt>Débouché</dt><dd>poudre, épiceries, cosmétique</dd>
-            </dl>
-            <p class="crop-credit">Photo : Simon A. Eugster · CC BY-SA 3.0 · <a href="https://commons.wikimedia.org/wiki/File:Curcuma_longa_roots.jpg" target="_blank" rel="noreferrer">Wikimedia Commons</a></p>
-          </div>
-        </article>
-        <article class="crop reveal">
-          <figure class="crop-img">
-            <img src="assets/cultures/piment.jpg" alt="Piment — photographie réelle" width="1200" height="750" loading="lazy">
-            <span class="crop-badge epice">Épice</span>
-          </figure>
-          <div class="crop-body">
-            <h3>Piment</h3>
-            <p class="surnom">Capsicum spp. — frais ou séché</p>
-            <p class="desc">Arbuste à récolte étalée : le séchage permet de lisser les ventes et d'éviter de brader au pic de production. Choisir une variété dont le piquant correspond au marché local.</p>
-            <dl>
-              <dt>Cycle</dt><dd>4 à 6 mois, récolte étalée</dd>
-              <dt>Atouts</dt><dd>cycle court, demande urbaine constante</dd>
-              <dt>Débouché</dt><dd>frais, séché, transformation</dd>
-            </dl>
-            <p class="crop-credit">Photo : Prenn · CC BY-SA 3.0 · <a href="https://commons.wikimedia.org/wiki/File:Capsicum_frutescens_(3).jpg" target="_blank" rel="noreferrer">Wikimedia Commons</a></p>
-          </div>
-        </article>
-      </div>
-      <p class="pricing-note reveal">Prix des épices : aucun relevé officiel ivoirien n'est publié régulièrement. Nous ne donnons donc aucun prix au kilo pour ces cultures — demandez un devis à un acheteur ou renseignez-vous auprès de l'ANADER avant de planter.</p>
-    </div>
-  </section>
-
-  <section class="section" id="conseil">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <span class="eyebrow">Conseil</span>
-        <h2>Décrivez votre situation, on s'occupe du reste.</h2>
-        <p class="section-sub">Choisissez votre localité, puis décrivez la parcelle ou l'élevage. La réponse est rendue par l'Agent Agronome Expert, avec ses sources, ses hypothèses et ses limites.</p>
-      </div>
-
-      <div class="panel-wrap">
-        <form class="panel reveal" id="conseilForm" novalidate>
-          <div class="credits-bar" id="creditsBar">
-            <span class="pill">Crédits : <strong id="creditsCount">3</strong></span>
-            <span id="creditsTexte">Crédits disponibles : gratuit 3/3 ce mois-ci.</span>
-            <a href="#tarifs" id="creditsRecharge">Recharger — 599 FCFA les 10 conseils</a>
-          </div>
-
-          <div class="panel-head">
-            <p class="pin">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
-              Toute la Côte d’Ivoire
-            </p>
-            <span class="count">33 régions et districts · 111 départements</span>
-          </div>
-
-          <div class="field-grid">
-            <label class="field">
-              <span>Région ou district autonome</span>
-              <select id="region" name="region" aria-label="Région ou district autonome">
-                <option value="">Toutes les régions et districts</option>
-              </select>
-            </label>
-            <label class="field">
-              <span>Département</span>
-              <select id="departement" name="departement" aria-label="Département">
-                <option value="">Tous les départements</option>
-              </select>
-            </label>
-            <label class="field">
-              <span>Localité <span class="label-hint">(facultatif)</span></span>
-              <input type="text" id="localite" name="localite" placeholder="Village, sous-préfecture…" autocomplete="off">
-            </label>
-            <label class="field">
-              <span>Surface <span class="label-hint">(hectares, facultatif)</span></span>
-              <input type="text" id="surface" name="surface" inputmode="decimal" placeholder="2" autocomplete="off">
-            </label>
-            <label class="field field-wide">
-              <span>Votre question</span>
-              <textarea id="question" name="question" placeholder="Ex. : j'ai 2 hectares à Bouaké, je débute, que puis-je cultiver en saison des pluies avec un petit budget ?" required></textarea>
-              <p class="help">Décrivez ce que vous observez, ce que vous avez déjà fait, et ce que vous voulez décider. Plus c'est précis, moins la réponse comporte d'hypothèses.</p>
-            </label>
-          </div>
-
-          <div class="form-actions">
-            <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">Demander un conseil</button>
-            <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
-          </div>
-
-          <label class="consent">
-            <input type="checkbox" id="consent" name="consent">
-            <span>J'accepte que ma question, ma localité et ma surface soient traitées pour produire la réponse, conformément à la <a href="confidentialite.html">politique de confidentialité</a>. Je peux demander leur suppression à tout moment.</span>
-          </label>
-        </form>
-
-        <article class="answer" id="answer" aria-live="polite">
-          <div class="answer-head">
-            <span class="state-badge" id="stateBadge">—</span>
-            <span class="answer-meta" id="answerMeta"></span>
-          </div>
-          <div id="answerBody"></div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================ ÉTAPES -->
-  <section class="section-tight">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <span class="eyebrow">Simple comme un coup de fil</span>
-        <h2>Trois étapes, une réponse.</h2>
-      </div>
-      <div class="steps">
-        <div class="step reveal"><h3>Vous décrivez</h3><p>Localité, surface, culture ou élevage, budget. Une phrase suffit pour commencer.</p></div>
-        <div class="step reveal"><h3>Les agents travaillent</h3><p>L'agent principal sélectionne les spécialistes utiles, appelle les outils réels (pluie, calculs, références) et vérifie les chiffres.</p></div>
-        <div class="step reveal"><h3>Vous décidez</h3><p>La réponse dit ce qui est un fait, ce qui reste à confirmer et ce qu'il faut vérifier sur le terrain.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================ TARIFS -->
+  <!-- ===================== TARIFS ===================== -->
   <section class="section" id="tarifs">
     <div class="wrap">
-      <div class="pricing-head reveal">
-        <div class="section-head" style="margin-bottom:0">
-          <span class="eyebrow">Tarifs, crédits et abonnements</span>
-          <h2>Commencez gratuitement. Payez seulement si vous en voulez plus.</h2>
-          <p class="section-sub">Le conseil de base reste accessible à tous. Les crédits servent au-delà de 3 conseils par mois ; le suivi personnalisé et les offres professionnelles ajoutent un accompagnement humain et des exports.</p>
-        </div>
-        <div class="toggle-billing" role="group" aria-label="Période de facturation">
-          <button type="button" class="active" data-billing="mensuel" aria-pressed="true">Mensuel</button>
-          <button type="button" data-billing="annuel" aria-pressed="false">Annuel</button>
-          <span class="save">2 mois offerts</span>
-        </div>
+      <div class="panel-intro reveal">
+        <span class="eyebrow">Accès gratuit chaque jour</span>
+        <h2>Gratuit tous les jours. Deux formules payantes, pas plus.</h2>
+        <p>Chaque personne dispose de 2 conseils gratuits par jour, sans carte bancaire et sans inscription. Au-delà : un pack de crédits à l'usage, ou un suivi personnalisé.</p>
       </div>
 
-      <div class="plans">
+      <div class="plans plans-3">
         <article class="plan reveal">
-          <h3>Découverte</h3>
-          <p class="who">Pour essayer, sans engagement ni carte bancaire.</p>
-          <p class="price"><span class="amount" data-price-mensuel="0" data-price-annuel="0">0</span><span class="cur">FCFA</span></p>
-          <p class="per">3 conseils par mois</p>
+          <h3>Gratuit</h3>
+          <p class="who">Pour tout le monde, chaque jour.</p>
+          <p class="price"><span class="amount">0</span><span class="cur">FCFA</span></p>
+          <p class="per">2 conseils par jour · remis à zéro chaque matin</p>
           <ul>
-            <li>3 conseils IA par mois, quota remis à zéro chaque mois</li>
+            <li>2 conseils IA par jour, sans carte bancaire</li>
             <li>Météo 12 mois et prévision 7 jours</li>
             <li>Calculs de marge, densité et semences</li>
-            <li>Prix du marché et fiches techniques</li>
+            <li>Prix du marché, cultures et épices</li>
           </ul>
-          <p class="credits-note">Au-delà de 3 conseils : passez aux crédits.</p>
-          <a class="btn btn-outline btn-block plan-cta" href="#conseil">Commencer gratuitement</a>
+          <a class="btn btn-primary btn-block plan-cta" href="#conseil" data-tab="conseil">Demander mon conseil du jour</a>
         </article>
 
         <article class="plan reveal">
           <h3>Crédits</h3>
           <p class="who">Pour payer à l'usage, sans abonnement.</p>
-          <p class="price"><span class="amount" data-price-mensuel="599" data-price-annuel="599">599</span><span class="cur">FCFA</span></p>
+          <p class="price"><span class="amount">599</span><span class="cur">FCFA</span></p>
           <p class="per">les 10 conseils · valables 12 mois</p>
           <ul>
-            <li>10 conseils, à utiliser quand vous voulez</li>
-            <li>Pas d'abonnement, pas de reconduction</li>
-            <li>Se cumulent avec les 3 conseils gratuits du mois</li>
+            <li>10 conseils à utiliser quand vous voulez</li>
+            <li>Ni abonnement, ni reconduction</li>
+            <li>S'ajoutent aux 2 conseils gratuits du jour</li>
             <li>Paiement mobile money (Orange Money, MTN, Wave)</li>
           </ul>
-          <p class="credits-note">Soit 59,90 FCFA le conseil.</p>
           <a class="btn btn-outline btn-block plan-cta" href="#contact">Acheter 10 crédits</a>
         </article>
 
         <article class="plan featured reveal">
-          <span class="tag">Le plus choisi</span>
+          <span class="tag">Suivi</span>
           <h3>Suivi personnalisé</h3>
-          <p class="who">Pour un producteur qui veut être suivi, pas seulement dépanné.</p>
-          <p class="price"><span class="amount" data-price-mensuel="9900" data-price-annuel="8250">9 900</span><span class="cur">FCFA</span></p>
-          <p class="per" data-per-mensuel="par mois, sans engagement" data-per-annuel="par mois, facturé 99 000 FCFA par an">par mois, sans engagement</p>
+          <p class="who">Pour être accompagné, pas seulement dépanné.</p>
+          <p class="price"><span class="amount">9 900</span><span class="cur">FCFA</span></p>
+          <p class="per">par mois, sans engagement</p>
           <ul>
             <li>Conseils illimités</li>
             <li>2 parcelles ou ateliers suivis, avec historique</li>
             <li>Calendrier cultural personnalisé et rappels</li>
-            <li>Revue mensuelle de la situation avec un conseiller</li>
-            <li>Réponse prioritaire</li>
+            <li>Revue mensuelle avec un conseiller</li>
           </ul>
           <a class="btn btn-primary btn-block plan-cta" href="#contact">Choisir le suivi</a>
         </article>
-
-        <article class="plan reveal">
-          <h3>Professionnels</h3>
-          <p class="who">Coopératives, agro-industrie, ONG, projets.</p>
-          <p class="price"><span class="amount" data-price-mensuel="24900" data-price-annuel="20750">24 900</span><span class="cur">FCFA</span></p>
-          <p class="per" data-per-mensuel="par mois, selon le nombre de bénéficiaires" data-per-annuel="par mois, facturé 249 000 FCFA par an">par mois, selon le nombre de bénéficiaires</p>
-          <ul>
-            <li>Tout le suivi personnalisé, multi-exploitations</li>
-            <li>Dossiers producteurs regroupés et exports CSV / PDF</li>
-            <li>Accès API et rapports personnalisés</li>
-            <li>Facturation et convention de service</li>
-            <li>Formation des équipes de terrain</li>
-          </ul>
-          <a class="btn btn-outline btn-block plan-cta" href="#contact">Demander une proposition</a>
-        </article>
       </div>
 
-      <p class="pricing-note reveal">
-        <span class="momo">Paiement mobile money : Orange Money · MTN MoMo · Wave</span> — facture disponible.
-        Tarifs de lancement indicatifs, hors taxes, à confirmer lors de la souscription. Le quota gratuit est réinitialisé chaque mois.
-      </p>
+      <p class="pricing-note reveal"><span class="momo">Orange Money · MTN MoMo · Wave</span> — facture disponible. Tarifs de lancement indicatifs, hors taxes. Le quota gratuit est réinitialisé chaque jour.</p>
     </div>
   </section>
 
-  <!-- ============================================================ FAQ -->
-  <section class="section-tight" id="faq">
+  <!-- ===================== FAQ ===================== -->
+  <section class="section section-tight" id="faq">
     <div class="wrap">
-      <div class="section-head reveal">
+      <div class="panel-intro reveal">
         <span class="eyebrow">Questions fréquentes</span>
         <h2>Ce qu'il faut savoir avant de commencer.</h2>
       </div>
       <div class="faq reveal">
         <details>
-          <summary>Qu'est-ce qui est gratuit exactement ?</summary>
-          <p>Trois conseils par mois, sans carte bancaire : météo, calendrier, calculs de marge, prix du marché et fiches techniques. Au-delà, deux options : un pack de 10 crédits à 599 FCFA (valable 12 mois, sans abonnement) ou un suivi personnalisé à 9 900 FCFA par mois.</p>
+          <summary>Le gratuit, c'est vraiment tous les jours ?</summary>
+          <p>Oui : 2 conseils par jour, sans carte bancaire ni inscription, remis à zéro chaque matin. Au-delà, deux formules seulement : 10 crédits à 599 FCFA (valables 12 mois) ou le suivi personnalisé à 9 900 FCFA par mois.</p>
         </details>
         <details>
-          <summary>Comment sont appliqués les 3 conseils gratuits ?</summary>
-          <p>Le compteur est tenu dans votre navigateur et remis à zéro chaque mois. Il sert à donner le bon ordre de grandeur tant que les comptes utilisateurs ne sont pas ouverts : une limite stricte par compte sera appliquée côté serveur à ce moment-là. Aucun paiement n'est demandé pour essayer.</p>
+          <summary>Pourquoi seulement deux formules payantes ?</summary>
+          <p>Parce qu'un producteur doit pouvoir décider vite : payer à l'usage quand il a un coup de feu, ou être suivi dans la durée. Les offres entreprises se traitent au cas par cas par e-mail, sans figurer dans la grille.</p>
         </details>
         <details>
-          <summary>D'où viennent les prix au kilo ?</summary>
-          <p>Des relevés hebdomadaires de gros publiés par l'OCPV (Office d'aide à la commercialisation des produits vivriers) et repris par PAM Agro. Nous affichons la semaine du relevé et le marché concerné. Un prix affiché n'est jamais un prix garanti : il sert à négocier, pas à promettre.</p>
+          <summary>Les épices font-elles partie des cultures ?</summary>
+          <p>Oui, elles sont dans le même onglet « Cultures &amp; épices », avec un filtre dédié. Quatre vivrières peu plantées (voandzou, fonio, sésame, patate douce orange) et quatre épices (poivre, gingembre, curcuma, piment).</p>
         </details>
         <details>
-          <summary>Et les cultures de rente (cacao, café, anacarde) ?</summary>
-          <p>Leurs prix bord champ relèvent de barèmes officiels fixés par le Conseil Café-Cacao et le Conseil Coton Anacarde. Nous ne les reprenons pas tant que nous n'avons pas de relevé vérifié : mieux vaut renvoyer vers le barème officiel que d'afficher un chiffre approximatif.</p>
+          <summary>D'où viennent les infos affichées en continu ?</summary>
+          <p>Deux sources distinctes, affichées ensemble dans le bandeau : la météo actuelle des villes de référence (Open-Meteo, rafraîchie côté navigateur) et les prix de gros OCPV du dernier relevé hebdomadaire. Nous indiquons toujours la date du relevé : la météo est en temps réel, les prix le sont à la semaine.</p>
         </details>
         <details>
           <summary>Que faites-vous de mes données ?</summary>
-          <p>Votre question, votre localité et votre surface servent uniquement à produire la réponse. Elles ne sont pas revendues, ni utilisées pour de la publicité. Vous pouvez demander l'accès, la rectification ou la suppression à tout moment : voir la <a href="confidentialite.html">politique de confidentialité</a>, conforme à la loi ivoirienne n° 2013-450 du 19 juin 2013.</p>
+          <p>Votre question, votre localité et votre surface servent uniquement à produire la réponse. Rien n'est revendu, aucune publicité. Accès, rectification et suppression sur simple demande : <a href="confidentialite.html">politique de confidentialité</a>, conforme à la loi ivoirienne n° 2013-450 du 19 juin 2013.</p>
         </details>
       </div>
     </div>
   </section>
 
-  <!-- ============================================================ CTA -->
   <section class="section-tight" id="contact">
     <div class="wrap">
       <div class="cta-band reveal">
-        <h2>Poser une question, ça ne coûte rien.</h2>
-        <p>Trois conseils gratuits par mois, sans inscription. Pour un pack de crédits, un suivi personnalisé ou une offre professionnelle, écrivez-nous : nous répondons avec une proposition chiffrée.</p>
+        <h2>Deux conseils gratuits vous attendent aujourd'hui.</h2>
+        <p>Sans inscription, sans carte bancaire. Pour un pack de crédits ou un suivi personnalisé, écrivez-nous : réponse avec proposition chiffrée.</p>
         <div class="hero-actions">
-          <a class="btn btn-primary btn-lg" href="#conseil">Demander un conseil</a>
-          <a class="btn btn-ghost btn-lg" href="mailto:aicmaxter@gmail.com?subject=AGROGUIDCI%20—%20cr%C3%A9dits%20ou%20abonnement">Écrire pour un abonnement</a>
+          <button class="btn btn-primary btn-lg" type="button" data-tab="conseil">Poser ma question</button>
+          <a class="btn btn-ghost btn-lg" href="mailto:aicmaxter@gmail.com?subject=AGROGUIDCI%20—%20cr%C3%A9dits%20ou%20suivi">Écrire pour un abonnement</a>
         </div>
       </div>
     </div>
@@ -579,15 +534,15 @@
           </span>
           <span class="brand-text">AGROGUID<span class="ci">CI</span></span>
         </a>
-        <p style="margin:.8rem 0 0;font-size:.86rem;color:var(--muted);max-width:34ch">Conseil agricole pour la Côte d'Ivoire. Données réelles, prix du marché, cultures à découvrir — et des limites dites clairement.</p>
+        <p style="margin:.8rem 0 0;font-size:.86rem;max-width:34ch">Conseil agricole pour la Côte d'Ivoire. Données réelles, prix du marché, cultures et épices — limites dites clairement.</p>
       </div>
       <div>
-        <h4>Produit</h4>
+        <h4>Application</h4>
         <ul>
-          <li><a href="#conseil">Conseil</a></li>
-          <li><a href="#prix">Prix du kilo</a></li>
-          <li><a href="#cultures">Cultures à découvrir</a></li>
-          <li><a href="#tarifs">Tarifs &amp; crédits</a></li>
+          <li><button class="lien" type="button" data-tab="conseil">Conseil</button></li>
+          <li><button class="lien" type="button" data-tab="cultures">Cultures &amp; épices</button></li>
+          <li><button class="lien" type="button" data-tab="prix">Prix du kilo</button></li>
+          <li><button class="lien" type="button" data-tab="actus">Actualités</button></li>
         </ul>
       </div>
       <div>
@@ -595,7 +550,7 @@
         <ul>
           <li><a href="specs.html">Spécification technique</a></li>
           <li><a href="https://github.com/aicmaxter/agroguidci/tree/main/knowledge" target="_blank" rel="noreferrer">Bibliothèque</a></li>
-          <li><a href="#actualites">Repères de campagne</a></li>
+          <li><a href="#tarifs">Tarifs &amp; crédits</a></li>
         </ul>
       </div>
       <div>
