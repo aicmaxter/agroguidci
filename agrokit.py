@@ -101,7 +101,14 @@ def dossier_sortie(base: str = "out", etiquette: str | None = None) -> Path:
 
 
 def dire(etape: str, message: str) -> None:
-    print(f"[{horodate()}] {etape:<14}{message}", flush=True)
+    """Trace lisible sur la sortie standard (docker logs / console).
+
+    Les données personnelles (téléphone, e-mail, longues références) sont masquées
+    ici, au point de sortie unique : c'est le seul moyen de garantir qu'aucun
+    journal, y compris les traces de coordination, n'expose un numéro de producteur.
+    """
+    from confidentialite import masquer
+    print(f"[{horodate()}] {etape:<14}{masquer(message)}", flush=True)
 
 
 # --------------------------------------------------------------------------- HTTP
