@@ -1095,3 +1095,19 @@ body { background: #e9f2e0; }
 /* 10. texte long : jamais de débordement horizontal */
 body, .panel, .crop, .actu, .plan { overflow-wrap: anywhere; }
 html, body { max-width: 100%; }
+
+
+/* v7.1 : garantit 4 colonnes sur les grands écrans (les anciennes règles de la v4
+   fixaient 3 colonnes pour l'ancienne grille de fiches) */
+@media (min-width: 1241px) {
+  #grilleCultures.crops-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 1240px) and (min-width: 901px) {
+  #grilleCultures.crops-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 900px) and (min-width: 561px) {
+  #grilleCultures.crops-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  #grilleCultures.crops-grid { grid-template-columns: 1fr; }
+}
