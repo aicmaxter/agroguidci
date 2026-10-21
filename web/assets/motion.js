@@ -59,6 +59,13 @@
     var cible = parseInt(el.getAttribute("data-count"), 10);
     if (!cible || reduit) return;
     var debut = null, duree = 1100;
+    // Filet : même si requestAnimationFrame est suspendu (onglet en arrière-plan),
+    // la valeur finale doit être affichée — jamais un « 0 » qui reste à l'écran.
+    setTimeout(function () {
+      if ((el.textContent || "").replace(/\D/g, "") !== String(cible)) {
+        el.textContent = cible.toLocaleString("fr-FR");
+      }
+    }, duree + 600);
     el.textContent = "0";
     function pas(ts) {
       if (debut === null) debut = ts;
@@ -66,6 +73,7 @@
       var val = Math.round(cible * (1 - Math.pow(1 - p, 3)));
       el.textContent = val.toLocaleString("fr-FR");
       if (p < 1) requestAnimationFrame(pas);
+      else el.textContent = cible.toLocaleString("fr-FR");
     }
     requestAnimationFrame(pas);
   }
