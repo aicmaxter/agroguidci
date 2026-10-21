@@ -113,18 +113,29 @@ verifie("accueil : quota gratuit quotidien", "chaque jour" in accueil.lower() an
 verifie("accueil : météo temps réel (Open-Meteo)", "api.open-meteo.com" in
         (ROOT / "web" / "assets" / "ui.js").read_text(encoding="utf-8"))
 verifie("accueil : clignotement des nouveautés", "clignote" in css and "flash-card" in accueil)
+# --- chaîne éditoriale : données -> génération -> site, et veille
+import subprocess
+_r = subprocess.run([sys.executable, str(ROOT / "scripts" / "gen_index.py"), "--verifier"], capture_output=True, text=True)
+verifie("fiches générées = données cultures.json", _r.returncode == 0, _r.stdout.strip()[:120])
+verifie("veille : sources suivies déclarées", "SOURCES" in (ROOT / "scripts" / "veille.py").read_text(encoding="utf-8"))
+verifie("veille : état enregistré", (ROOT / "veille" / "etat-sources.json").exists())
+verifie("veille : rien n'est publié automatiquement",
+        "web/index.html" not in (ROOT / "scripts" / "veille.py").read_text(encoding="utf-8"))
 verifie("accueil : épices intégrées aux cultures", 'data-filtre="epice"' in accueil and "Poivre noir" in accueil)
-verifie("accueil : huit cartes cultures/épices", accueil.count('class="crop reveal') == 8, accueil.count('class="crop reveal'))
+_cultures = json.loads((ROOT / "web" / "assets" / "cultures.json").read_text(encoding="utf-8"))["cultures"]
+verifie("accueil : une carte par culture déclarée", accueil.count('class="crop reveal') == len(_cultures),
+        f"{accueil.count('class="crop reveal')} cartes / {len(_cultures)} déclarées")
 verifie("accueil : photos réelles référencées",
         all(f"assets/cultures/{c}.jpg" in accueil for c in
             ("poivre", "gingembre", "curcuma", "piment", "voandzou", "fonio", "sesame", "patatedouce")))
-verifie("accueil : crédits photo Wikimedia", accueil.count('class="crop-credit"') == 8 and "Wikimedia" in accueil, accueil.count('class="crop-credit"'))
+verifie("accueil : crédits photo Wikimedia", accueil.count('class="crop-credit"') == len(_cultures) and "Wikimedia" in accueil,
+        accueil.count('class="crop-credit"'))
 verifie("accueil : bandeau temps réel", 'id="prixTicker"' in accueil and "chargerMeteo" in (ROOT / "web" / "assets" / "ui.js").read_text(encoding="utf-8"))
 verifie("accueil : application à onglets", accueil.count('role="tab"') == 4 and accueil.count('role="tabpanel"') == 4)
 verifie("accueil : hero vert", ".hero {" in css and "#0b3a22" in css)
 verifie("photos présentes sur le disque",
-        all((ROOT / "web" / "assets" / "cultures" / f"{c}.jpg").exists() for c in
-            ("poivre", "gingembre", "curcuma", "piment", "voandzou", "fonio", "sesame", "patatedouce")))
+        all((ROOT / "web" / "assets" / "cultures" / f"{c['id']}.jpg").exists() for c in _cultures),
+        [c["id"] for c in _cultures if not (ROOT / "web" / "assets" / "cultures" / f"{c['id']}.jpg").exists()])
 _lic = json.loads((ROOT / "web" / "assets" / "cultures" / "_sources.json").read_text(encoding="utf-8"))
 verifie("licences photo renseignées", all(v.get("licence") and v.get("auteur") for v in _lic.values()))
 

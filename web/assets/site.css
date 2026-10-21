@@ -1020,3 +1020,78 @@ body { background: #e9f2e0; }
   border: 1px solid var(--line);
   box-shadow: var(--shadow-md);
 }
+
+
+/* ==========================================================================
+   v7 — cohérence d'apparence entre téléphone, tablette et ordinateur.
+   Principe : MÊME structure, MÊMES composants, MÊMES couleurs partout.
+   Seul le nombre de colonnes change — rien n'est masqué sur mobile.
+   ========================================================================== */
+
+/* 1. grilles fluides : 4 → 3 → 2 → 1 colonnes, sans saut brutal */
+.crops-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1240px) { .crops-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 900px)  { .crops-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px)  { .crops-grid { grid-template-columns: 1fr; } }
+
+/* 2. une carte garde exactement la même allure à toutes les tailles */
+.crop { min-width: 0; }
+.crop-img { aspect-ratio: 16 / 10; }
+.crop-body { display: flex; flex-direction: column; gap: .45rem; }
+.crop-body dl { min-height: 4.6rem; }
+
+/* 3. le tableau des prix ne perd aucune colonne sur petit écran */
+@media (max-width: 640px) {
+  .prix-table .marche { display: table-cell; }
+  .prix-table thead th:nth-child(3) { display: table-cell; }
+  .prix-table th, .prix-table td { padding: .7rem .8rem; font-size: .86rem; }
+  .prix-table .prix { font-size: 1rem; }
+}
+
+/* 4. la barre d'onglets est identique partout (mêmes pilules, défilement horizontal) */
+.tabbar { -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity; }
+.tab { scroll-snap-align: start; min-height: 44px; }
+
+/* 5. même respiration de section sur tous les écrans */
+.panel { padding-block: clamp(1.6rem, 3.2vw, 2.8rem); }
+.panel-intro { margin-bottom: clamp(1.1rem, 2.4vw, 1.8rem); }
+
+/* 6. le hero reste un bandeau vert avec les mêmes cartes, simplement empilées */
+@media (max-width: 980px) {
+  .app-hero-grid { gap: 1.4rem; }
+  .hero-mini { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .mini-card { flex-direction: column; text-align: center; gap: .4rem; }
+  .mini-card strong { font-size: .82rem; }
+  .mini-card small { font-size: .66rem; }
+}
+@media (max-width: 560px) {
+  .hero-mini { grid-template-columns: 1fr; }
+  .mini-card { flex-direction: row; text-align: left; }
+  .mini-card strong { font-size: .9rem; }
+}
+
+/* 7. météo et offres : mêmes cartes, colonnes adaptées */
+.meteo-cartes { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 900px) { .meteo-cartes { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 420px) { .meteo-cartes { grid-template-columns: 1fr; } }
+
+.plans-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 980px) { .plans-3 { grid-template-columns: 1fr; } }
+
+/* 8. zones tactiles confortables sur mobile, sans changer le design */
+@media (max-width: 760px) {
+  .btn { min-height: 44px; }
+  .filtre { min-height: 40px; }
+  .nav-mobile a, .nav-mobile .navlink { min-height: 44px; display: flex; align-items: center; }
+  .site-header .wrap { height: 64px; }
+  .brand-text { font-size: 1.1rem; }
+  .panel-form { padding: 1rem; }
+  .legende-cultures { font-size: .8rem; }
+}
+
+/* 9. images : même cadrage partout, pas d'étirement */
+.crop-img img, .hero-card img, .fiche img { object-fit: cover; }
+
+/* 10. texte long : jamais de débordement horizontal */
+body, .panel, .crop, .actu, .plan { overflow-wrap: anywhere; }
+html, body { max-width: 100%; }

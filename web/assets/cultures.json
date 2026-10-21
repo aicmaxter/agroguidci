@@ -1,0 +1,89 @@
+{
+  "_note": "Source de vérité des fiches cultures et épices. Modifier ce fichier puis lancer: python scripts/gen_index.py --ecrire pour régénérer web/index.html.",
+  "_maj": "2026-10-21",
+  "cultures": [
+    {
+      "id": "voandzou", "nom": "Voandzou", "surnom": "Pois bambara, pois de terre",
+      "type": "vivriere", "badge": "Peu cultivée", "epice": false, "nouveau": false,
+      "desc": "Légumineuse très rustique : elle fixe l'azote, supporte la sécheresse et se conserve longtemps sans traitement. Utile en rotation avant une céréale.",
+      "cycle": "90 à 120 jours", "atouts": "peu d'intrants, résiste au sec, enrichit le sol",
+      "debouche": "graines, farine, bouillie ; demande urbaine stable"
+    },
+    {
+      "id": "fonio", "nom": "Fonio", "surnom": "La céréale la plus fine",
+      "type": "vivriere", "badge": "Peu cultivée", "epice": false, "nouveau": false,
+      "desc": "Pousse sur des sols pauvres et sableux, mûrit vite et demande peu d'eau — un recours quand la saison est courte.",
+      "cycle": "60 à 90 jours", "atouts": "rustique, très précoce, bon prix au kilo",
+      "debouche": "restauration, farines, marchés urbains et export"
+    },
+    {
+      "id": "sesame", "nom": "Sésame", "surnom": "Oléagineux d'export",
+      "type": "vivriere", "badge": "Peu cultivée", "epice": false, "nouveau": false,
+      "desc": "Le point critique n'est pas la production mais la récolte : choisir des variétés à capsules qui ne s'ouvrent pas, récolter dès maturité, sécher sur bâche.",
+      "cycle": "90 à 110 jours", "atouts": "peu d'eau, demande à l'export, prix au kilo élevé",
+      "debouche": "huile, pâtisserie, export (qualité et propreté du lot)"
+    },
+    {
+      "id": "patatedouce", "nom": "Patate douce à chair orange", "surnom": "Vitamine A, transformation",
+      "type": "vivriere", "badge": "Peu cultivée", "epice": false, "nouveau": false,
+      "desc": "Rendement rapide sur sol léger, riche en bêta-carotène. Deux marchés : le frais et la transformation en farine ou purée.",
+      "cycle": "90 à 120 jours", "atouts": "couvre le sol, peu d'intrants, bonne valeur nutritionnelle",
+      "debouche": "frais, farine, programmes nutrition, écoles"
+    },
+    {
+      "id": "soja", "nom": "Soja", "surnom": "Oléagineux et protéine animale",
+      "type": "vivriere", "badge": "Nouvelle fiche", "epice": false, "nouveau": true,
+      "desc": "Filière soutenue par le FIRCA depuis 2022 : la production nationale reste très inférieure à la demande des huileries et de l'aliment du bétail. Culture associée au maïs, elle enrichit aussi le sol en azote.",
+      "cycle": "90 à 110 jours", "atouts": "fixe l'azote, débouché industriel, prix de contrat possible",
+      "debouche": "huileries, provende, semence certifiée",
+      "source": "FIRCA (filière soja) ; USDA FAS - Oilseeds Annual 2025",
+      "source_url": "https://firca.ci/filieres-agricoles/legumes/"
+    },
+    {
+      "id": "igname", "nom": "Igname", "surnom": "La culture vivrière à plus fort revenu",
+      "type": "vivriere", "badge": "Nouvelle fiche", "epice": false, "nouveau": true,
+      "desc": "Le PNIA classe l'igname parmi les filières au plus fort potentiel d'augmentation du revenu agricole. Elle demande un sol meuble et profond, et une bonne maîtrise des boutures pour éviter les pertes au stockage.",
+      "cycle": "7 à 9 mois", "atouts": "forte valeur marchande, demande urbaine constante",
+      "debouche": "marchés urbains, cossettes, transformation en farine",
+      "source": "PNIA (Programme national d'investissement agricole)",
+      "source_url": "https://www.partenariat.gouv.ci/uploads/document/PNIA.pdf?download=1"
+    },
+    {
+      "id": "plantain", "nom": "Banane plantain", "surnom": "Demande urbaine en croissance",
+      "type": "vivriere", "badge": "Nouvelle fiche", "epice": false, "nouveau": true,
+      "desc": "Le PNIA retient aussi la banane plantain parmi les filières à fort potentiel de revenu. Cycle court, régimes récoltés toute l'année : intéressante pour lisser la trésorerie entre deux campagnes de rente.",
+      "cycle": "10 à 12 mois (rejets successifs)", "atouts": "récolte étalée, bon rendement à l'hectare",
+      "debouche": "frais, alloco, chips, marchés urbains",
+      "source": "PNIA (Programme national d'investissement agricole)",
+      "source_url": "https://www.partenariat.gouv.ci/uploads/document/PNIA.pdf?download=1"
+    },
+    {
+      "id": "poivre", "nom": "Poivre noir", "surnom": "Piper nigrum — liane à tuteurer",
+      "type": "epice", "badge": "Épice", "epice": true, "nouveau": true,
+      "desc": "Liane tropicale conduite sur tuteur, à l'ombre légère. Baies vertes séchées = poivre noir ; baies dépulpées = poivre blanc. Production ivoirienne encore marginale : valider le débouché avant de planter.",
+      "cycle": "entrée en production 3 à 4 ans", "atouts": "prix au kilo très élevé, valorise l'ombrage",
+      "debouche": "épiceries fines, restauration, export"
+    },
+    {
+      "id": "gingembre", "nom": "Gingembre", "surnom": "Zingiber officinale — rhizome",
+      "type": "epice", "badge": "Épice", "epice": true, "nouveau": true,
+      "desc": "Rhizome cultivé sur sol meuble et humide, récolté à maturité des tiges. Forte demande locale pour les jus et boissons, et bonne valeur une fois séché et broyé.",
+      "cycle": "8 à 10 mois", "atouts": "demande locale forte, transformation simple",
+      "debouche": "marchés urbains, jus et boissons, cosmétique"
+    },
+    {
+      "id": "curcuma", "nom": "Curcuma", "surnom": "Curcuma longa — rhizome orangé",
+      "type": "epice", "badge": "Épice", "epice": true, "nouveau": true,
+      "desc": "Proche du gingembre, rhizome orangé séché puis broyé : épice, colorant, usage cosmétique. Transformation possible avec un simple séchoir et un moulin.",
+      "cycle": "8 à 9 mois", "atouts": "transformation simple, demande croissante",
+      "debouche": "poudre, épiceries, cosmétique"
+    },
+    {
+      "id": "piment", "nom": "Piment", "surnom": "Capsicum spp. — frais ou séché",
+      "type": "epice", "badge": "Épice", "epice": true, "nouveau": true,
+      "desc": "Arbuste à récolte étalée : le séchage permet de lisser les ventes et d'éviter de brader au pic de production. Choisir une variété dont le piquant correspond au marché local.",
+      "cycle": "4 à 6 mois, récolte étalée", "atouts": "cycle court, demande urbaine constante",
+      "debouche": "frais, séché, transformation"
+    }
+  ]
+}

@@ -54,5 +54,26 @@
     "auteur": "K Hari Krishnan",
     "licence": "CC BY-SA 3.0",
     "page": "https://commons.wikimedia.org/wiki/File:Black_Pepper_(Piper_nigrum)_fruits.jpg"
+  },
+  "igname": {
+    "fichier": "assets/cultures/igname.jpg",
+    "titre": "File:Yam at monday market kaduna state 01.jpg",
+    "auteur": "Dorcas Atule",
+    "licence": "CC BY-SA 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Yam_at_monday_market_kaduna_state_01.jpg"
+  },
+  "plantain": {
+    "fichier": "assets/cultures/plantain.jpg",
+    "titre": "File:Banane plantain au marché.jpg",
+    "auteur": "BorisAhonon",
+    "licence": "CC BY-SA 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Banane_plantain_au_march%C3%A9.jpg"
+  },
+  "soja": {
+    "fichier": "assets/cultures/soja.jpg",
+    "titre": "File:Starr-090611-0626-Glycine max-plants in garden-Olinda-Maui (24846154482).jpg",
+    "auteur": "Forest and Kim Starr",
+    "licence": "CC BY 3.0 us",
+    "page": "https://commons.wikimedia.org/wiki/File:Starr-090611-0626-Glycine_max-plants_in_garden-Olinda-Maui_(24846154482).jpg"
   }
 }

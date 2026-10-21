@@ -106,7 +106,7 @@
         <button role="tab" id="tab-cultures" aria-controls="panel-cultures" aria-selected="false" data-tab="cultures" class="tab">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21v-7"/><path d="M12 14c0-3.4 2.4-5.8 5.8-5.8 0 3.4-2.4 5.8-5.8 5.8Z"/><path d="M12 14c0-2.6-1.9-4.5-4.7-4.5 0 2.6 1.9 4.5 4.7 4.5Z"/></svg>
           Cultures &amp; épices
-          <span class="tab-count">8</span>
+          <span class="tab-count">11</span>
         </button>
         <button role="tab" id="tab-prix" aria-controls="panel-prix" aria-selected="false" data-tab="prix" class="tab">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 5-6"/></svg>
@@ -196,8 +196,8 @@
       </div>
 
       <div class="filtres" role="group" aria-label="Filtrer les cultures">
-        <button class="filtre actif" type="button" data-filtre="tous">Toutes <span>8</span></button>
-        <button class="filtre" type="button" data-filtre="vivriere">Vivrières <span>4</span></button>
+        <button class="filtre actif" type="button" data-filtre="tous">Toutes <span>11</span></button>
+        <button class="filtre" type="button" data-filtre="vivriere">Vivrières <span>7</span></button>
         <button class="filtre" type="button" data-filtre="epice">Épices <span>4</span></button>
         <label class="recherche"><span class="sr-only">Rechercher une culture</span>
           <input type="search" id="rechercheCulture" placeholder="Rechercher : poivre, fonio…" autocomplete="off">
@@ -205,6 +205,7 @@
       </div>
 
       <div class="crops-grid" id="grilleCultures">
+<!-- FICHES:DEBUT -->
           <article class="crop reveal" data-type="vivriere" data-nom="voandzou">
             <figure class="crop-img">
               <img src="assets/cultures/voandzou.jpg" alt="Voandzou — photographie réelle" width="1200" height="750" loading="lazy">
@@ -213,12 +214,13 @@
             <div class="crop-body">
               <h3>Voandzou</h3>
               <p class="surnom">Pois bambara, pois de terre</p>
-              <p class="desc">Légumineuse très rustique : elle fixe l'azote, supporte la sécheresse et se conserve longtemps sans traitement. Utile en rotation avant une céréale.</p>
+              <p class="desc">Légumineuse très rustique : elle fixe l&#x27;azote, supporte la sécheresse et se conserve longtemps sans traitement. Utile en rotation avant une céréale.</p>
               <dl>
                 <dt>Cycle</dt><dd>90 à 120 jours</dd>
-                <dt>Atouts</dt><dd>peu d'intrants, résiste au sec, enrichit le sol</dd>
+                <dt>Atouts</dt><dd>peu d&#x27;intrants, résiste au sec, enrichit le sol</dd>
                 <dt>Débouché</dt><dd>graines, farine, bouillie ; demande urbaine stable</dd>
               </dl>
+              
               <p class="crop-credit">Photo : Crop Trust · CC BY-SA 4.0 · <a href="https://commons.wikimedia.org/wiki/File:Traditional_deshelling_of_Bambara_groundnut,_Singida,_Tanzania.jpg" target="_blank" rel="noreferrer">Wikimedia</a></p>
             </div>
           </article>
@@ -230,12 +232,13 @@
             <div class="crop-body">
               <h3>Fonio</h3>
               <p class="surnom">La céréale la plus fine</p>
-              <p class="desc">Pousse sur des sols pauvres et sableux, mûrit vite et demande peu d'eau — un recours quand la saison est courte.</p>
+              <p class="desc">Pousse sur des sols pauvres et sableux, mûrit vite et demande peu d&#x27;eau — un recours quand la saison est courte.</p>
               <dl>
                 <dt>Cycle</dt><dd>60 à 90 jours</dd>
                 <dt>Atouts</dt><dd>rustique, très précoce, bon prix au kilo</dd>
                 <dt>Débouché</dt><dd>restauration, farines, marchés urbains et export</dd>
               </dl>
+              
               <p class="crop-credit">Photo : Crop Trust · CC BY-SA 4.0 · <a href="https://commons.wikimedia.org/wiki/File:Fonio_panicles_maturing_in_Natitingou,_northern_Benin.jpg" target="_blank" rel="noreferrer">Wikimedia</a></p>
             </div>
           </article>
@@ -246,13 +249,14 @@
             </figure>
             <div class="crop-body">
               <h3>Sésame</h3>
-              <p class="surnom">Oléagineux d'export</p>
-              <p class="desc">Le point critique n'est pas la production mais la récolte : choisir des variétés à capsules qui ne s'ouvrent pas, récolter dès maturité, sécher sur bâche.</p>
+              <p class="surnom">Oléagineux d&#x27;export</p>
+              <p class="desc">Le point critique n&#x27;est pas la production mais la récolte : choisir des variétés à capsules qui ne s&#x27;ouvrent pas, récolter dès maturité, sécher sur bâche.</p>
               <dl>
                 <dt>Cycle</dt><dd>90 à 110 jours</dd>
-                <dt>Atouts</dt><dd>peu d'eau, demande à l'export, prix au kilo élevé</dd>
+                <dt>Atouts</dt><dd>peu d&#x27;eau, demande à l&#x27;export, prix au kilo élevé</dd>
                 <dt>Débouché</dt><dd>huile, pâtisserie, export (qualité et propreté du lot)</dd>
               </dl>
+              
               <p class="crop-credit">Photo : Joydeep · CC BY-SA 3.0 · <a href="https://commons.wikimedia.org/wiki/File:Sesamum_indicum_13062014.jpg" target="_blank" rel="noreferrer">Wikimedia</a></p>
             </div>
           </article>
@@ -267,10 +271,65 @@
               <p class="desc">Rendement rapide sur sol léger, riche en bêta-carotène. Deux marchés : le frais et la transformation en farine ou purée.</p>
               <dl>
                 <dt>Cycle</dt><dd>90 à 120 jours</dd>
-                <dt>Atouts</dt><dd>couvre le sol, peu d'intrants, bonne valeur nutritionnelle</dd>
+                <dt>Atouts</dt><dd>couvre le sol, peu d&#x27;intrants, bonne valeur nutritionnelle</dd>
                 <dt>Débouché</dt><dd>frais, farine, programmes nutrition, écoles</dd>
               </dl>
+              
               <p class="crop-credit">Photo : Prosperosity · CC BY 4.0 · <a href="https://commons.wikimedia.org/wiki/File:20230227_161110_Ipomoea_batatas_%27Beauregard%27.jpg" target="_blank" rel="noreferrer">Wikimedia</a></p>
+            </div>
+          </article>
+          <article class="crop reveal" data-type="vivriere" data-nom="soja">
+            <figure class="crop-img">
+              <img src="assets/cultures/soja.jpg" alt="Soja — photographie réelle" width="1200" height="750" loading="lazy">
+              <span class="crop-badge nou">Nouvelle fiche</span>
+            </figure>
+            <div class="crop-body">
+              <h3>Soja</h3>
+              <p class="surnom">Oléagineux et protéine animale</p>
+              <p class="desc">Filière soutenue par le FIRCA depuis 2022 : la production nationale reste très inférieure à la demande des huileries et de l&#x27;aliment du bétail. Culture associée au maïs, elle enrichit aussi le sol en azote.</p>
+              <dl>
+                <dt>Cycle</dt><dd>90 à 110 jours</dd>
+                <dt>Atouts</dt><dd>fixe l&#x27;azote, débouché industriel, prix de contrat possible</dd>
+                <dt>Débouché</dt><dd>huileries, provende, semence certifiée</dd>
+              </dl>
+              <p class="crop-source">Pourquoi maintenant : FIRCA (filière soja) ; USDA FAS - Oilseeds Annual 2025 — <a href="https://firca.ci/filieres-agricoles/legumes/" target="_blank" rel="noreferrer">source</a></p>
+              <p class="crop-credit">Photo : Forest and Kim Starr · CC BY 3.0 us · <a href="https://commons.wikimedia.org/wiki/File:Starr-090611-0626-Glycine_max-plants_in_garden-Olinda-Maui_(24846154482).jpg" target="_blank" rel="noreferrer">Wikimedia</a></p>
+            </div>
+          </article>
+          <article class="crop reveal" data-type="vivriere" data-nom="igname">
+            <figure class="crop-img">
+              <img src="assets/cultures/igname.jpg" alt="Igname — photographie réelle" width="1200" height="750" loading="lazy">
+              <span class="crop-badge nou">Nouvelle fiche</span>
+            </figure>
+            <div class="crop-body">
+              <h3>Igname</h3>
+              <p class="surnom">La culture vivrière à plus fort revenu</p>
+              <p class="desc">Le PNIA classe l&#x27;igname parmi les filières au plus fort potentiel d&#x27;augmentation du revenu agricole. Elle demande un sol meuble et profond, et une bonne maîtrise des boutures pour éviter les pertes au stockage.</p>
+              <dl>
+                <dt>Cycle</dt><dd>7 à 9 mois</dd>
+                <dt>Atouts</dt><dd>forte valeur marchande, demande urbaine constante</dd>
+                <dt>Débouché</dt><dd>marchés urbains, cossettes, transformation en farine</dd>
+              </dl>
+              <p class="crop-source">Pourquoi maintenant : PNIA (Programme national d&#x27;investissement agricole) — <a href="https://www.partenariat.gouv.ci/uploads/document/PNIA.pdf?download=1" target="_blank" rel="noreferrer">source</a></p>
+              <p class="crop-credit">Photo : Dorcas Atule · CC BY-SA 4.0 · <a href="https://commons.wikimedia.org/wiki/File:Yam_at_monday_market_kaduna_state_01.jpg" target="_blank" rel="noreferrer">Wikimedia</a></p>
+            </div>
+          </article>
+          <article class="crop reveal" data-type="vivriere" data-nom="banane plantain">
+            <figure class="crop-img">
+              <img src="assets/cultures/plantain.jpg" alt="Banane plantain — photographie réelle" width="1200" height="750" loading="lazy">
+              <span class="crop-badge nou">Nouvelle fiche</span>
+            </figure>
+            <div class="crop-body">
+              <h3>Banane plantain</h3>
+              <p class="surnom">Demande urbaine en croissance</p>
+              <p class="desc">Le PNIA retient aussi la banane plantain parmi les filières à fort potentiel de revenu. Cycle court, régimes récoltés toute l&#x27;année : intéressante pour lisser la trésorerie entre deux campagnes de rente.</p>
+              <dl>
+                <dt>Cycle</dt><dd>10 à 12 mois (rejets successifs)</dd>
+                <dt>Atouts</dt><dd>récolte étalée, bon rendement à l&#x27;hectare</dd>
+                <dt>Débouché</dt><dd>frais, alloco, chips, marchés urbains</dd>
+              </dl>
+              <p class="crop-source">Pourquoi maintenant : PNIA (Programme national d&#x27;investissement agricole) — <a href="https://www.partenariat.gouv.ci/uploads/document/PNIA.pdf?download=1" target="_blank" rel="noreferrer">source</a></p>
+              <p class="crop-credit">Photo : BorisAhonon · CC BY-SA 4.0 · <a href="https://commons.wikimedia.org/wiki/File:Banane_plantain_au_march%C3%A9.jpg" target="_blank" rel="noreferrer">Wikimedia</a></p>
             </div>
           </article>
           <article class="crop reveal epice" data-type="epice" data-nom="poivre noir">
@@ -281,12 +340,13 @@
             <div class="crop-body">
               <h3>Poivre noir</h3>
               <p class="surnom">Piper nigrum — liane à tuteurer</p>
-              <p class="desc">Liane tropicale conduite sur tuteur, à l'ombre légère. Baies vertes séchées = poivre noir ; baies dépulpées = poivre blanc. Production ivoirienne encore marginale : valider le débouché avant de planter.</p>
+              <p class="desc">Liane tropicale conduite sur tuteur, à l&#x27;ombre légère. Baies vertes séchées = poivre noir ; baies dépulpées = poivre blanc. Production ivoirienne encore marginale : valider le débouché avant de planter.</p>
               <dl>
                 <dt>Cycle</dt><dd>entrée en production 3 à 4 ans</dd>
-                <dt>Atouts</dt><dd>prix au kilo très élevé, valorise l'ombrage</dd>
+                <dt>Atouts</dt><dd>prix au kilo très élevé, valorise l&#x27;ombrage</dd>
                 <dt>Débouché</dt><dd>épiceries fines, restauration, export</dd>
               </dl>
+              
               <p class="crop-credit">Photo : K Hari Krishnan · CC BY-SA 3.0 · <a href="https://commons.wikimedia.org/wiki/File:Black_Pepper_(Piper_nigrum)_fruits.jpg" target="_blank" rel="noreferrer">Wikimedia</a></p>
             </div>
           </article>
@@ -304,6 +364,7 @@
                 <dt>Atouts</dt><dd>demande locale forte, transformation simple</dd>
                 <dt>Débouché</dt><dd>marchés urbains, jus et boissons, cosmétique</dd>
               </dl>
+              
               <p class="crop-credit">Photo : Kayleemariev · CC0 · <a href="https://commons.wikimedia.org/wiki/File:Zingiber_officinale_rhizome.jpg" target="_blank" rel="noreferrer">Wikimedia</a></p>
             </div>
           </article>
@@ -321,6 +382,7 @@
                 <dt>Atouts</dt><dd>transformation simple, demande croissante</dd>
                 <dt>Débouché</dt><dd>poudre, épiceries, cosmétique</dd>
               </dl>
+              
               <p class="crop-credit">Photo : Simon A. Eugster · CC BY-SA 3.0 · <a href="https://commons.wikimedia.org/wiki/File:Curcuma_longa_roots.jpg" target="_blank" rel="noreferrer">Wikimedia</a></p>
             </div>
           </article>
@@ -332,15 +394,17 @@
             <div class="crop-body">
               <h3>Piment</h3>
               <p class="surnom">Capsicum spp. — frais ou séché</p>
-              <p class="desc">Arbuste à récolte étalée : le séchage permet de lisser les ventes et d'éviter de brader au pic de production. Choisir une variété dont le piquant correspond au marché local.</p>
+              <p class="desc">Arbuste à récolte étalée : le séchage permet de lisser les ventes et d&#x27;éviter de brader au pic de production. Choisir une variété dont le piquant correspond au marché local.</p>
               <dl>
                 <dt>Cycle</dt><dd>4 à 6 mois, récolte étalée</dd>
                 <dt>Atouts</dt><dd>cycle court, demande urbaine constante</dd>
                 <dt>Débouché</dt><dd>frais, séché, transformation</dd>
               </dl>
+              
               <p class="crop-credit">Photo : Prenn · CC BY-SA 3.0 · <a href="https://commons.wikimedia.org/wiki/File:Capsicum_frutescens_(3).jpg" target="_blank" rel="noreferrer">Wikimedia</a></p>
             </div>
           </article>
+<!-- FICHES:FIN -->
       </div>
       <p class="pricing-note">Prix des épices : aucun relevé officiel ivoirien n'est publié régulièrement. Nous ne donnons donc aucun prix au kilo pour ces cultures — demandez un devis à un acheteur ou renseignez-vous auprès de l'ANADER avant de planter.</p>
     </div>
