@@ -1002,3 +1002,21 @@ body { background: #e9f2e0; }
   .flash-card::before, .actu-tag.neuf, .crop-badge.nou, .tab-dot { animation: none; }
   .panel { animation: none; }
 }
+
+
+/* correctif v6.1 : `.panel` est une SECTION dans l'application, pas une carte.
+   L'ancienne règle (carte blanche arrondie de la v3) est neutralisée ici. */
+.panel {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
+}
+.panel::before { content: none; }
+.panel-form {
+  border-radius: var(--radius-xl);
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-md);
+}
