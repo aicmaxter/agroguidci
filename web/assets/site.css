@@ -1111,3 +1111,13 @@ html, body { max-width: 100%; }
 @media (max-width: 560px) {
   #grilleCultures.crops-grid { grid-template-columns: 1fr; }
 }
+
+/* v7.2 : bandeau de veille dans l'onglet Actualités */
+.veille-note { display: flex; gap: .8rem; align-items: flex-start; margin: 1.1rem 0 1.6rem;
+  padding: 1rem 1.1rem; border-radius: 14px; background: rgba(12, 74, 43, .06);
+  border: 1px solid rgba(12, 74, 43, .14); font-size: .9rem; line-height: 1.55; color: var(--vert-900, #0b3a22); }
+.veille-note strong { display: block; margin-bottom: .2rem; }
+.veille-pastille { flex: 0 0 auto; width: 10px; height: 10px; margin-top: .45rem; border-radius: 50%;
+  background: #a7d857; box-shadow: 0 0 0 0 rgba(167, 216, 87, .7); animation: veillePulse 2.2s infinite; }
+@keyframes veillePulse { 70% { box-shadow: 0 0 0 10px rgba(167, 216, 87, 0); } 100% { box-shadow: 0 0 0 0 rgba(167, 216, 87, 0); } }
+@media (prefers-reduced-motion: reduce) { .veille-pastille { animation: none; } }
