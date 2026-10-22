@@ -203,6 +203,29 @@ class TestPurge(Base):
         self.assertIsNone(conv.fil(jeton and conv.session_valide(jeton) or "", cid))
 
 
+
+class TestProtectionDesRoutes(Base):
+    def test_cle_du_moteur_exigee(self):
+        """Les quatre routes de conversation doivent exiger la clé du moteur.
+
+        Test statique : on vérifie la dépendance dans la source, car les tests
+        tournent avec AGRO_SANS_AUTH=1 pour ne pas manipuler de clé.
+        """
+        source = (ROOT / "serveur_api.py").read_text(encoding="utf-8")
+        for fonction in ("def nouvelle_session(", "def nouvelle_conversation(",
+                         "def lire_conversation(", "def envoyer_message("):
+            debut = source.index(fonction)
+            fin = source.index("):", debut)
+            signature = source[debut:fin]
+            self.assertIn("Depends(garde_cle)", signature, fonction)
+
+    def test_session_exigee_pour_lire_un_fil(self):
+        jeton = self.session()
+        cid = self.conversation(jeton)
+        r = self.client.get(f"/api/conversations/{cid}")
+        self.assertEqual(r.status_code, 401)
+
+
 class TestContrat(Base):
     def test_forme_de_la_reponse(self):
         jeton = self.session()

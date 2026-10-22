@@ -70,7 +70,7 @@ class TestCultures(unittest.TestCase):
 
     def test_chaque_carte_lien_vers_sa_fiche(self):
         for c in DATA:
-            self.assertIn(f'href="cultures/{c["id"]}.html"', INDEX, c["id"])
+            self.assertIn(f'href="cultures/{c["id"]}"', INDEX, c["id"])
 
     def test_fiches_generees_completes(self):
         for c in DATA:

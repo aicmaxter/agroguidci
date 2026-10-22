@@ -6,7 +6,9 @@
 	encode zstd gzip
 
 	# L'API n'a que trois routes utiles : on ferme tout le reste.
-	@autorise path /health /api/demande /api/demande/ /api/missions/* /api/etat
+	# Routes publiques du moteur. Les routes de conversation servent le chat :
+	# elles restent derriere la cle X-API-Key et ne sont appelees que par Vercel.
+	@autorise path /health /api/demande /api/demande/ /api/missions/* /api/etat /api/sessions /api/conversations /api/conversations/*
 	handle @autorise {
 		reverse_proxy moteur:8080 {
 			# une coordination peut durer 2 minutes côté moteur

@@ -487,7 +487,7 @@ def _executer_message(cid: str, mid: str, texte: str, profil: Profil | None) -> 
 
 
 @app.post("/api/sessions")
-def nouvelle_session() -> dict[str, Any]:
+def nouvelle_session(_: None = Depends(garde_cle)) -> dict[str, Any]:
     """Crée une session anonyme ; le jeton n'est rendu qu'une seule fois."""
     s = conv.creer_session()
     journalise(evenement="session_creee", session=s["session_id"])
@@ -497,7 +497,8 @@ def nouvelle_session() -> dict[str, Any]:
 
 @app.post("/api/conversations")
 def nouvelle_conversation(corps: NouvelleConversation | None = None,
-                          x_session_token: str | None = Header(default=None, alias="X-Session-Token")) -> JSONResponse:
+                          x_session_token: str | None = Header(default=None, alias="X-Session-Token"),
+                          _: None = Depends(garde_cle)) -> JSONResponse:
     sid = _session(x_session_token)
     corps = corps or NouvelleConversation()
     c = conv.creer_conversation(sid, corps.culture_id, corps.localite)
@@ -507,7 +508,8 @@ def nouvelle_conversation(corps: NouvelleConversation | None = None,
 
 @app.get("/api/conversations/{cid}")
 def lire_conversation(cid: str,
-                      x_session_token: str | None = Header(default=None, alias="X-Session-Token")) -> dict[str, Any]:
+                      x_session_token: str | None = Header(default=None, alias="X-Session-Token"),
+                      _: None = Depends(garde_cle)) -> dict[str, Any]:
     sid = _session(x_session_token)
     f = conv.fil(sid, cid)
     if not f:
@@ -518,7 +520,8 @@ def lire_conversation(cid: str,
 
 @app.post("/api/conversations/{cid}/messages")
 def envoyer_message(cid: str, d: NouveauMessage,
-                    x_session_token: str | None = Header(default=None, alias="X-Session-Token")) -> JSONResponse:
+                    x_session_token: str | None = Header(default=None, alias="X-Session-Token"),
+                    _: None = Depends(garde_cle)) -> JSONResponse:
     sid = _session(x_session_token)
     if not conv.conversation_de(sid, cid):
         raise HTTPException(status_code=404, detail="conversation inconnue")
