@@ -95,6 +95,27 @@
     });
   }
 
+  // Compteurs recalculés depuis le DOM : les nombres affichés ne peuvent pas
+  // diverger du nombre réel de fiches, même si la génération change.
+  function majCompteurs() {
+    var cartes = document.querySelectorAll("#grilleCultures .crop");
+    var total = cartes.length;
+    var vivrieres = 0, epices = 0;
+    cartes.forEach(function (c) {
+      var type = c.getAttribute("data-type");
+      if (type === "epice") epices++; else vivrieres++;
+    });
+    var valeurs = { tous: total, vivriere: vivrieres, epice: epices };
+    document.querySelectorAll("[data-filtre]").forEach(function (b) {
+      var span = b.querySelector("span");
+      if (span && valeurs[b.getAttribute("data-filtre")] !== undefined) {
+        span.textContent = valeurs[b.getAttribute("data-filtre")];
+      }
+    });
+    var onglet = document.querySelector('[data-tab="cultures"] .tab-count');
+    if (onglet) onglet.textContent = total;
+  }
+
   document.querySelectorAll("[data-filtre]").forEach(function (bouton) {
     bouton.addEventListener("click", function () {
       document.querySelectorAll("[data-filtre]").forEach(function (b) { b.classList.remove("actif"); });
@@ -104,6 +125,7 @@
   });
   var champRecherche = document.getElementById("rechercheCulture");
   if (champRecherche) champRecherche.addEventListener("input", filtrer);
+  majCompteurs();
 
   function filtrer() {
     if (!grille) return;

@@ -46,6 +46,7 @@ from pydantic import BaseModel, ConfigDict, Field  # noqa: E402
 
 from coordinateur import Coordonnateur, etat_reseau  # noqa: E402
 from confidentialite import masquer_champs  # minimisation des journaux
+import conversations as conv  # fils de discussion (SQLite, volume agro-data)
 from agrokit import Orchestrateur  # noqa: E402
 from experts import EXPERTISES  # noqa: E402
 
@@ -423,6 +424,128 @@ def etat(_: None = Depends(garde_cle)) -> dict[str, Any]:
     except Exception as e:
         journalise(evenement="etat_erreur", type=type(e).__name__)
         return {"orchestrateur": False, "agents": []}
+
+
+
+# ------------------------------------------------------- conversations (chat)
+class NouvelleConversation(BaseModel):
+    culture_id: str | None = Field(default=None, max_length=60)
+    localite: str | None = Field(default=None, max_length=120)
+
+
+class NouveauMessage(BaseModel):
+    texte: str = Field(min_length=2, max_length=conv.MAX_MESSAGE)
+    culture_id: str | None = Field(default=None, max_length=60)
+    localite: str | None = Field(default=None, max_length=120)
+    stade: str | None = Field(default=None, max_length=60)
+    idempotency_key: str | None = Field(default=None, max_length=100)
+
+
+def _session(x_session_token: str | None) -> str:
+    """Session anonyme exigée par les routes de conversation (401 sinon)."""
+    sid = conv.session_valide(x_session_token)
+    if not sid:
+        raise HTTPException(status_code=401, detail="session absente ou expirée")
+    return sid
+
+
+def _statut_message(etat: str | None) -> str:
+    return {"TERMINEE_VERIFIEE": "termine",
+            "A_VALIDER": "escalade",
+            "ESCALADE_HUMAINE": "escalade",
+            "ARRETEE_PERMISSION": "escalade",
+            "EN_ATTENTE_INFORMATION": "clarification",
+            "ECHEC_OUTIL": "echec"}.get(etat or "", "echec")
+
+
+def _executer_message(cid: str, mid: str, texte: str, profil: Profil | None) -> None:
+    """Exécute une demande de chat et publie la réponse dans le fil."""
+    if not _VERROU.acquire(timeout=BUDGET_S):
+        conv.repondre(cid, mid, "Le moteur est occupé : réessayez dans un instant.", "echec",
+                      erreur="moteur occupé")
+        return
+    try:
+        coord = Coordonnateur()
+        resultat = coord.traiter(texte, None, None)
+        corps = _enveloppe(texte, profil, resultat, 0.0)
+        etat = corps.get("etat_final")
+        conv.repondre(cid, mid, corps["rapport"]["reponse"][:4000], _statut_message(etat),
+                      mission_id=corps.get("id"),
+                      sources=(corps.get("rapport") or {}).get("sources") or [])
+        journalise(evenement="chat_reponse", id=corps.get("id"), etat=etat)
+    except RuntimeError:
+        conv.repondre(cid, mid, "Le moteur de l'agent agronome est indisponible : orchestrateur "
+                      "ou agents non démarrés. Réessayez plus tard.", "echec",
+                      erreur="moteur indisponible")
+        journalise(evenement="chat_moteur_indisponible")
+    except Exception as e:
+        conv.repondre(cid, mid, "Une erreur technique est survenue : aucune réponse n'a été produite.",
+                      "echec", erreur=f"erreur du moteur ({type(e).__name__})")
+        journalise(evenement="chat_erreur", type=type(e).__name__)
+    finally:
+        _VERROU.release()
+
+
+@app.post("/api/sessions")
+def nouvelle_session() -> dict[str, Any]:
+    """Crée une session anonyme ; le jeton n'est rendu qu'une seule fois."""
+    s = conv.creer_session()
+    journalise(evenement="session_creee", session=s["session_id"])
+    return {"session_id": s["session_id"], "session_token": s["session_token"],
+            "expires_at": s["expires_at"]}
+
+
+@app.post("/api/conversations")
+def nouvelle_conversation(corps: NouvelleConversation | None = None,
+                          x_session_token: str | None = Header(default=None, alias="X-Session-Token")) -> JSONResponse:
+    sid = _session(x_session_token)
+    corps = corps or NouvelleConversation()
+    c = conv.creer_conversation(sid, corps.culture_id, corps.localite)
+    journalise(evenement="conversation_creee", conversation=c["conversation_id"])
+    return JSONResponse(status_code=201, content=c)
+
+
+@app.get("/api/conversations/{cid}")
+def lire_conversation(cid: str,
+                      x_session_token: str | None = Header(default=None, alias="X-Session-Token")) -> dict[str, Any]:
+    sid = _session(x_session_token)
+    f = conv.fil(sid, cid)
+    if not f:
+        # 404 et non 403 : ne jamais révéler l'existence d'un fil d'autrui
+        raise HTTPException(status_code=404, detail="conversation inconnue")
+    return f
+
+
+@app.post("/api/conversations/{cid}/messages")
+def envoyer_message(cid: str, d: NouveauMessage,
+                    x_session_token: str | None = Header(default=None, alias="X-Session-Token")) -> JSONResponse:
+    sid = _session(x_session_token)
+    if not conv.conversation_de(sid, cid):
+        raise HTTPException(status_code=404, detail="conversation inconnue")
+    contexte = []
+    if d.culture_id:
+        contexte.append(f"culture : {d.culture_id}")
+    if d.localite:
+        contexte.append(f"localité : {d.localite}")
+    if d.stade:
+        contexte.append(f"stade : {d.stade}")
+    texte = d.texte.strip()
+    if contexte:
+        saut = chr(10) * 2
+        texte = texte + saut + "Contexte fourni par la page — " + " · ".join(contexte)
+    try:
+        msg = conv.ajouter_message(cid, "user", d.texte.strip(), statut="en_cours",
+                                   idempotency_key=d.idempotency_key)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    if msg.get("rejoue"):
+        return JSONResponse(status_code=200, content={"message_id": msg["message_id"],
+                                                      "statut": msg["statut"], "rejoue": True})
+    thread = threading.Thread(target=_executer_message, args=(cid, msg["message_id"], texte, None), daemon=True)
+    thread.start()
+    journalise(evenement="chat_demande", conversation=cid, message=msg["message_id"])
+    return JSONResponse(status_code=202, content={"message_id": msg["message_id"],
+                                                  "statut": "en_cours", "rejoue": False})
 
 
 @app.exception_handler(413)

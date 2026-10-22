@@ -46,11 +46,13 @@ def carte(c: dict, photo: dict | None) -> str:
                   ' — <a href="' + e(lien) + '" target="_blank" rel="noreferrer">source</a></p>')
     return f'''          <article class="{classes}" data-type="{e(c['type'])}" data-nom="{e(c['nom'].lower())}">
             <figure class="crop-img">
-              <img src="assets/cultures/{e(c['id'])}.jpg" alt="{e(c['nom'])} — photographie réelle" width="1200" height="750" loading="lazy">
+              <a class="crop-lien-img" href="cultures/{e(c['id'])}.html" aria-label="Lire la fiche {e(c['nom'])}">
+                <img src="assets/cultures/{e(c['id'])}.jpg" alt="{e(c['nom'])} — photographie réelle" width="1200" height="750" loading="lazy">
+              </a>
               <span class="{badge}">{e(c['badge'])}</span>
             </figure>
             <div class="crop-body">
-              <h3>{e(c['nom'])}</h3>
+              <h3><a class="crop-lien-titre" href="cultures/{e(c['id'])}.html">{e(c["nom"])}</a></h3>
               <p class="surnom">{e(c['surnom'])}</p>
               <p class="desc">{e(c['desc'])}</p>
               <dl>
@@ -58,6 +60,7 @@ def carte(c: dict, photo: dict | None) -> str:
                 <dt>Atouts</dt><dd>{e(c['atouts'])}</dd>
                 <dt>Débouché</dt><dd>{e(c['debouche'])}</dd>
               </dl>
+              <p class="crop-plus"><a href="cultures/{e(c['id'])}.html">Fiche complète : climat, itinéraire, récolte, budget →</a></p>
               {source}
               {credit}
             </div>

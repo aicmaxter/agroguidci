@@ -8,6 +8,15 @@
     },
     "api/missions/[id].js": {
       "maxDuration": 15
+    },
+    "api/conversations/index.js": {
+      "maxDuration": 25
+    },
+    "api/conversations/[id].js": {
+      "maxDuration": 20
+    },
+    "api/conversations/[id]/messages.js": {
+      "maxDuration": 25
     }
   },
   "headers": [

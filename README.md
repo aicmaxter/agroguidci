@@ -354,3 +354,30 @@ sans supervision ni état disque) : c'est un repli, pas la cible.
 **Contenus exclus de la publication** (`.gitignore`) : `.env`, `.agent-token*.json` (jetons
 d'enrôlement), `data/` (dossiers producteurs — données personnelles), `out/`, `logs/`.
 
+## Chat agronome et fiches cultures (développement local)
+
+Depuis la v9, la vitrine contient :
+
+- un **chat** relié au moteur (agent principal « Agent Agronome Expert ») via trois routes
+  publiques protégées par session anonyme : `POST /api/conversations`,
+  `POST /api/conversations/{id}/messages`, `GET /api/conversations/{id}` ;
+- des **fiches cultures détaillées** générées depuis `content/cultures-*.json`
+  (`python scripts/build_cultures.py`), reliées aux cartes de l'onglet Cultures ;
+- un stockage **SQLite** des conversations dans le volume `agro-data` du VPS.
+
+Documents de référence : `docs/CHAT-CONTRAT.md` (contrat d'API, statuts, idempotence) et
+`docs/EXPLOITATION-SQLITE.md` (volume, sauvegarde, purge, concurrence).
+
+Commandes utiles :
+
+```bash
+python scripts/build_cultures.py --verifier     # les fiches générées sont-elles à jour ?
+python scripts/gen_index.py --verifier          # les cartes correspondent-elles aux données ?
+python tests_conversations.py                   # sessions, propriété, idempotence, purge (sans LLM)
+python tests_vitrine_v9.py                      # bloc d'accueil, cartes, fiches, chat, en-têtes
+python scripts/purge_conversations.py           # purge (simulation par défaut)
+```
+
+Le chat n'appelle jamais un fournisseur d'IA depuis le navigateur : la clé du moteur reste
+dans l'environnement Vercel, le cookie de session est `HttpOnly`, et chaque conversation est
+vérifiée contre la session qui y accède (404 sinon).
