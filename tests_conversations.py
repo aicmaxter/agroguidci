@@ -201,6 +201,11 @@ class TestMessages(Base):
         self.assertEqual(len(agents), 1, agents)
         self.assertIn("Extrait du volet", agents[0]["contenu"])
         self.assertEqual(agents[0]["statut"], "en_cours")
+        # un fragment plus court ne doit pas faire rétrécir la bulle
+        etat["maj"] = 0.0
+        api._publier_avancement(cid, "court", etat)
+        agents = [m for m in conv.fil(sid, cid)["messages"] if m["role"] == "assistant"]
+        self.assertIn("Extrait du volet", agents[0]["contenu"])
         # la réponse finale réutilise la bulle d'avancement
         conv.repondre(cid, question["message_id"], "Réponse finale de l'agent.", "termine",
                       sources=[{"titre": "knowledge/fonio.md"}], assistant_id=etat["id"])
@@ -212,6 +217,18 @@ class TestMessages(Base):
         self.assertEqual(agents[0]["statut"], "termine")
         self.assertEqual(len(agents[0]["sources"]), 1)
         self.assertEqual(fil["messages"][0]["statut"], "termine")
+
+    def test_fiche_culture_jointe_a_la_demande(self):
+        """Le chat ouvert depuis une fiche reçoit les chiffres et limites de la fiche."""
+        extrait = api.extrait_fiche("igname")
+        self.assertIn("EXTRAIT DE LA FICHE", extrait)
+        self.assertIn("Igname", extrait)
+        self.assertLessEqual(len(extrait), 1800)
+        self.assertIn("Plantation / semis", extrait)
+        # insensible à la casse et au nom affiché
+        self.assertEqual(api.extrait_fiche("Igname"), extrait)
+        self.assertEqual(api.extrait_fiche("culture-inconnue"), "")
+        self.assertEqual(api.extrait_fiche(None), "")
 
     def test_message_vide_refuse(self):
         jeton = self.session()
@@ -292,6 +309,59 @@ class TestContrat(Base):
         for cle in ("message_id", "role", "contenu", "statut", "sources"):
             self.assertIn(cle, m)
         self.assertNotIn("session_token", json.dumps(fil))
+
+
+class TestMigration(unittest.TestCase):
+    """Une base ouverte avec l'ancien plafond (4000) doit être convertie sans perte."""
+
+    def test_base_ancienne_migree(self):
+        import sqlite3
+        import tempfile
+        from pathlib import Path
+
+        ancien_chemin, ancienne_connexion = conv.CHEMIN, conv._connexion
+        chemin = Path(tempfile.mkdtemp(prefix="agro-mig-")) / "conversations.db"
+        c = sqlite3.connect(str(chemin))
+        c.executescript("""
+        CREATE TABLE sessions (session_id TEXT PRIMARY KEY, token_hash BLOB NOT NULL UNIQUE,
+          created_at INTEGER NOT NULL, last_seen_at INTEGER NOT NULL, expires_at INTEGER NOT NULL,
+          revoked_at INTEGER);
+        CREATE TABLE conversations (conversation_id TEXT PRIMARY KEY,
+          session_id TEXT NOT NULL REFERENCES sessions(session_id) ON DELETE CASCADE, titre TEXT,
+          culture_id TEXT, localite TEXT, statut TEXT NOT NULL DEFAULT 'active'
+          CHECK (statut IN ('active','archivee','expiree')), created_at INTEGER NOT NULL,
+          updated_at INTEGER NOT NULL, expires_at INTEGER NOT NULL);
+        CREATE TABLE messages (message_id TEXT PRIMARY KEY,
+          conversation_id TEXT NOT NULL REFERENCES conversations(conversation_id) ON DELETE CASCADE,
+          role TEXT NOT NULL CHECK (role IN ('user','assistant','systeme')),
+          contenu TEXT NOT NULL CHECK (length(contenu) BETWEEN 1 AND 4000),
+          statut TEXT NOT NULL CHECK (statut IN ('en_cours','termine','echec',
+                  'info_insuffisante','clarification','escalade')),
+          mission_id TEXT, demande_id TEXT, erreur TEXT, sources_json TEXT, idempotency_key TEXT,
+          created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL,
+          UNIQUE (conversation_id, idempotency_key));
+        INSERT INTO sessions VALUES ('ses_x', X'00', 1, 1, 9999999999, NULL);
+        INSERT INTO conversations VALUES ('cnv_x','ses_x',NULL,NULL,NULL,'active',1,1,9999999999);
+        INSERT INTO messages VALUES ('msg_x','cnv_x','user','bonjour','termine',
+          NULL,NULL,NULL,NULL,NULL,1,1);
+        """)
+        c.commit()
+        c.close()
+        try:
+            conv.CHEMIN = chemin
+            conv._connexion = None
+            base = conv._db()
+            self.assertEqual(base.execute("PRAGMA user_version").fetchone()[0], conv.VERSION_SCHEMA)
+            self.assertEqual(base.execute("SELECT COUNT(*) n FROM messages").fetchone()["n"], 1,
+                             "aucune ligne perdue par la migration")
+            long_message = conv.ajouter_message("cnv_x", "assistant", "a" * 10000)
+            self.assertEqual(len(long_message["contenu"]), 10000)
+        finally:
+            try:
+                conv._connexion.close()
+            except Exception:
+                pass
+            conv.CHEMIN, conv._connexion = ancien_chemin, ancienne_connexion
 
 
 if __name__ == "__main__":

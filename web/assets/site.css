@@ -1177,6 +1177,12 @@ html, body { max-width: 100%; }
 .chat-texte em { font-style: italic; }
 .chat-texte code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .92em;
   background: rgba(11, 58, 34, .08); border-radius: 4px; padding: .05em .3em; }
+.chat-table-wrap { max-width: 100%; overflow-x: auto; margin: .5rem 0; }
+.chat-table { border-collapse: collapse; width: 100%; font-size: .82rem; }
+.chat-table th, .chat-table td { border: 1px solid rgba(11, 58, 34, .18); padding: .3rem .45rem;
+  text-align: left; vertical-align: top; }
+.chat-table th { background: rgba(11, 58, 34, .07); font-weight: 650; }
+.chat-table tbody tr:nth-child(even) td { background: rgba(11, 58, 34, .025); }
 .chat-badge { margin-left: .45rem; padding: .05rem .4rem; border-radius: 999px; font-size: .62rem;
   letter-spacing: .04em; text-transform: none; }
 .chat-badge.attente { background: #e6f2d8; color: #2f5d17; }

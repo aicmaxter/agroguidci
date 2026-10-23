@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap">
-  <link rel="stylesheet" href="../assets/site.css?v=10">
+  <link rel="stylesheet" href="../assets/site.css?v=11">
   <link rel="stylesheet" href="../assets/fiche.css?v=1">
 </head>
 <body class="fiche-page">
@@ -116,10 +116,38 @@
     </section>
 
     <section class="fiche-actions" aria-label="Actions">
-      <button class="btn btn-primary btn-lg" type="button" data-chat="ouvrir" data-culture="fonio">Poser une question sur cette culture</button>
+      <button class="btn btn-primary btn-lg" type="button" data-chat="ouvrir" data-culture="fonio" data-culture-libelle="Fonio">Poser une question sur cette culture</button>
       <a class="btn btn-ghost btn-lg" href="../#prix">Voir les prix au kilo</a>
     </section>
   </div>
+
+  <!-- ===================== CHATBOX — AGENT EXPERT AGRONOME ===================== -->
+  <dialog id="chatDialogue" class="chat-dialogue" aria-labelledby="chatTitre" aria-describedby="chatAide">
+    <div class="chat-panneau">
+      <header class="chat-entete">
+        <div>
+          <h2 id="chatTitre">Agent expert agronome</h2>
+          <p id="chatCulture" class="chat-sous-titre" hidden></p>
+        </div>
+        <div class="chat-outils">
+          <button type="button" id="chatNouveau" class="btn btn-ghost btn-sm">Nouvelle conversation</button>
+          <button type="button" id="chatFermer" class="chat-fermer" aria-label="Fermer la conversation">×</button>
+        </div>
+      </header>
+
+      <ol id="chatFil" class="chat-fil" aria-live="polite" aria-busy="false"></ol>
+
+      <p id="chatEtat" class="chat-etat" role="status" aria-live="polite"></p>
+
+      <form id="chatForm" class="chat-form">
+        <label class="sr-only" for="chatTexte">Votre question</label>
+        <textarea id="chatTexte" rows="2" maxlength="2000" placeholder="Ex. : quelle variété choisir à Bouaké ?" required></textarea>
+        <button type="submit" id="chatEnvoyer" class="btn btn-primary">Envoyer</button>
+      </form>
+      <p id="chatAide" class="chat-aide">Réponses de l'agent, avec ses sources et ses limites. Les échanges sont conservés 90 jours puis supprimés : n'indiquez pas de données sensibles.</p>
+    </div>
+  </dialog>
+
 </main>
 
 <footer class="site-footer">
@@ -127,6 +155,6 @@
     <p>AGROGUIDCI — conseil agricole pour la Côte d'Ivoire. <a href="../confidentialite.html">Politique de confidentialité</a></p>
   </div>
 </footer>
-<script src="../assets/chat.js?v=13" defer></script>
+<script src="../assets/chat.js?v=15" defer></script>
 </body>
 </html>

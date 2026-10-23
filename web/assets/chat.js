@@ -14,6 +14,7 @@
   var dialogue, fil, formulaire, zone, bouton, etat, titreCulture;
   var conversationId = null;
   var cultureId = null;
+  var cultureLibelle = null;
   var localite = null;
   var envoiEnCours = false;
   var minuteur = null;
@@ -28,16 +29,61 @@
   }
 
   /* Markdown minimal et sûr : le texte est échappé AVANT toute mise en forme,
-   * donc aucun HTML de la réponse ne peut être interprété par le navigateur. */
-  function formater(texte) {
+   * donc aucun HTML de la réponse ne peut être interprété par le navigateur.
+   * Les tableaux « | a | b | » du moteur deviennent de vrais <table>. */
+  function ligneInline(texte) {
     var s = echapper(texte);
-    s = s.replace(/^#{1,6}\s*(.+)$/gm, "<strong>$1</strong>");
+    s = s.replace(/^#{1,6}\s*(.+)$/, "<strong>$1</strong>");
     s = s.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
     s = s.replace(/(^|[\s(])\*([^*\n]+)\*/g, "$1<em>$2</em>");
     s = s.replace(/`([^`\n]+)`/g, "<code>$1</code>");
-    s = s.replace(/^\s*[-*•]\s+/gm, "• ");
-    s = s.replace(/\n{3,}/g, "\n\n");
-    return s.replace(/\n/g, "<br>");
+    s = s.replace(/^\s*[-*•]\s+/, "• ");
+    return s;
+  }
+
+  function cellules(ligne) {
+    var s = ligne.trim().replace(/^\|/, "").replace(/\|$/, "");
+    return s.split("|").map(function (c) { return c.trim(); });
+  }
+
+  function estLigneTableau(l) { return /^\s*\|.*\|\s*$/.test(l); }
+  function estSeparateur(l) { return /^\s*\|?[\s:|-]*-[\s:|-]*\|?\s*$/.test(l) && l.indexOf("-") >= 0; }
+
+  function tableau(entete, corps) {
+    var html = '<div class="chat-table-wrap"><table class="chat-table"><thead><tr>' +
+      entete.map(function (c) { return "<th>" + ligneInline(c) + "</th>"; }).join("") +
+      "</tr></thead><tbody>" +
+      corps.map(function (ligne) {
+        return "<tr>" + ligne.map(function (c) { return "<td>" + ligneInline(c) + "</td>"; }).join("") + "</tr>";
+      }).join("") + "</tbody></table></div>";
+    return html;
+  }
+
+  function formater(texte) {
+    // retrait des CR Windows sans séquence d'échappement fragile dans les regex
+    var lignes = String(texte == null ? "" : texte).split(String.fromCharCode(13)).join("")
+      .split(String.fromCharCode(10));
+    var blocs = [], tampon = [];
+    function vider() {
+      if (tampon.length) { blocs.push(tampon.join("<br>")); tampon = []; }
+    }
+    for (var i = 0; i < lignes.length; i++) {
+      var l = lignes[i];
+      if (estLigneTableau(l) && i + 1 < lignes.length && estSeparateur(lignes[i + 1])) {
+        var entete = cellules(l), corps = [];
+        i += 2;
+        while (i < lignes.length && estLigneTableau(lignes[i])) { corps.push(cellules(lignes[i])); i++; }
+        i--;
+        vider();
+        blocs.push(tableau(entete, corps));
+        continue;
+      }
+      if (!l.trim()) { vider(); continue; }
+      if (tampon.length === 0 && blocs.length) blocs.push("");
+      tampon.push(ligneInline(l));
+    }
+    vider();
+    return blocs.join("<br>").replace(/(<br>){3,}/g, "<br><br>");
   }
 
   function lireStockage() {
@@ -230,10 +276,11 @@
     options = options || {};
     if (options.culture) {
       cultureId = options.culture;
+      cultureLibelle = options.libelle || options.culture;
       localite = options.localite || null;
     }
     if (titreCulture) {
-      titreCulture.textContent = cultureId ? "À propos de : " + cultureId : "";
+      titreCulture.textContent = cultureId ? "À propos de : " + (cultureLibelle || cultureId) : "";
       titreCulture.hidden = !cultureId;
     }
     if (typeof dialogue.showModal === "function") dialogue.showModal();
@@ -269,6 +316,7 @@
         e.preventDefault();
         ouvrir({
           culture: declencheur.getAttribute("data-culture") || null,
+          libelle: declencheur.getAttribute("data-culture-libelle") || null,
           localite: declencheur.getAttribute("data-localite") || null,
         });
       });

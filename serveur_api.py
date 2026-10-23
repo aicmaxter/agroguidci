@@ -427,6 +427,60 @@ def etat(_: None = Depends(garde_cle)) -> dict[str, Any]:
 
 
 
+# ------------------------------------------------- fiches cultures (contexte)
+_FICHES: dict[str, dict] = {}
+_FICHES_MTIME = 0.0
+
+
+def fiches_cultures() -> dict[str, dict]:
+    """Fiches publiées (content/cultures-*.json) : lues une fois, relues si modifiées."""
+    global _FICHES, _FICHES_MTIME
+    fichiers = sorted((ROOT / "content").glob("cultures-*.json"))
+    mtime = max((f.stat().st_mtime for f in fichiers), default=0.0)
+    if _FICHES and mtime <= _FICHES_MTIME:
+        return _FICHES
+    cultures: dict[str, dict] = {}
+    for f in fichiers:
+        try:
+            cultures.update((json.loads(f.read_text(encoding="utf-8")) or {}).get("cultures") or {})
+        except (OSError, ValueError):
+            continue
+    _FICHES, _FICHES_MTIME = cultures, mtime
+    return _FICHES
+
+
+def extrait_fiche(culture_id: str | None, limite: int = 1800) -> str:
+    """Extrait compact de la fiche publiée pour une culture, joint à la demande.
+
+    Le chat ouvert depuis une fiche doit repondre avec les chiffres et les limites
+    DE CETTE FICHE (source interne verifiee), pas avec une agronomie generique.
+    """
+    cid = (culture_id or "").strip().lower()
+    if not cid:
+        return ""
+    fiches = fiches_cultures()
+    fiche = fiches.get(cid) or next(
+        (v for v in fiches.values() if (v.get("nom") or "").strip().lower() == cid), None)
+    if not fiche:
+        return ""
+    champs = [("Cycle", "cycle"), ("Fiabilité de la fiche", "confiance"),
+              ("Variétés", "varietes"), ("Conditions", "conditions"),
+              ("Calendrier", "calendrier"), ("Préparation du sol", "preparation"),
+              ("Plantation / semis", "semis"), ("Entretien et fertilisation", "entretien"),
+              ("Santé des plants", "sante"), ("Récolte", "recolte"),
+              ("Conservation", "conservation"), ("Économie et prix", "economie"),
+              ("Limites déclarées", "limites")]
+    lignes = [f"- {titre} : {(fiche.get(cle) or '').strip()[:230]}"
+              for titre, cle in champs if (fiche.get(cle) or "").strip()]
+    if not lignes:
+        return ""
+    entete = (f"EXTRAIT DE LA FICHE CULTURE PUBLIÉE PAR AGROGUIDCI — « {fiche.get('nom')} » "
+              f"(source interne, page /cultures/{cid}). À utiliser en priorité : reprends ses "
+              "chiffres et ses limites, dis clairement ce qu'elle ne documente pas, et ne la "
+              "contredis jamais sans l'expliquer.\n")
+    return (entete + "\n".join(lignes))[:limite]
+
+
 # ------------------------------------------------------- conversations (chat)
 class NouvelleConversation(BaseModel):
     culture_id: str | None = Field(default=None, max_length=60)
@@ -479,6 +533,10 @@ def _publier_avancement(cid: str, contenu: str, state: dict) -> None:
     contenu = (contenu or "").strip()
     if not contenu:
         return
+    # L'extrait des volets ne doit jamais être remplacé par un fragment de synthèse
+    # plus court : le fil ne rétrécit pas sous les yeux du producteur.
+    if state.get("id") is not None and len(contenu) < int(state.get("taille") or 0):
+        return
     maintenant = time.monotonic()
     if state.get("id") is not None and maintenant - float(state.get("maj") or 0.0) < 1.2:
         return
@@ -490,6 +548,7 @@ def _publier_avancement(cid: str, contenu: str, state: dict) -> None:
         else:
             conv.maj_message(state["id"], contenu=contenu, statut="en_cours")
         state["maj"] = maintenant
+        state["taille"] = len(contenu)
     except Exception as e:                     # confort d'affichage : jamais une erreur
         journalise(evenement="chat_avancement_ignore", type=type(e).__name__)
 
@@ -591,6 +650,9 @@ def envoyer_message(cid: str, d: NouveauMessage,
     if contexte:
         saut = chr(10) * 2
         texte = texte + saut + "Contexte fourni par la page — " + " · ".join(contexte)
+        fiche = extrait_fiche(d.culture_id)
+        if fiche:
+            texte = texte + saut + saut + fiche
     try:
         msg = conv.ajouter_message(cid, "user", d.texte.strip(), statut="en_cours",
                                    idempotency_key=d.idempotency_key)

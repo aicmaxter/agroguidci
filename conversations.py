@@ -33,8 +33,10 @@ CHEMIN = Path(os.environ.get("AGRO_CONVERSATIONS_DB") or (ROOT / "data" / "conve
 TTL_CONVERSATION_S = int(float(os.environ.get("AGRO_CONV_TTL_JOURS", "90") or 90) * 86400)
 DUREE_SESSION_S = int(float(os.environ.get("AGRO_SESSION_JOURS", "30") or 30) * 86400)
 MAX_MESSAGE = 2000
-MAX_REPONSE = 4000       # une réponse d'agent dépasse la limite d'une question (plafond du schéma)
+LIMITE_CONTENU = 12000   # plafond du schéma : une réponse d'agent (synthèse) tient entière
+MAX_REPONSE = LIMITE_CONTENU
 MAX_TOURS = 200          # garde-fou : une conversation ne peut pas grossir sans fin
+VERSION_SCHEMA = 2       # 2 : limite de contenu 4000 -> LIMITE_CONTENU (migration ci-dessous)
 
 # Quotas : valeurs proposées, volontairement NON appliquées (validation requise).
 QUOTAS_PROPOSES = {
@@ -43,6 +45,31 @@ QUOTAS_PROPOSES = {
     "conversations_actives_par_session": 5,
     "taille_max_message": MAX_MESSAGE,
 }
+
+_DDL_MESSAGES = """
+CREATE TABLE {ifnot}{table} (
+  message_id      TEXT PRIMARY KEY,
+  conversation_id TEXT NOT NULL REFERENCES conversations(conversation_id) ON DELETE CASCADE,
+  role            TEXT NOT NULL CHECK (role IN ('user','assistant','systeme')),
+  contenu         TEXT NOT NULL CHECK (length(contenu) BETWEEN 1 AND {limite}),
+  statut          TEXT NOT NULL CHECK (statut IN
+                  ('en_cours','termine','echec','info_insuffisante','clarification','escalade')),
+  mission_id      TEXT,
+  demande_id      TEXT,
+  erreur          TEXT,
+  sources_json    TEXT,
+  idempotency_key TEXT,
+  created_at      INTEGER NOT NULL,
+  updated_at      INTEGER NOT NULL,
+  UNIQUE (conversation_id, idempotency_key)
+);
+"""
+
+_INDEX_MESSAGES = """
+CREATE INDEX IF NOT EXISTS ix_msg_conv    ON messages(conversation_id, created_at);
+CREATE INDEX IF NOT EXISTS ix_msg_encours ON messages(statut) WHERE statut = 'en_cours';
+CREATE INDEX IF NOT EXISTS ix_msg_mission ON messages(mission_id) WHERE mission_id IS NOT NULL;
+"""
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS sessions (
@@ -68,30 +95,42 @@ CREATE TABLE IF NOT EXISTS conversations (
 );
 CREATE INDEX IF NOT EXISTS ix_conv_session ON conversations(session_id, updated_at DESC);
 CREATE INDEX IF NOT EXISTS ix_conv_expire  ON conversations(expires_at);
-
-CREATE TABLE IF NOT EXISTS messages (
-  message_id      TEXT PRIMARY KEY,
-  conversation_id TEXT NOT NULL REFERENCES conversations(conversation_id) ON DELETE CASCADE,
-  role            TEXT NOT NULL CHECK (role IN ('user','assistant','systeme')),
-  contenu         TEXT NOT NULL CHECK (length(contenu) BETWEEN 1 AND 4000),
-  statut          TEXT NOT NULL CHECK (statut IN
-                  ('en_cours','termine','echec','info_insuffisante','clarification','escalade')),
-  mission_id      TEXT,
-  demande_id      TEXT,
-  erreur          TEXT,
-  sources_json    TEXT,
-  idempotency_key TEXT,
-  created_at      INTEGER NOT NULL,
-  updated_at      INTEGER NOT NULL,
-  UNIQUE (conversation_id, idempotency_key)
-);
-CREATE INDEX IF NOT EXISTS ix_msg_conv    ON messages(conversation_id, created_at);
-CREATE INDEX IF NOT EXISTS ix_msg_encours ON messages(statut) WHERE statut = 'en_cours';
-CREATE INDEX IF NOT EXISTS ix_msg_mission ON messages(mission_id) WHERE mission_id IS NOT NULL;
-"""
+""" + _DDL_MESSAGES.format(ifnot="IF NOT EXISTS ", table="messages", limite=LIMITE_CONTENU) + _INDEX_MESSAGES
 
 _connexion: sqlite3.Connection | None = None
 _chemin_ouvert: str | None = None
+
+
+def _migrer(conn: sqlite3.Connection) -> None:
+    """Migrations de schéma, idempotentes (PRAGMA user_version).
+
+    2 : la limite de longueur d'un message passe de 4000 à LIMITE_CONTENU. Les
+        réponses de l'agent (synthèse de plusieurs volets) étaient tronquées.
+        SQLite ne sait pas modifier un CHECK : on reconstruit la table en
+        conservant toutes les lignes, puis on recrée index et version.
+    """
+    version = conn.execute("PRAGMA user_version").fetchone()[0]
+    if version >= VERSION_SCHEMA:
+        return
+    ligne = conn.execute("SELECT sql FROM sqlite_master WHERE type='table' AND name='messages'"
+                         ).fetchone()
+    ddl = (ligne[0] or "") if ligne else ""
+    if ddl and f"BETWEEN 1 AND {LIMITE_CONTENU}" not in ddl:
+        conn.execute("PRAGMA foreign_keys=OFF")
+        try:
+            conn.executescript(
+                "BEGIN;DROP TABLE IF EXISTS messages_v2;"
+                + _DDL_MESSAGES.format(ifnot="", table="messages_v2", limite=LIMITE_CONTENU)
+                + "INSERT INTO messages_v2 SELECT * FROM messages;"
+                + "DROP TABLE messages;"
+                + "ALTER TABLE messages_v2 RENAME TO messages;" + _INDEX_MESSAGES + "COMMIT;")
+        except Exception:
+            conn.rollback()
+            raise
+        finally:
+            conn.execute("PRAGMA foreign_keys=ON")
+    conn.execute(f"PRAGMA user_version={VERSION_SCHEMA}")
+    conn.commit()
 
 
 def _db() -> sqlite3.Connection:
@@ -108,6 +147,7 @@ def _db() -> sqlite3.Connection:
     conn.execute("PRAGMA synchronous=NORMAL")
     conn.executescript(SCHEMA)
     conn.commit()
+    _migrer(conn)               # schéma d'une base existante : voir VERSION_SCHEMA
     _connexion, _chemin_ouvert = conn, str(CHEMIN)
     return conn
 
