@@ -46,7 +46,7 @@ GABARIT = """<!DOCTYPE html>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="../assets/site.css?v=12">
-  <link rel="stylesheet" href="../assets/fiche.css?v=2">
+  <link rel="stylesheet" href="../assets/fiche.css?v=3">
 </head>
 <body class="fiche-page">
 <a class="skip" href="#fiche">Aller au contenu</a>
@@ -147,20 +147,45 @@ GABARIT = """<!DOCTYPE html>
     <p>AGROGUIDCI — conseil agricole pour la Côte d'Ivoire. <a href="../confidentialite.html">Politique de confidentialité</a></p>
   </div>
 </footer>
-<script src="../assets/chat.js?v=18" defer></script>
+<script src="../assets/chat.js?v=19" defer></script>
 </body>
 </html>
 """
 
 
 # Questions proposées dans la chatbox ouverte depuis une fiche : elles portent sur
-# les décisions que le producteur doit prendre, sans dépendre de la grammaire du nom.
-SUGGESTIONS = "|".join([
-    "Quand planter ?",
-    "Quelle densité et quel écartement ?",
-    "Comment fertiliser et entretenir ?",
-    "Comment conserver la récolte ?",
-])
+# les décisions que le producteur doit prendre, avec l'article correct du nom.
+ARTICLES = {
+    "voandzou": "le", "fonio": "le", "sesame": "le", "patatedouce": "la",
+    "soja": "le", "igname": "l'", "plantain": "le", "poivre": "le",
+    "gingembre": "le", "curcuma": "le", "piment": "le",
+}
+# Deuxième question : le point de vigilance propre à la culture (jamais générique).
+POINT_CRITIQUE = {
+    "voandzou": "Comment trier les graines avant de semer ?",
+    "fonio": "Comment désherber sans abîmer le fonio ?",
+    "sesame": "Comment éviter que les capsules s'ouvrent avant la récolte ?",
+    "patatedouce": "Comment choisir des boutures saines ?",
+    "soja": "Où vendre mon soja après la récolte ?",
+    "igname": "Comment préparer les buttes et les semenceaux ?",
+    "plantain": "Comment choisir les rejets au plantain ?",
+    "poivre": "Où trouver un acheteur pour le poivre ?",
+    "gingembre": "Comment éviter les pourritures du gingembre ?",
+    "curcuma": "Comment sécher et transformer le curcuma ?",
+    "piment": "Comment protéger le piment des pucerons ?",
+}
+
+
+def suggestions(cid: str, nom: str) -> str:
+    """Les quatre questions proposées dans le chat de cette fiche."""
+    article = ARTICLES.get(cid, "le")
+    espace = "" if article.endswith("'") else " "
+    return "|".join([
+        f"Quand planter {article}{espace}{nom.lower()} ?",
+        POINT_CRITIQUE.get(cid, "Quel est le point de vigilance principal ?"),
+        "Quelle densité et quel écartement ?",
+        "Comment conserver la récolte ?",
+    ])
 
 
 def e(t: object) -> str:
@@ -221,11 +246,26 @@ def page(cid: str, c: dict, photos: dict, maj: str) -> str:
     sommaire.append('<li><a href="#tutoriel">Tutoriel étape par étape</a></li>')
     sommaire.append('<li><a href="#sources">Sources et limites</a></li>')
 
+    etapes_photos = (photos.get(cid) or {}).get("etapes") or {}
+
+    def figure_etape(icone: str | None) -> str:
+        ph = etapes_photos.get(icone or "")
+        if not ph or not ph.get("fichier"):
+            return ""
+        credit = " · ".join(x for x in (ph.get("auteur"), ph.get("licence")) if x)
+        lien = ph.get("page") or ""
+        libelle = f'<a href="{e(lien)}" target="_blank" rel="noreferrer">Wikimedia Commons</a>' if lien else ""
+        return (f'<figure class="tuto-photo"><img src="../{e(ph["fichier"])}" '
+                f'alt="{e(c.get("nom"))} — illustration de cette étape" loading="lazy" '
+                f'decoding="async"><figcaption>{e(credit)}'
+                f'{" · " + libelle if libelle else ""}</figcaption></figure>')
+
     tutoriel = "\n".join(
         '<li class="tuto-etape">'
         f'<span class="tuto-picto">{PICTOS.get(etape.get("icone") or "", "")}</span>'
         f'<div class="tuto-corps"><strong>{e(etape.get("titre"))}</strong>'
-        f'<p>{e(etape.get("simple") or etape.get("texte"))}</p></div>'
+        f'<p>{e(etape.get("simple") or etape.get("texte"))}</p>'
+        f'{figure_etape(etape.get("icone"))}</div>'
         "</li>"
         for etape in (c.get("tutoriel") or []))
 
@@ -254,7 +294,7 @@ def page(cid: str, c: dict, photos: dict, maj: str) -> str:
         description=e(description), credit=credit,
         sommaire="".join(sommaire), sections="\n".join(sections),
         tutoriel=tutoriel, sources="".join(sources), limites=e(c.get("limites")),
-        suggestions=SUGGESTIONS,
+        suggestions=suggestions(cid, c.get("nom") or cid),
     )
 
 

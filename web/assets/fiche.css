@@ -54,6 +54,11 @@
 .tuto-picto svg { width: 24px; height: 24px; }
 .tuto-corps strong { display: block; margin-bottom: .2rem; color: #0b3a22; font-size: .95rem; }
 .tuto-corps p { margin: 0; font-size: .93rem; line-height: 1.55; color: #24352a; }
+.tuto-photo { margin: .7rem 0 0; }
+.tuto-photo img { display: block; width: 100%; max-width: 520px; height: 190px; object-fit: cover;
+  border-radius: 10px; border: 1px solid rgba(11, 58, 34, .1); background: #eef3ea; }
+.tuto-photo figcaption { margin-top: .3rem; font-size: .7rem; color: #5d6b62; }
+.tuto-photo figcaption a { color: #2f5d17; }
 @media (max-width: 480px) {
   .tutoriel li.tuto-etape { grid-template-columns: 28px 1fr; gap: .55rem; }
   .tuto-picto { width: 28px; height: 28px; border-radius: 8px; }

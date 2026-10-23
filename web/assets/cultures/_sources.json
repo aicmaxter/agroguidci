@@ -4,76 +4,217 @@
     "titre": "File:Zingiber officinale rhizome.jpg",
     "auteur": "Kayleemariev",
     "licence": "CC0",
-    "page": "https://commons.wikimedia.org/wiki/File:Zingiber_officinale_rhizome.jpg"
+    "page": "https://commons.wikimedia.org/wiki/File:Zingiber_officinale_rhizome.jpg",
+    "etapes": {
+      "plantation": {
+        "fichier": "assets/cultures/gingembre-plantation.jpg",
+        "titre": "File:Ingwer (Zingiber officinale) Freiland Anbau Pflanze-1-Josef Schlaghecken.jpg",
+        "auteur": "Schlaghecken Josef",
+        "licence": "CC BY-SA 4.0",
+        "page": "https://commons.wikimedia.org/wiki/File:Ingwer_(Zingiber_officinale)_Freiland_Anbau_Pflanze-1-Josef_Schlaghecken.jpg"
+      },
+      "recolte": {
+        "fichier": "assets/cultures/gingembre-recolte.jpg",
+        "titre": "File:Zingiber officinale (Zingiberaceae).jpg",
+        "auteur": "Filo gèn'",
+        "licence": "CC BY-SA 4.0",
+        "page": "https://commons.wikimedia.org/wiki/File:Zingiber_officinale_(Zingiberaceae).jpg"
+      }
+    }
   },
   "curcuma": {
     "fichier": "assets/cultures/curcuma.jpg",
     "titre": "File:Curcuma longa roots.jpg",
     "auteur": "Simon A. Eugster",
     "licence": "CC BY-SA 3.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Curcuma_longa_roots.jpg"
+    "page": "https://commons.wikimedia.org/wiki/File:Curcuma_longa_roots.jpg",
+    "etapes": {
+      "plantation": {
+        "fichier": "assets/cultures/curcuma-plantation.jpg",
+        "titre": "File:\"Field of Turmeric with coconut as a inter crop\".jpg",
+        "auteur": "Thamizhpparithi Maari",
+        "licence": "CC BY-SA 3.0",
+        "page": "https://commons.wikimedia.org/wiki/File:%22Field_of_Turmeric_with_coconut_as_a_inter_crop%22.jpg"
+      },
+      "recolte": {
+        "fichier": "assets/cultures/curcuma-recolte.jpg",
+        "titre": "File:Starr-170114-6479-Curcuma longa-harvest-Hawea Pl Olinda-Maui (31654308183).jpg",
+        "auteur": "Forest and Kim Starr",
+        "licence": "CC BY 3.0 us",
+        "page": "https://commons.wikimedia.org/wiki/File:Starr-170114-6479-Curcuma_longa-harvest-Hawea_Pl_Olinda-Maui_(31654308183).jpg"
+      }
+    }
   },
   "piment": {
     "fichier": "assets/cultures/piment.jpg",
     "titre": "File:Capsicum frutescens (3).jpg",
     "auteur": "Prenn",
     "licence": "CC BY-SA 3.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Capsicum_frutescens_(3).jpg"
+    "page": "https://commons.wikimedia.org/wiki/File:Capsicum_frutescens_(3).jpg",
+    "etapes": {
+      "recolte": {
+        "fichier": "assets/cultures/piment-recolte.jpg",
+        "titre": "File:Dried chili peppers.jpg",
+        "auteur": "Twentyfour Students from Bangkok, Thailand",
+        "licence": "CC BY-SA 2.0",
+        "page": "https://commons.wikimedia.org/wiki/File:Dried_chili_peppers.jpg"
+      }
+    }
   },
   "voandzou": {
     "fichier": "assets/cultures/voandzou.jpg",
     "titre": "File:Traditional deshelling of Bambara groundnut, Singida, Tanzania.jpg",
     "auteur": "Crop Trust",
     "licence": "CC BY-SA 4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Traditional_deshelling_of_Bambara_groundnut,_Singida,_Tanzania.jpg"
+    "page": "https://commons.wikimedia.org/wiki/File:Traditional_deshelling_of_Bambara_groundnut,_Singida,_Tanzania.jpg",
+    "etapes": {
+      "recolte": {
+        "fichier": "assets/cultures/voandzou-recolte.jpg",
+        "titre": "File:Traditional deshelling of Bambara groundnut, Singida, Tanzania.jpg",
+        "auteur": "Crop Trust",
+        "licence": "CC BY-SA 4.0",
+        "page": "https://commons.wikimedia.org/wiki/File:Traditional_deshelling_of_Bambara_groundnut,_Singida,_Tanzania.jpg"
+      }
+    }
   },
   "fonio": {
     "fichier": "assets/cultures/fonio.jpg",
     "titre": "File:Fonio panicles maturing in Natitingou, northern Benin.jpg",
     "auteur": "Crop Trust",
     "licence": "CC BY-SA 4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Fonio_panicles_maturing_in_Natitingou,_northern_Benin.jpg"
+    "page": "https://commons.wikimedia.org/wiki/File:Fonio_panicles_maturing_in_Natitingou,_northern_Benin.jpg",
+    "etapes": {
+      "recolte": {
+        "fichier": "assets/cultures/fonio-recolte.jpg",
+        "titre": "File:Threshing fonio with a small-scale machine, Natitingou, northern Benin.jpg",
+        "auteur": "Crop Trust",
+        "licence": "CC BY-SA 4.0",
+        "page": "https://commons.wikimedia.org/wiki/File:Threshing_fonio_with_a_small-scale_machine,_Natitingou,_northern_Benin.jpg"
+      }
+    }
   },
   "sesame": {
     "fichier": "assets/cultures/sesame.jpg",
     "titre": "File:Sesamum indicum 13062014.jpg",
     "auteur": "Joydeep",
     "licence": "CC BY-SA 3.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Sesamum_indicum_13062014.jpg"
+    "page": "https://commons.wikimedia.org/wiki/File:Sesamum_indicum_13062014.jpg",
+    "etapes": {
+      "plantation": {
+        "fichier": "assets/cultures/sesame-plantation.jpg",
+        "titre": "File:Sesame Sesamum indicum farm in andhra JEG5192.jpg",
+        "auteur": "PJeganathan",
+        "licence": "CC BY-SA 4.0",
+        "page": "https://commons.wikimedia.org/wiki/File:Sesame_Sesamum_indicum_farm_in_andhra_JEG5192.jpg"
+      }
+    }
   },
   "patatedouce": {
     "fichier": "assets/cultures/patatedouce.jpg",
     "titre": "File:20230227 161110 Ipomoea batatas 'Beauregard'.jpg",
     "auteur": "Prosperosity",
     "licence": "CC BY 4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:20230227_161110_Ipomoea_batatas_%27Beauregard%27.jpg"
+    "page": "https://commons.wikimedia.org/wiki/File:20230227_161110_Ipomoea_batatas_%27Beauregard%27.jpg",
+    "etapes": {
+      "recolte": {
+        "fichier": "assets/cultures/patatedouce-recolte.jpg",
+        "titre": "File:Sweet Potato Harvest at Kirby Farms (20130920-OC-LSC-0767).jpg",
+        "auteur": "USDAgov",
+        "licence": "Public domain",
+        "page": "https://commons.wikimedia.org/wiki/File:Sweet_Potato_Harvest_at_Kirby_Farms_(20130920-OC-LSC-0767).jpg"
+      }
+    }
   },
   "poivre": {
     "fichier": "assets/cultures/poivre.jpg",
     "titre": "File:Black Pepper (Piper nigrum) fruits.jpg",
     "auteur": "K Hari Krishnan",
     "licence": "CC BY-SA 3.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Black_Pepper_(Piper_nigrum)_fruits.jpg"
+    "page": "https://commons.wikimedia.org/wiki/File:Black_Pepper_(Piper_nigrum)_fruits.jpg",
+    "etapes": {
+      "plantation": {
+        "fichier": "assets/cultures/poivre-plantation.jpg",
+        "titre": "File:Green Park Spices plantation-WUS07403.jpg",
+        "auteur": "Rainer Halama",
+        "licence": "CC BY-SA 4.0",
+        "page": "https://commons.wikimedia.org/wiki/File:Green_Park_Spices_plantation-WUS07403.jpg"
+      },
+      "recolte": {
+        "fichier": "assets/cultures/poivre-recolte.jpg",
+        "titre": "File:Black Pepper berries before drying(Kerala, India).jpg",
+        "auteur": "Sunil Elias",
+        "licence": "CC BY-SA 3.0",
+        "page": "https://commons.wikimedia.org/wiki/File:Black_Pepper_berries_before_drying(Kerala,_India).jpg"
+      }
+    }
   },
   "igname": {
     "fichier": "assets/cultures/igname.jpg",
     "titre": "File:Yam at monday market kaduna state 01.jpg",
     "auteur": "Dorcas Atule",
     "licence": "CC BY-SA 4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Yam_at_monday_market_kaduna_state_01.jpg"
+    "page": "https://commons.wikimedia.org/wiki/File:Yam_at_monday_market_kaduna_state_01.jpg",
+    "etapes": {
+      "plantation": {
+        "fichier": "assets/cultures/igname-plantation.jpg",
+        "titre": "File:Making of yam mounds in Northern Ghana 01.jpg",
+        "auteur": "ZELIA ALHASSAN",
+        "licence": "CC BY-SA 4.0",
+        "page": "https://commons.wikimedia.org/wiki/File:Making_of_yam_mounds_in_Northern_Ghana_01.jpg"
+      },
+      "recolte": {
+        "fichier": "assets/cultures/igname-recolte.jpg",
+        "titre": "File:Tubers of yams in Ghana.jpg",
+        "auteur": "Tahiru Asimawu",
+        "licence": "CC BY-SA 4.0",
+        "page": "https://commons.wikimedia.org/wiki/File:Tubers_of_yams_in_Ghana.jpg"
+      }
+    }
   },
   "plantain": {
     "fichier": "assets/cultures/plantain.jpg",
     "titre": "File:Banane plantain au marché.jpg",
     "auteur": "BorisAhonon",
     "licence": "CC BY-SA 4.0",
-    "page": "https://commons.wikimedia.org/wiki/File:Banane_plantain_au_march%C3%A9.jpg"
+    "page": "https://commons.wikimedia.org/wiki/File:Banane_plantain_au_march%C3%A9.jpg",
+    "etapes": {
+      "plantation": {
+        "fichier": "assets/cultures/plantain-plantation.jpg",
+        "titre": "File:Plantain plant 3.jpg",
+        "auteur": "daSupremo",
+        "licence": "CC BY-SA 4.0",
+        "page": "https://commons.wikimedia.org/wiki/File:Plantain_plant_3.jpg"
+      },
+      "recolte": {
+        "fichier": "assets/cultures/plantain-recolte.jpg",
+        "titre": "File:Bunches of Plantain.jpg",
+        "auteur": "Menyea",
+        "licence": "CC BY-SA 4.0",
+        "page": "https://commons.wikimedia.org/wiki/File:Bunches_of_Plantain.jpg"
+      }
+    }
   },
   "soja": {
     "fichier": "assets/cultures/soja.jpg",
     "titre": "File:Starr-090611-0626-Glycine max-plants in garden-Olinda-Maui (24846154482).jpg",
     "auteur": "Forest and Kim Starr",
     "licence": "CC BY 3.0 us",
-    "page": "https://commons.wikimedia.org/wiki/File:Starr-090611-0626-Glycine_max-plants_in_garden-Olinda-Maui_(24846154482).jpg"
+    "page": "https://commons.wikimedia.org/wiki/File:Starr-090611-0626-Glycine_max-plants_in_garden-Olinda-Maui_(24846154482).jpg",
+    "etapes": {
+      "plantation": {
+        "fichier": "assets/cultures/soja-plantation.jpg",
+        "titre": "File:Soja en Siembra Directa sobre rastrojo de Sorgo Granífero.jpg",
+        "auteur": "Maggilautaro",
+        "licence": "CC BY 3.0",
+        "page": "https://commons.wikimedia.org/wiki/File:Soja_en_Siembra_Directa_sobre_rastrojo_de_Sorgo_Gran%C3%ADfero.jpg"
+      },
+      "recolte": {
+        "fichier": "assets/cultures/soja-recolte.jpg",
+        "titre": "File:Soybean Pods Ready for Harvest (10138538485).jpg",
+        "auteur": "United Soybean Board",
+        "licence": "CC BY 2.0",
+        "page": "https://commons.wikimedia.org/wiki/File:Soybean_Pods_Ready_for_Harvest_(10138538485).jpg"
+      }
+    }
   }
 }
