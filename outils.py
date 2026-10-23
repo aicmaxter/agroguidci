@@ -72,6 +72,12 @@ def entete_source(titre: str, url: str) -> str:
     return f"_source : {titre} — relevé le {time.strftime('%d/%m/%Y %H:%M')} — {url}_"
 
 
+MOTS_VIDES = frozenset({
+    "comment", "quand", "pourquoi", "quel", "quelle", "quels", "quelles", "votre",
+    "mon", "ma", "mes", "une", "des", "les", "cette", "notre", "son", "sa",
+})
+
+
 def extraire_localite(texte: str) -> str | None:
     """Repère une localité ivoirienne citée dans le texte (accents ignorés).
 
@@ -80,6 +86,10 @@ def extraire_localite(texte: str) -> str | None:
     Manchester, Royaume-Uni). La localité citée EN PREMIER gagne ; à position
     égale, la plus longue (« grand-bassam » avant « bassam »).
     """
+    # La consigne de forme ajoutée aux demandes du chat n'est pas du contenu
+    # producteur : elle ne doit jamais fournir de « localité » (bug constaté :
+    # « COMMENT RÉPONDRE » était géocodé Commentry, en France).
+    texte = (texte or "").split("[CONSIGNE_INTERNE]")[0]
     t = sans_accents(texte)
     trouves: list[tuple[int, int, str]] = []
     for v in VILLES_CI:
@@ -93,8 +103,15 @@ def extraire_localite(texte: str) -> str | None:
         trouves.append((m.start(), -len(v), v))
     if trouves:
         return sorted(trouves)[0][2].title()
-    m = re.search(r"(?:a|à|vers|sur|depuis)\s+([A-ZÉÈÎÔÛ][\w'’\-éèêôûîàç]+)", texte)
-    return m.group(1) if m else None
+    # Repli : « à Bouaké », « vers Daloa »… Un nom de lieu n'est pas un mot en
+    # capitales (COMMENT, AGROGUIDCI) et la préposition doit être un mot entier.
+    m = re.search(r"\b(?:a|à|vers|sur|depuis)\s+([A-ZÉÈÎÔÛ][a-zà-ÿ'’\-]{2,})", texte)
+    if not m:
+        return None
+    candidat = m.group(1)
+    if sans_accents(candidat).lower() in MOTS_VIDES:
+        return None
+    return candidat
 
 
 def _get(url: str, timeout: float = 25.0) -> tuple[int, object]:

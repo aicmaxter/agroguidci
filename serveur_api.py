@@ -29,9 +29,11 @@ import asyncio
 import hmac
 import json
 import os
+import re
 import sys
 import threading
 import time
+import unicodedata
 import uuid
 from pathlib import Path
 from typing import Any
@@ -481,6 +483,47 @@ def extrait_fiche(culture_id: str | None, limite: int = 1800) -> str:
     return (entete + "\n".join(lignes))[:limite]
 
 
+CONSIGNE_CHAT = (
+    "[CONSIGNE_INTERNE] COMMENT RÉPONDRE (demande posée dans la chatbox du site)\n"
+    "- Français simple et direct, phrases courtes, comme on explique à un producteur "
+    "dans son champ : pas de jargon administratif.\n"
+    "- Si un terme technique est indispensable (nématode, buttage, densité), explique-le "
+    "en quelques mots entre parenthèses.\n"
+    "- Donne d'abord la réponse concrète, ensuite les détails ; termine par ce qu'il faut "
+    "vérifier sur place ou auprès d'un service technique.\n"
+    "- Vouvoie le producteur, sans familiarité."
+)
+
+
+def _sans_accents(t: str) -> str:
+    return "".join(c for c in unicodedata.normalize("NFD", t or "")
+                   if unicodedata.category(c) != "Mn").lower()
+
+
+def culture_detectee(texte: str) -> str | None:
+    """Culture citée dans la question, quand la page ne la fournit pas (accueil).
+
+    On s'appuie sur les noms et surnoms des fiches (mots entiers, sans accents) :
+    « combien d'igname par butte ? » -> igname. Aucune supposition au-delà des noms
+    réellement publiés.
+    """
+    t = _sans_accents(texte or "")
+    if not t:
+        return None
+    meilleur: tuple[int, str] | None = None
+    for cid, fiche in fiches_cultures().items():
+        candidats = [cid, fiche.get("nom") or ""]
+        candidats += [p.strip() for p in (fiche.get("surnom") or "").split(",")]
+        for mot in candidats:
+            motif = _sans_accents(mot).strip()
+            if len(motif) < 4:
+                continue
+            if re.search(rf"\b{re.escape(motif)}\b", t):
+                if meilleur is None or len(motif) > meilleur[0]:
+                    meilleur = (len(motif), cid)
+    return meilleur[1] if meilleur else None
+
+
 # ------------------------------------------------------- conversations (chat)
 class NouvelleConversation(BaseModel):
     culture_id: str | None = Field(default=None, max_length=60)
@@ -640,19 +683,21 @@ def envoyer_message(cid: str, d: NouveauMessage,
     if not conv.conversation_de(sid, cid):
         raise HTTPException(status_code=404, detail="conversation inconnue")
     contexte = []
-    if d.culture_id:
-        contexte.append(f"culture : {d.culture_id}")
+    culture = (d.culture_id or "").strip() or culture_detectee(d.texte) or ""
+    if culture:
+        contexte.append(f"culture : {culture}")
     if d.localite:
         contexte.append(f"localité : {d.localite}")
     if d.stade:
         contexte.append(f"stade : {d.stade}")
     texte = d.texte.strip()
+    saut = chr(10) * 2
     if contexte:
-        saut = chr(10) * 2
         texte = texte + saut + "Contexte fourni par la page — " + " · ".join(contexte)
-        fiche = extrait_fiche(d.culture_id)
+        fiche = extrait_fiche(culture)
         if fiche:
             texte = texte + saut + saut + fiche
+    texte = texte + saut + saut + CONSIGNE_CHAT
     try:
         msg = conv.ajouter_message(cid, "user", d.texte.strip(), statut="en_cours",
                                    idempotency_key=d.idempotency_key)

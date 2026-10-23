@@ -45,8 +45,8 @@ GABARIT = """<!DOCTYPE html>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap">
-  <link rel="stylesheet" href="../assets/site.css?v=11">
-  <link rel="stylesheet" href="../assets/fiche.css?v=1">
+  <link rel="stylesheet" href="../assets/site.css?v=12">
+  <link rel="stylesheet" href="../assets/fiche.css?v=2">
 </head>
 <body class="fiche-page">
 <a class="skip" href="#fiche">Aller au contenu</a>
@@ -106,7 +106,7 @@ GABARIT = """<!DOCTYPE html>
     </section>
 
     <section class="fiche-actions" aria-label="Actions">
-      <button class="btn btn-primary btn-lg" type="button" data-chat="ouvrir" data-culture="{id}" data-culture-libelle="{nom}">Poser une question sur cette culture</button>
+      <button class="btn btn-primary btn-lg" type="button" data-chat="ouvrir" data-culture="{id}" data-culture-libelle="{nom}" data-suggestions="{suggestions}">Poser une question sur cette culture</button>
       <a class="btn btn-ghost btn-lg" href="../#prix">Voir les prix au kilo</a>
     </section>
   </div>
@@ -129,6 +129,8 @@ GABARIT = """<!DOCTYPE html>
 
       <p id="chatEtat" class="chat-etat" role="status" aria-live="polite"></p>
 
+      <div id="chatSuggestions" class="chat-suggestions" aria-label="Questions fréquentes"></div>
+
       <form id="chatForm" class="chat-form">
         <label class="sr-only" for="chatTexte">Votre question</label>
         <textarea id="chatTexte" rows="2" maxlength="2000" placeholder="Ex. : quelle variété choisir à Bouaké ?" required></textarea>
@@ -145,14 +147,50 @@ GABARIT = """<!DOCTYPE html>
     <p>AGROGUIDCI — conseil agricole pour la Côte d'Ivoire. <a href="../confidentialite.html">Politique de confidentialité</a></p>
   </div>
 </footer>
-<script src="../assets/chat.js?v=15" defer></script>
+<script src="../assets/chat.js?v=18" defer></script>
 </body>
 </html>
 """
 
 
+# Questions proposées dans la chatbox ouverte depuis une fiche : elles portent sur
+# les décisions que le producteur doit prendre, sans dépendre de la grammaire du nom.
+SUGGESTIONS = "|".join([
+    "Quand planter ?",
+    "Quelle densité et quel écartement ?",
+    "Comment fertiliser et entretenir ?",
+    "Comment conserver la récolte ?",
+])
+
+
 def e(t: object) -> str:
     return html.escape(str(t or ""), quote=True)
+
+
+# Pictogrammes des étapes de tutoriel : dessins vectoriels originaux (aucune photo
+# inventée), une icône par type de geste. Couleur héritée, décoratifs (aria-hidden).
+_PICTO_ENTETE = ('<svg viewBox="0 0 28 28" fill="none" stroke="currentColor" '
+                 'stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" '
+                 'aria-hidden="true" focusable="false">')
+PICTOS = {
+    "parcelle": _PICTO_ENTETE + '<circle cx="8" cy="8" r="3"/><path d="M3 17h22M5 21h19M7 25h15"/></svg>',
+    "preparation": _PICTO_ENTETE + '<path d="M3 22c4-9 10-9 14 0"/><circle cx="20" cy="8" r="1.3"/>'
+                                   '<circle cx="24" cy="12" r="1.3"/><circle cx="18" cy="13" r="1.3"/></svg>',
+    "semence": _PICTO_ENTETE + '<circle cx="9" cy="9" r="2.6"/><circle cx="16" cy="7" r="2"/>'
+                               '<circle cx="21" cy="13" r="2.6"/><path d="M4 22h20"/></svg>',
+    "plantation": _PICTO_ENTETE + '<path d="M3 22h22"/><path d="M14 22V11"/>'
+                                  '<path d="M14 14c0-3 2.4-5.4 5.4-5.4 0 3-2.4 5.4-5.4 5.4Z"/></svg>',
+    "entretien": _PICTO_ENTETE + '<path d="M4 24h20"/><path d="M14 24V7"/>'
+                                 '<path d="M14 12c-3 0-5-2-5-4.5 3 0 5 2 5 4.5Z"/>'
+                                 '<path d="M14 17c3 0 5-2 5-4.5-3 0-5 2-5 4.5Z"/></svg>',
+    "sante": _PICTO_ENTETE + '<path d="M6 22C6 12 13 5 23 5c0 10-7 17-17 17Z"/>'
+                             '<path d="M6 22 23 5"/><circle cx="12" cy="16" r="1.6"/></svg>',
+    "recolte": _PICTO_ENTETE + '<path d="M5 12h18l-2 10H7z"/><path d="M10 12a4 4 0 0 1 8 0"/>'
+                               '<path d="M10 16v3M14 16v3M18 16v3"/></svg>',
+    "stockage": _PICTO_ENTETE + '<path d="M10 5h8v3l3 13H7l3-13z"/>'
+                                '<path d="M10 5c0 2 1.8 3 4 3s4-1 4-3"/><path d="M11 16h6"/></svg>',
+    "marche": _PICTO_ENTETE + '<circle cx="14" cy="14" r="8.5"/><path d="M14 9v10M11 12.5h6M11 16h6"/></svg>',
+}
 
 
 def charger() -> tuple[dict, dict]:
@@ -184,7 +222,11 @@ def page(cid: str, c: dict, photos: dict, maj: str) -> str:
     sommaire.append('<li><a href="#sources">Sources et limites</a></li>')
 
     tutoriel = "\n".join(
-        f'<li><strong>{e(etape.get("titre"))}</strong><p>{e(etape.get("texte"))}</p></li>'
+        '<li class="tuto-etape">'
+        f'<span class="tuto-picto">{PICTOS.get(etape.get("icone") or "", "")}</span>'
+        f'<div class="tuto-corps"><strong>{e(etape.get("titre"))}</strong>'
+        f'<p>{e(etape.get("simple") or etape.get("texte"))}</p></div>'
+        "</li>"
         for etape in (c.get("tutoriel") or []))
 
     sources = []
@@ -212,6 +254,7 @@ def page(cid: str, c: dict, photos: dict, maj: str) -> str:
         description=e(description), credit=credit,
         sommaire="".join(sommaire), sections="\n".join(sections),
         tutoriel=tutoriel, sources="".join(sources), limites=e(c.get("limites")),
+        suggestions=SUGGESTIONS,
     )
 
 

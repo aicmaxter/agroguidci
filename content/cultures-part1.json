@@ -1,7 +1,21 @@
 {
   "_note": "Contenu long des fiches cultures. Chaque affirmation non vérifiée est signalée. Les sources listées sont soit internes (fichiers du dépôt, vérifiables), soit à collecter : aucune référence externe n'est inventée.",
   "_maj": "2026-10-21",
-  "sections": ["presentation", "conditions", "varietes", "calendrier", "preparation", "semis", "entretien", "sante", "recolte", "conservation", "economie", "tutoriel", "sources"],
+  "sections": [
+    "presentation",
+    "conditions",
+    "varietes",
+    "calendrier",
+    "preparation",
+    "semis",
+    "entretien",
+    "sante",
+    "recolte",
+    "conservation",
+    "economie",
+    "tutoriel",
+    "sources"
+  ],
   "cultures": {
     "voandzou": {
       "nom": "Voandzou",
@@ -21,14 +35,50 @@
       "conservation": "Séchage à l'ombre sur aire propre, puis stockage en sacs dans un local sec, surélevé. Graines bien sèches = conservation longue sans insecticide. Contrôler l'humidité avant fermeture des sacs.",
       "economie": "Débouchés : graines, farine, bouillie, marché urbain de proximité. Aucun prix officiel spécifique n'est publié dans les sources internes ; ne pas bâtir de budget sur un prix supposé. Les postes de dépense principaux sont la semence, le travail du sol, deux sarclages et le séchage.",
       "tutoriel": [
-        {"titre": "1. Choisir la parcelle", "texte": "Sol léger, sans creux où l'eau stagne, exposé au soleil. Éviter une parcelle inondée la saison précédente."},
-        {"titre": "2. Préparer le sol", "texte": "Travail superficiel, nivellement, apport de compost mûr si disponible. Objectif : une couche meuble pour enterrer les graines."},
-        {"titre": "3. Trier la semence", "texte": "Éliminer les graines trouées ou moisies ; garder les plus grosses. Un test de flottaison dans l'eau peut aider à écarter les graines vides."},
-        {"titre": "4. Semer", "texte": "Poquets espacés, graines recouvertes de quelques centimètres de terre fine, sur sol humide. Ressemer les manquants une semaine plus tard."},
-        {"titre": "5. Entretenir", "texte": "Deux sarclages, sans blesser les racines. Surveiller les chenilles et le drainage après les grosses pluies."},
-        {"titre": "6. Récolter et sécher", "texte": "Arracher à maturité, sécher les gousses à l'ombre, battre, trier, stocker au sec. Résultat attendu : graines saines conservables plusieurs mois."}
+        {
+          "titre": "1. Choisir la parcelle",
+          "texte": "Sol léger, sans creux où l'eau stagne, exposé au soleil. Éviter une parcelle inondée la saison précédente.",
+          "simple": "Choisissez une terre légère, au soleil, sans creux où l'eau reste.",
+          "icone": "parcelle"
+        },
+        {
+          "titre": "2. Préparer le sol",
+          "texte": "Travail superficiel, nivellement, apport de compost mûr si disponible. Objectif : une couche meuble pour enterrer les graines.",
+          "simple": "Travaillez la terre en surface, nivelez, ajoutez du compost bien mûr si vous en avez.",
+          "icone": "preparation"
+        },
+        {
+          "titre": "3. Trier la semence",
+          "texte": "Éliminer les graines trouées ou moisies ; garder les plus grosses. Un test de flottaison dans l'eau peut aider à écarter les graines vides.",
+          "simple": "Gardez les plus grosses graines ; jetez celles qui ont un trou ou de la moisissure.",
+          "icone": "semence"
+        },
+        {
+          "titre": "4. Semer",
+          "texte": "Poquets espacés, graines recouvertes de quelques centimètres de terre fine, sur sol humide. Ressemer les manquants une semaine plus tard.",
+          "simple": "Semez en petits tas espacés, recouvrez de quelques centimètres de terre fine, sur sol humide.",
+          "icone": "plantation"
+        },
+        {
+          "titre": "5. Entretenir",
+          "texte": "Deux sarclages, sans blesser les racines. Surveiller les chenilles et le drainage après les grosses pluies.",
+          "simple": "Deux sarclages à la main, sans abîmer les racines ; surveillez les chenilles et l'eau qui stagne.",
+          "icone": "entretien"
+        },
+        {
+          "titre": "6. Récolter et sécher",
+          "texte": "Arracher à maturité, sécher les gousses à l'ombre, battre, trier, stocker au sec. Résultat attendu : graines saines conservables plusieurs mois.",
+          "simple": "Arrachez à maturité, séchez les gousses à l'ombre, battez et triez ; gardez au sec.",
+          "icone": "recolte"
+        }
       ],
-      "sources": [{"organisme": "Base de connaissances interne", "titre": "knowledge/agronomie.md, knowledge/techniques_agricoles.md", "consulte_le": "2026-10-21"}],
+      "sources": [
+        {
+          "organisme": "Base de connaissances interne",
+          "titre": "knowledge/agronomie.md, knowledge/techniques_agricoles.md",
+          "consulte_le": "2026-10-21"
+        }
+      ],
       "limites": "Variétés, densités et seuils de traitement ne sont pas documentés dans les sources internes. Aucune donnée de rendement ni de prix vérifiée n'est disponible : à collecter auprès de l'ANADER ou d'une station de recherche avant de chiffrer un budget."
     },
     "fonio": {
@@ -49,13 +99,44 @@
       "conservation": "Battage délicat, séchage complet, stockage hermétique. Le fonio absorbe l'humidité : un séchage insuffisant entraîne moisissures et pertes.",
       "economie": "Débouchés : restauration, farines, marchés urbains et export de niche. Les prix ne sont pas vérifiés ici. Postes de dépense : semence, désherbage manuel (poste important), battage, séchage, conditionnement.",
       "tutoriel": [
-        {"titre": "1. Préparer un lit fin", "texte": "Émietter la terre, retirer les résidus. La graine étant très petite, toute motte gêne la levée."},
-        {"titre": "2. Semer régulièrement", "texte": "Semis à la volée par petites quantités, puis passage léger pour enfouir. Mieux vaut semer clair et compléter que semer trop dense."},
-        {"titre": "3. Désherber tôt", "texte": "Premier désherbage dès la levée, à la main. C'est le travail décisif pour cette culture."},
-        {"titre": "4. Protéger l'épiaison", "texte": "Surveiller les oiseaux ; récolter dès maturité pour éviter l'égrenage au champ."},
-        {"titre": "5. Battre et sécher", "texte": "Battage sur aire propre, séchage jusqu'à ce que les grains ne collent plus, stockage hermétique."}
+        {
+          "titre": "1. Préparer un lit fin",
+          "texte": "Émietter la terre, retirer les résidus. La graine étant très petite, toute motte gêne la levée.",
+          "simple": "Émiettez bien la terre et enlevez les restes : la graine est toute petite, la moindre motte l'empêche de lever.",
+          "icone": "preparation"
+        },
+        {
+          "titre": "2. Semer régulièrement",
+          "texte": "Semis à la volée par petites quantités, puis passage léger pour enfouir. Mieux vaut semer clair et compléter que semer trop dense.",
+          "simple": "Semez à la volée, par petites poignées, puis passez légèrement pour enterrer la graine.",
+          "icone": "plantation"
+        },
+        {
+          "titre": "3. Désherber tôt",
+          "texte": "Premier désherbage dès la levée, à la main. C'est le travail décisif pour cette culture.",
+          "simple": "Désherbez à la main dès que ça lève : sur le fonio, c'est le travail qui décide de la récolte.",
+          "icone": "entretien"
+        },
+        {
+          "titre": "4. Protéger l'épiaison",
+          "texte": "Surveiller les oiseaux ; récolter dès maturité pour éviter l'égrenage au champ.",
+          "simple": "Surveillez les oiseaux et récoltez dès que c'est mûr, pour ne pas perdre les grains au champ.",
+          "icone": "sante"
+        },
+        {
+          "titre": "5. Battre et sécher",
+          "texte": "Battage sur aire propre, séchage jusqu'à ce que les grains ne collent plus, stockage hermétique.",
+          "simple": "Battez sur une aire propre, séchez jusqu'à ce que les grains ne collent plus, rangez en bidon fermé.",
+          "icone": "recolte"
+        }
       ],
-      "sources": [{"organisme": "Base de connaissances interne", "titre": "knowledge/agronomie.md", "consulte_le": "2026-10-21"}],
+      "sources": [
+        {
+          "organisme": "Base de connaissances interne",
+          "titre": "knowledge/agronomie.md",
+          "consulte_le": "2026-10-21"
+        }
+      ],
       "limites": "Variétés, densités et rendements non documentés dans les sources internes. Aucun prix vérifié : à collecter avant toute projection économique."
     },
     "sesame": {
@@ -76,13 +157,44 @@
       "conservation": "Séchage sur bâche, battage doux, vannage, stockage au sec. La propreté du lot (absence de sable, d'humidité) détermine le prix à l'export.",
       "economie": "Débouchés : huile, pâtisserie, export. Le prix dépend fortement de la qualité du lot. Aucun prix vérifié ici. Postes de dépense : semence, sarclages, bâches de séchage, main-d'œuvre de récolte.",
       "tutoriel": [
-        {"titre": "1. Choisir une variété non déhiscente", "texte": "Demander explicitement ce critère au fournisseur de semence ; sinon, prévoir une récolte très précoce et acceptez des pertes."},
-        {"titre": "2. Préparer et semer", "texte": "Sol fin, semis peu profond en lignes, densité permettant le sarclage."},
-        {"titre": "3. Sarcler tôt", "texte": "Deux passages avant que la culture ne couvre le sol."},
-        {"titre": "4. Récolter au bon moment", "texte": "Dès le jaunissement des capsules : couper, mettre en bottes sur bâche, sécher."},
-        {"titre": "5. Battre et nettoyer", "texte": "Battage doux, vannage, sacs propres et secs. Un lot propre se vend mieux."}
+        {
+          "titre": "1. Choisir une variété non déhiscente",
+          "texte": "Demander explicitement ce critère au fournisseur de semence ; sinon, prévoir une récolte très précoce et acceptez des pertes.",
+          "simple": "Demandez une variété qui ne s'ouvre pas toute seule (dite non déhiscente) ; sinon, récoltez très tôt et acceptez des pertes.",
+          "icone": "semence"
+        },
+        {
+          "titre": "2. Préparer et semer",
+          "texte": "Sol fin, semis peu profond en lignes, densité permettant le sarclage.",
+          "simple": "Terre fine, semez peu profond en lignes, assez espacé pour passer la houe entre les rangs.",
+          "icone": "plantation"
+        },
+        {
+          "titre": "3. Sarcler tôt",
+          "texte": "Deux passages avant que la culture ne couvre le sol.",
+          "simple": "Deux sarclages, avant que la culture ne couvre le sol.",
+          "icone": "entretien"
+        },
+        {
+          "titre": "4. Récolter au bon moment",
+          "texte": "Dès le jaunissement des capsules : couper, mettre en bottes sur bâche, sécher.",
+          "simple": "Coupez dès que les capsules jaunissent, faites des bottes sur une bâche et laissez sécher.",
+          "icone": "recolte"
+        },
+        {
+          "titre": "5. Battre et nettoyer",
+          "texte": "Battage doux, vannage, sacs propres et secs. Un lot propre se vend mieux.",
+          "simple": "Battez doucement, vannez, mettez en sacs propres et secs : un lot propre se vend mieux.",
+          "icone": "stockage"
+        }
       ],
-      "sources": [{"organisme": "Base de connaissances interne", "titre": "knowledge/agronomie.md, knowledge/techniques_agricoles.md", "consulte_le": "2026-10-21"}],
+      "sources": [
+        {
+          "organisme": "Base de connaissances interne",
+          "titre": "knowledge/agronomie.md, knowledge/techniques_agricoles.md",
+          "consulte_le": "2026-10-21"
+        }
+      ],
       "limites": "Variétés et rendements non documentés. Le prix à l'export n'est pas vérifié : ne pas annoncer de revenu sans contrat ou relevé réel."
     },
     "patatedouce": {
@@ -103,13 +215,44 @@
       "conservation": "Les racines se conservent mal longtemps : vente rapide, stockage à l'ombre dans un local ventilé. La transformation en farine prolonge la conservation.",
       "economie": "Débouchés : frais, farine, purée, programmes nutritionnels. Aucun prix vérifié ici. Postes de dépense : boutures, préparation des buttes, main-d'œuvre de récolte, séchage pour la farine.",
       "tutoriel": [
-        {"titre": "1. Préparer les buttes", "texte": "Buttes surélevées, sol meuble, compost bien mûr incorporé."},
-        {"titre": "2. Prélever des boutures saines", "texte": "Tiges vigoureuses, sans taches ni déformation ; couper des segments de plusieurs nœuds."},
-        {"titre": "3. Planter", "texte": "Enfoncer obliquement, arroser si la terre est sèche, espacer pour laisser le feuillage s'étaler."},
-        {"titre": "4. Entretenir", "texte": "Sarcler tôt, surveiller les viroses, éviter l'eau stagnante."},
-        {"titre": "5. Récolter et trier", "texte": "Soulever la butte, trier les racines saines, vendre rapidement ou transformer en farine."}
+        {
+          "titre": "1. Préparer les buttes",
+          "texte": "Buttes surélevées, sol meuble, compost bien mûr incorporé.",
+          "simple": "Faites des buttes hautes, en terre meuble, avec du compost bien mûr.",
+          "icone": "preparation"
+        },
+        {
+          "titre": "2. Prélever des boutures saines",
+          "texte": "Tiges vigoureuses, sans taches ni déformation ; couper des segments de plusieurs nœuds.",
+          "simple": "Prenez des tiges vigoureuses, sans tache ni déformation ; coupez des morceaux de plusieurs nœuds.",
+          "icone": "semence"
+        },
+        {
+          "titre": "3. Planter",
+          "texte": "Enfoncer obliquement, arroser si la terre est sèche, espacer pour laisser le feuillage s'étaler.",
+          "simple": "Plantez en biais, arrosez si la terre est sèche, espacez pour que le feuillage s'étale.",
+          "icone": "plantation"
+        },
+        {
+          "titre": "4. Entretenir",
+          "texte": "Sarcler tôt, surveiller les viroses, éviter l'eau stagnante.",
+          "simple": "Sarclez tôt, surveillez les maladies, évitez l'eau qui stagne.",
+          "icone": "entretien"
+        },
+        {
+          "titre": "5. Récolter et trier",
+          "texte": "Soulever la butte, trier les racines saines, vendre rapidement ou transformer en farine.",
+          "simple": "Soulevez la butte, triez les racines saines, vendez vite ou transformez en farine.",
+          "icone": "recolte"
+        }
       ],
-      "sources": [{"organisme": "Base de connaissances interne", "titre": "knowledge/agronomie.md", "consulte_le": "2026-10-21"}],
+      "sources": [
+        {
+          "organisme": "Base de connaissances interne",
+          "titre": "knowledge/agronomie.md",
+          "consulte_le": "2026-10-21"
+        }
+      ],
       "limites": "Variétés, densités et rendements non documentés. Le prix du frais et de la farine n'est pas vérifié."
     },
     "soja": {
@@ -130,13 +273,44 @@
       "conservation": "Séchage à l'air, tri des graines moisies (risque de mycotoxines), stockage au sec et au frais.",
       "economie": "Débouchés : huileries, provende, semence certifiée. Un contrat avec un acheteur est préférable avant de semer une grande surface. Aucun prix vérifié ici.",
       "tutoriel": [
-        {"titre": "1. Vérifier le débouché", "texte": "Identifier l'acheteur ou l'huilerie avant de semer ; le soja se vend mal sans contrat local."},
-        {"titre": "2. Préparer et inoculer", "texte": "Sol fin, semence saine ; inoculation si la parcelle est nouvelle, sur conseil technique."},
-        {"titre": "3. Semer en lignes", "texte": "Profondeur modérée, densité régulière ; en association, respecter les écartements du maïs."},
-        {"titre": "4. Surveiller la floraison", "texte": "C'est la période sensible : éviter le stress hydrique et les traitements inutiles."},
-        {"titre": "5. Récolter sec", "texte": "Récolte dès maturité, séchage, tri des graines moisies avant stockage."}
+        {
+          "titre": "1. Vérifier le débouché",
+          "texte": "Identifier l'acheteur ou l'huilerie avant de semer ; le soja se vend mal sans contrat local.",
+          "simple": "Trouvez l'acheteur ou l'huilerie avant de semer : sans contrat local, le soja se vend mal.",
+          "icone": "marche"
+        },
+        {
+          "titre": "2. Préparer et inoculer",
+          "texte": "Sol fin, semence saine ; inoculation si la parcelle est nouvelle, sur conseil technique.",
+          "simple": "Terre fine, semence saine ; inoculez si la parcelle n'en a jamais porté, sur conseil technique.",
+          "icone": "preparation"
+        },
+        {
+          "titre": "3. Semer en lignes",
+          "texte": "Profondeur modérée, densité régulière ; en association, respecter les écartements du maïs.",
+          "simple": "Semez en lignes, pas trop profond, régulièrement ; en association, gardez les écartements du maïs.",
+          "icone": "plantation"
+        },
+        {
+          "titre": "4. Surveiller la floraison",
+          "texte": "C'est la période sensible : éviter le stress hydrique et les traitements inutiles.",
+          "simple": "La floraison est la période fragile : pas de manque d'eau, pas de traitement inutile.",
+          "icone": "sante"
+        },
+        {
+          "titre": "5. Récolter sec",
+          "texte": "Récolte dès maturité, séchage, tri des graines moisies avant stockage.",
+          "simple": "Récoltez bien sec, séchez, enlevez les graines moisies avant de stocker.",
+          "icone": "recolte"
+        }
       ],
-      "sources": [{"organisme": "Base de connaissances interne", "titre": "knowledge/agronomie.md, knowledge/techniques_agricoles.md", "consulte_le": "2026-10-21"}],
+      "sources": [
+        {
+          "organisme": "Base de connaissances interne",
+          "titre": "knowledge/agronomie.md, knowledge/techniques_agricoles.md",
+          "consulte_le": "2026-10-21"
+        }
+      ],
       "limites": "Variétés et rendements non documentés. Le prix et l'existence d'un débouché local doivent être vérifiés avant tout investissement."
     },
     "igname": {
@@ -157,14 +331,50 @@
       "conservation": "Stockage à l'ombre, ventilé, tubercules non lavés et non blessés. La conservation longue est difficile ; vendre au fur et à mesure ou transformer en cossettes.",
       "economie": "Débouchés : marchés urbains, cossettes, farine. Les prix varient fortement selon la variété et la saison ; aucun prix vérifié ici. Postes de dépense : semenceaux (poste majeur), travail du sol et buttage, tuteurage, main-d'œuvre de récolte.",
       "tutoriel": [
-        {"titre": "1. Choisir une parcelle profonde", "texte": "Sol meuble et drainé ; éviter les parcelles compactées ou inondables."},
-        {"titre": "2. Préparer buttes et compost", "texte": "Buttes hautes, matière organique mûre incorporée ; la structure du sol fait la récolte."},
-        {"titre": "3. Sélectionner les semenceaux", "texte": "Fragments sains, coupés proprement, cicatrisés à l'air avant plantation."},
-        {"titre": "4. Planter et tuteurer", "texte": "Semenceau dans la butte, œil vers le haut ; tuteurage dès que la tige s'allonge."},
-        {"titre": "5. Entretenir", "texte": "Sarclages, buttage pour couvrir les tubercules, surveillance des pourritures."},
-        {"titre": "6. Récolter sans blesser", "texte": "Creuser latéralement, soulever sans arracher brutalement ; trier et vendre rapidement."}
+        {
+          "titre": "1. Choisir une parcelle profonde",
+          "texte": "Sol meuble et drainé ; éviter les parcelles compactées ou inondables.",
+          "simple": "Choisissez une terre profonde et qui s'égoutte ; évitez les parcelles tassées et les bas-fonds.",
+          "icone": "parcelle"
+        },
+        {
+          "titre": "2. Préparer buttes et compost",
+          "texte": "Buttes hautes, matière organique mûre incorporée ; la structure du sol fait la récolte.",
+          "simple": "Faites des buttes hautes avec du fumier ou du compost mûr : c'est le sol qui fait la récolte.",
+          "icone": "preparation"
+        },
+        {
+          "titre": "3. Sélectionner les semenceaux",
+          "texte": "Fragments sains, coupés proprement, cicatrisés à l'air avant plantation.",
+          "simple": "Prenez des semenceaux sains, coupés net ; laissez-les sécher à l'air avant de planter.",
+          "icone": "semence"
+        },
+        {
+          "titre": "4. Planter et tuteurer",
+          "texte": "Semenceau dans la butte, œil vers le haut ; tuteurage dès que la tige s'allonge.",
+          "simple": "Posez le semenceau dans la butte, l'œil vers le haut ; tuteurez dès que la tige monte.",
+          "icone": "plantation"
+        },
+        {
+          "titre": "5. Entretenir",
+          "texte": "Sarclages, buttage pour couvrir les tubercules, surveillance des pourritures.",
+          "simple": "Sarclez, buttez pour couvrir les tubercules, surveillez les pourritures.",
+          "icone": "entretien"
+        },
+        {
+          "titre": "6. Récolter sans blesser",
+          "texte": "Creuser latéralement, soulever sans arracher brutalement ; trier et vendre rapidement.",
+          "simple": "Creusez sur le côté, soulevez sans arracher ; triez et vendez vite.",
+          "icone": "recolte"
+        }
       ],
-      "sources": [{"organisme": "Base de connaissances interne", "titre": "knowledge/agronomie.md, knowledge/techniques_agricoles.md", "consulte_le": "2026-10-21"}],
+      "sources": [
+        {
+          "organisme": "Base de connaissances interne",
+          "titre": "knowledge/agronomie.md, knowledge/techniques_agricoles.md",
+          "consulte_le": "2026-10-21"
+        }
+      ],
       "limites": "Rendements, densités et performances variétales non documentés. Les prix de gros varient : consulter le relevé OCPV le plus récent plutôt qu'une estimation."
     }
   }

@@ -29,6 +29,8 @@ os.environ["AGRO_CORS_ORIGINS"] = "https://agroguidci.vercel.app"
 from fastapi.testclient import TestClient  # noqa: E402
 
 import conversations as conv  # noqa: E402
+import outils  # noqa: E402
+import permissions  # noqa: E402
 import serveur_api as api  # noqa: E402
 
 
@@ -229,6 +231,33 @@ class TestMessages(Base):
         self.assertEqual(api.extrait_fiche("Igname"), extrait)
         self.assertEqual(api.extrait_fiche("culture-inconnue"), "")
         self.assertEqual(api.extrait_fiche(None), "")
+
+    def test_culture_detectee_depuis_l_accueil(self):
+        """Sans fiche d'origine, la culture citée est reconnue (accueil)."""
+        self.assertEqual(api.culture_detectee("Quand planter l'igname à Bouaké ?"), "igname")
+        self.assertEqual(api.culture_detectee("le kilo de gingembre se vend combien"), "gingembre")
+        self.assertEqual(api.culture_detectee("rotation avec du pois bambara"), "voandzou")
+        self.assertIsNone(api.culture_detectee("Quel engrais pour le maïs ?"))
+        self.assertIsNone(api.culture_detectee(""))
+
+    def test_permissions_mots_entiers(self):
+        """Un mot qui contient un déclencheur ne doit pas déclencher un refus."""
+        self.assertEqual(permissions.intentions_interdites("la fiche publiée par AGROGUIDCI"), [])
+        self.assertEqual(permissions.intentions_interdites("Quand planter l'igname ?"), [])
+        self.assertEqual([i["action"] for i in
+                          permissions.intentions_interdites("Achète 2 sacs d'urée et fais livrer")],
+                         ["acheter_payer"])
+        self.assertEqual([i["action"] for i in
+                          permissions.intentions_interdites("Publie mon annonce sur Facebook")],
+                         ["publier"])
+        self.assertEqual(permissions.intentions_interdites(
+            "Écris-moi un message à envoyer à ma coopérative"), [])
+
+    def test_consigne_chat_ignoree_par_les_outils(self):
+        """La consigne de forme ne doit jamais fournir de « localité » aux outils."""
+        self.assertTrue(api.CONSIGNE_CHAT.startswith("[CONSIGNE_INTERNE]"))
+        self.assertIsNone(outils.extraire_localite("Quand planter ?" + api.CONSIGNE_CHAT))
+        self.assertEqual(outils.extraire_localite("Je suis à Bouaké et je veux planter"), "Bouake")
 
     def test_message_vide_refuse(self):
         jeton = self.session()

@@ -45,6 +45,21 @@
 .tutoriel strong { display: block; margin-bottom: .15rem; color: #0b3a22; }
 .tutoriel p { margin: 0; font-size: .92rem; }
 
+/* Étapes illustrées : pictogramme + texte en langage courant */
+.tutoriel li.tuto-etape { display: grid; grid-template-columns: 34px 1fr; gap: .75rem;
+  align-items: start; padding: .8rem .95rem; }
+.tutoriel li.tuto-etape::before { content: none; }
+.tuto-picto { width: 34px; height: 34px; display: grid; place-items: center; flex: 0 0 auto;
+  border-radius: 10px; background: #e7f0df; color: #2f5d17; }
+.tuto-picto svg { width: 24px; height: 24px; }
+.tuto-corps strong { display: block; margin-bottom: .2rem; color: #0b3a22; font-size: .95rem; }
+.tuto-corps p { margin: 0; font-size: .93rem; line-height: 1.55; color: #24352a; }
+@media (max-width: 480px) {
+  .tutoriel li.tuto-etape { grid-template-columns: 28px 1fr; gap: .55rem; }
+  .tuto-picto { width: 28px; height: 28px; border-radius: 8px; }
+  .tuto-picto svg { width: 20px; height: 20px; }
+}
+
 .sources-liste { margin: 0 0 .7rem; padding-left: 1.1rem; font-size: .88rem; color: #24352a; }
 .sources-liste a { color: #2f5d17; }
 .limites { background: #fff7e6; border-left: 3px solid #e0a800; padding: .6rem .8rem; border-radius: 8px;

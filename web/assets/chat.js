@@ -11,12 +11,20 @@
   var INTERVALLE = 2000;      // cadence de rafraîchissement du fil pendant la rédaction
   var ATTENTE_MAX = 5 * 60 * 1000;
 
-  var dialogue, fil, formulaire, zone, bouton, etat, titreCulture;
+  var dialogue, fil, formulaire, zone, bouton, etat, titreCulture, suggestionsZone;
+  var SUGGESTIONS_DEFAUT = [
+    "Quand semer l'igname ?",
+    "Quel engrais pour mon maïs ?",
+    "Comment lutter contre les chenilles ?",
+    "Quel budget pour un hectare ?",
+  ];
   var conversationId = null;
   var cultureId = null;
   var cultureLibelle = null;
   var localite = null;
   var envoiEnCours = false;
+  var suggestionsActuelles = [];
+  var dejaPosees = {};
   var minuteur = null;
   var debutAttente = 0;
 
@@ -132,6 +140,36 @@
     return article;
   }
 
+  /* ---------------------------------------------- questions proposées (chips) */
+  function rendreSuggestions(liste) {
+    if (!suggestionsZone) return;
+    suggestionsActuelles = (Array.isArray(liste) ? liste : []).slice();
+    suggestionsZone.innerHTML = "";
+    suggestionsActuelles
+      .filter(function (q) { return q && !dejaPosees[q]; })
+      .slice(0, 4)
+      .forEach(function (question) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "chat-suggestion";
+        b.textContent = question;
+        b.addEventListener("click", function () {
+          if (envoiEnCours) return;
+          zone.value = question;
+          if (formulaire && formulaire.requestSubmit) formulaire.requestSubmit();
+          else envoyer(question);
+        });
+        suggestionsZone.appendChild(b);
+      });
+    suggestionsZone.hidden = !suggestionsZone.children.length;
+  }
+
+  function masquerSuggestions() {
+    if (!suggestionsZone) return;
+    suggestionsZone.hidden = true;
+    suggestionsZone.innerHTML = "";
+  }
+
   function rendre(donnees) {
     if (!fil) return;
     fil.innerHTML = "";
@@ -143,6 +181,7 @@
       fil.appendChild(accueil);
     }
     (donnees.messages || []).forEach(function (m) { fil.appendChild(bulle(m)); });
+    if ((donnees.messages || []).length) masquerSuggestions();
     var dernier = (donnees.messages || []).slice(-1)[0];
     // Une question posée attend sa réponse : le dernier message est encore « en_cours »,
     // qu'il soit la question du producteur ou la réponse en cours de l'agent.
@@ -186,7 +225,7 @@
       var memo = lireStockage();
       if (memo) conversationId = memo;
     }
-    if (!conversationId) { await ouvrirConversation(); return; }
+    if (!conversationId) { await ouvrirConversation(); rendre({ messages: [] }); return; }
     try {
       var donnees = await requete("/api/conversations/" + encodeURIComponent(conversationId));
       var attente = rendre(donnees);
@@ -215,7 +254,10 @@
         var donnees = await requete("/api/conversations/" + encodeURIComponent(conversationId));
         var attente = rendre(donnees);
         if (attente) suivre();
-        else { afficherEtat("", ""); }
+        else {
+          afficherEtat("", "");
+          rendreSuggestions(suggestionsActuelles);   // relancer la conversation
+        }
       } catch (e) {
         afficherEtat("Connexion interrompue : " + e.message, "err");
       }
@@ -226,6 +268,8 @@
     if (envoiEnCours) return;
     if (!conversationId) await ouvrirConversation();
     envoiEnCours = true;
+    dejaPosees[String(texte || "").trim()] = true;
+    masquerSuggestions();
     bouton.disabled = true;
     zone.setAttribute("aria-disabled", "true");
     afficherEtat("Envoi de votre question…", "attente");
@@ -244,6 +288,7 @@
       var donnees = await requete("/api/conversations/" + encodeURIComponent(conversationId));
       var attente = rendre(donnees);
       if (attente) { afficherEtat("L'agent agronome travaille…", "attente"); suivre(); }
+      else { afficherEtat("", ""); rendreSuggestions(suggestionsActuelles); }
     } catch (e) {
       if (e.statut === 401 || e.statut === 404) {
         ecrireStockage(""); conversationId = null;
@@ -286,6 +331,8 @@
     if (typeof dialogue.showModal === "function") dialogue.showModal();
     else dialogue.setAttribute("open", "open");
     dialogue.classList.add("ouvert");
+    rendreSuggestions(options.suggestions && options.suggestions.length
+      ? options.suggestions : SUGGESTIONS_DEFAUT);
     afficherEtat("Connexion à l'agent agronome…", "attente");
     charger()
       .then(function () { afficherEtat("", ""); zone.focus(); })
@@ -310,6 +357,7 @@
     bouton = $("chatEnvoyer");
     etat = $("chatEtat");
     titreCulture = $("chatCulture");
+    suggestionsZone = $("chatSuggestions");
 
     document.querySelectorAll('[data-chat="ouvrir"]').forEach(function (declencheur) {
       declencheur.addEventListener("click", function (e) {
@@ -317,6 +365,8 @@
         ouvrir({
           culture: declencheur.getAttribute("data-culture") || null,
           libelle: declencheur.getAttribute("data-culture-libelle") || null,
+          suggestions: (declencheur.getAttribute("data-suggestions") || "")
+            .split("|").map(function (q) { return q.trim(); }).filter(Boolean),
           localite: declencheur.getAttribute("data-localite") || null,
         });
       });

@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap">
-  <link rel="stylesheet" href="../assets/site.css?v=11">
-  <link rel="stylesheet" href="../assets/fiche.css?v=1">
+  <link rel="stylesheet" href="../assets/site.css?v=12">
+  <link rel="stylesheet" href="../assets/fiche.css?v=2">
 </head>
 <body class="fiche-page">
 <a class="skip" href="#fiche">Aller au contenu</a>
@@ -101,11 +101,11 @@
 
     <section class="fiche-section" id="tutoriel">
       <h2>Tutoriel étape par étape</h2>
-      <ol class="tutoriel"><li><strong>1. Faire une pépinière</strong><p>Sol fin, ombrage léger, arrosage régulier; repiquer des plants vigoureux.</p></li>
-<li><strong>2. Préparer la planche</strong><p>Planche drainée, compost mûr, espacement permettant l&#x27;aération.</p></li>
-<li><strong>3. Repiquer</strong><p>Avec motte, sans casser les racines, arroser à la plantation.</p></li>
-<li><strong>4. Entretenir</strong><p>Arrosage régulier, sarclages, surveillance des pucerons et des viroses.</p></li>
-<li><strong>5. Récolter et sécher</strong><p>Récolte échelonnée, séchage sur claie, stockage hermétique.</p></li></ol>
+      <ol class="tutoriel"><li class="tuto-etape"><span class="tuto-picto"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="9" cy="9" r="2.6"/><circle cx="16" cy="7" r="2"/><circle cx="21" cy="13" r="2.6"/><path d="M4 22h20"/></svg></span><div class="tuto-corps"><strong>1. Faire une pépinière</strong><p>Semez en pépinière, en terre fine, avec un peu d&#x27;ombre et des arrosages réguliers ; repiquez les plants vigoureux.</p></div></li>
+<li class="tuto-etape"><span class="tuto-picto"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 22c4-9 10-9 14 0"/><circle cx="20" cy="8" r="1.3"/><circle cx="24" cy="12" r="1.3"/><circle cx="18" cy="13" r="1.3"/></svg></span><div class="tuto-corps"><strong>2. Préparer la planche</strong><p>Préparez une planche drainée, avec du compost mûr et assez d&#x27;espace pour que l&#x27;air circule.</p></div></li>
+<li class="tuto-etape"><span class="tuto-picto"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 22h22"/><path d="M14 22V11"/><path d="M14 14c0-3 2.4-5.4 5.4-5.4 0 3-2.4 5.4-5.4 5.4Z"/></svg></span><div class="tuto-corps"><strong>3. Repiquer</strong><p>Repiquez avec la motte, sans casser les racines, et arrosez tout de suite.</p></div></li>
+<li class="tuto-etape"><span class="tuto-picto"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 24h20"/><path d="M14 24V7"/><path d="M14 12c-3 0-5-2-5-4.5 3 0 5 2 5 4.5Z"/><path d="M14 17c3 0 5-2 5-4.5-3 0-5 2-5 4.5Z"/></svg></span><div class="tuto-corps"><strong>4. Entretenir</strong><p>Arrosez régulièrement, sarclez, surveillez les pucerons et les maladies.</p></div></li>
+<li class="tuto-etape"><span class="tuto-picto"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h18l-2 10H7z"/><path d="M10 12a4 4 0 0 1 8 0"/><path d="M10 16v3M14 16v3M18 16v3"/></svg></span><div class="tuto-corps"><strong>5. Récolter et sécher</strong><p>Récoltez au fur et à mesure, séchez sur une claie, stockez hermétique.</p></div></li></ol>
     </section>
 
     <section class="fiche-section" id="sources">
@@ -116,7 +116,7 @@
     </section>
 
     <section class="fiche-actions" aria-label="Actions">
-      <button class="btn btn-primary btn-lg" type="button" data-chat="ouvrir" data-culture="piment" data-culture-libelle="Piment">Poser une question sur cette culture</button>
+      <button class="btn btn-primary btn-lg" type="button" data-chat="ouvrir" data-culture="piment" data-culture-libelle="Piment" data-suggestions="Quand planter ?|Quelle densité et quel écartement ?|Comment fertiliser et entretenir ?|Comment conserver la récolte ?">Poser une question sur cette culture</button>
       <a class="btn btn-ghost btn-lg" href="../#prix">Voir les prix au kilo</a>
     </section>
   </div>
@@ -139,6 +139,8 @@
 
       <p id="chatEtat" class="chat-etat" role="status" aria-live="polite"></p>
 
+      <div id="chatSuggestions" class="chat-suggestions" aria-label="Questions fréquentes"></div>
+
       <form id="chatForm" class="chat-form">
         <label class="sr-only" for="chatTexte">Votre question</label>
         <textarea id="chatTexte" rows="2" maxlength="2000" placeholder="Ex. : quelle variété choisir à Bouaké ?" required></textarea>
@@ -155,6 +157,6 @@
     <p>AGROGUIDCI — conseil agricole pour la Côte d'Ivoire. <a href="../confidentialite.html">Politique de confidentialité</a></p>
   </div>
 </footer>
-<script src="../assets/chat.js?v=15" defer></script>
+<script src="../assets/chat.js?v=18" defer></script>
 </body>
 </html>

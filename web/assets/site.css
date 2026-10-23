@@ -1183,6 +1183,14 @@ html, body { max-width: 100%; }
   text-align: left; vertical-align: top; }
 .chat-table th { background: rgba(11, 58, 34, .07); font-weight: 650; }
 .chat-table tbody tr:nth-child(even) td { background: rgba(11, 58, 34, .025); }
+.chat-suggestions { display: flex; flex-wrap: wrap; gap: .4rem; padding: .2rem .9rem .6rem;
+  background: #f8f7f1; }
+.chat-suggestions[hidden] { display: none; }
+.chat-suggestion { border: 1px solid rgba(11, 58, 34, .22); background: #fff; color: #0b3a22;
+  border-radius: 999px; padding: .35rem .7rem; font: inherit; font-size: .8rem; cursor: pointer;
+  transition: background .15s ease, border-color .15s ease; }
+.chat-suggestion:hover { background: #e7f0df; border-color: rgba(11, 58, 34, .4); }
+.chat-suggestion:focus-visible { outline: 3px solid #a7d857; outline-offset: 2px; }
 .chat-badge { margin-left: .45rem; padding: .05rem .4rem; border-radius: 999px; font-size: .62rem;
   letter-spacing: .04em; text-transform: none; }
 .chat-badge.attente { background: #e6f2d8; color: #2f5d17; }

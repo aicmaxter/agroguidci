@@ -14,6 +14,7 @@ Aucun contournement : un agent ne peut pas executer une action « interdit ».
 
 from __future__ import annotations
 
+import re
 import unicodedata
 
 MODES = ("automatique", "validation_humaine", "interdit")
@@ -139,22 +140,35 @@ def outil_autorise(nom_outil: str) -> bool:
     return all(v["mode"] == "automatique" for v in verifier_outil(nom_outil))
 
 
+def _motifs(declencheurs: tuple[str, ...]) -> list[tuple[str, object]]:
+    """Motifs de declenchement ancres sur des mots entiers.
+
+    Sans cette borne, un simple mot contenant le radical declenchait un refus :
+    « la fiche publiee » (participe) etait lu comme « publie » (action), et une
+    question de conseil finissait etiquetee « action interdite ».
+    """
+    return [(sans_accents(d), re.compile(rf"\b{re.escape(sans_accents(d).strip())}\b"))
+            for d in declencheurs if d.strip()]
+
+
 def intentions_interdites(demande: str) -> list[dict]:
     """Repere les demandes qui exigent une action interdite (envoi, achat...).
 
     Un brouillon demande explicitement n'est pas un envoi : on ne declenche le refus
     que si la demande d'envoi n'est pas encadree par une tournure de redaction.
+    Les motifs sont cherches en mots entiers (voir _motifs).
     """
     t = sans_accents(demande)
-    brouillon = any(m in t for m in (sans_accents(x) for x in TOURNURES_BROUILLON))
+    brouillon = any(re.search(rf"\b{re.escape(sans_accents(x).strip())}\b", t)
+                    for x in TOURNURES_BROUILLON if x.strip())
     trouvees: list[dict] = []
     for action, declencheurs, libelle in INTENTIONS:
-        for d in declencheurs:
-            if d in t:
+        for brut, motif in _motifs(declencheurs):
+            if motif.search(t):
                 if action == "envoyer_message" and brouillon:
                     continue        # « ecris-moi un message que j'enverrai » : redaction autorisee
                 trouvees.append({"action": action, "libelle": libelle,
-                                 "extrait": extrait(t, d), **verifier(action)})
+                                 "extrait": extrait(t, brut), **verifier(action)})
                 break
     return trouvees
 
