@@ -117,7 +117,7 @@ GABARIT = """<!DOCTYPE html>
     <p>AGROGUIDCI — conseil agricole pour la Côte d'Ivoire. <a href="../confidentialite.html">Politique de confidentialité</a></p>
   </div>
 </footer>
-<script src="../assets/chat.js?v=12" defer></script>
+<script src="../assets/chat.js?v=13" defer></script>
 </body>
 </html>
 """

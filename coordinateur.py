@@ -36,6 +36,7 @@ import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+from typing import Any, Callable
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
@@ -370,7 +371,7 @@ class Coordonnateur:
 
     # -- 4. synthese ------------------------------------------------------
     def synthetiser(self, demande: str, clarification: dict, resultats: dict[str, dict],
-                    trace: Trace) -> dict:
+                    trace: Trace, on_delta: Any = None) -> dict:
         morceaux = []
         for capacite, rep in resultats.items():
             expert = par_capacite(capacite)
@@ -404,14 +405,15 @@ class Coordonnateur:
                      "avec exactement les sections demandees, et mentionne explicitement "
                      "tout volet consulte en echec.")
 
-        def appel(complement: str = "", max_tokens: int = 14000) -> str:
+        def appel(complement: str = "", max_tokens: int = 14000, flux: bool = False) -> str:
             return self.llm.chat([
                 {"role": "system", "content": PROMPT_SYNTHESE},
                 {"role": "user", "content": dossier + complement},
-            ], temperature=0.2, max_tokens=max_tokens)
+            ], temperature=0.2, max_tokens=max_tokens,
+                stream=flux, on_delta=on_delta if flux else None)
 
         try:
-            texte = appel()
+            texte = appel(flux=on_delta is not None)
             avis: list[str] = []
             fini = self.llm.derniere_finish
             manquantes = sections_manquantes(texte)
@@ -717,7 +719,22 @@ class Coordonnateur:
         return f
 
     def traiter(self, demande: str, domaines_forces: list[str] | None = None,
-                etiquette: str | None = None) -> dict:
+                etiquette: str | None = None,
+                progres: Callable[[str, str], None] | None = None) -> dict:
+        """Execute une mission complete.
+
+        `progres(etape, texte)` est appele aux jalons utiles a l'interface (besoin
+        clarifie, volets disponibles) : ce sont des extraits REELS, jamais une
+        reponse inventee ; la synthese les remplace a la fin.
+        """
+        def jalon(etape: str, txt: str) -> None:
+            if progres is None:
+                return
+            try:
+                progres(etape, txt)
+            except Exception as e:                  # l'affichage ne casse jamais la mission
+                dire("PROGRES", f"jalon « {etape} » non publie : {type(e).__name__}")
+
         if not self.orch.health():
             raise RuntimeError(f"orchestrateur injoignable sur {self.orch.base} : "
                                "demarre-le (python demarrer_agroguidci.py)")
@@ -766,14 +783,35 @@ class Coordonnateur:
             dire("PERMISSION", f"action `{i['action']}` refusee ({i['mode']}) : {i['libelle']}")
         # Le volet agronomique est traite EN PROPRE par l'agent principal : il EST
         # l'agronome, le deleguer a un autre agent serait un detour inutile.
+        # Les volets sont independants : le volet propre et les delegations partent
+        # EN MEME TEMPS (la synthese attend les deux, pas l'un apres l'autre).
         resultats: dict[str, dict] = {}
-        a_deleguer: list[Expertise] = []
-        for e in experts:
-            if e.cle == PRINCIPAL.cle:
-                resultats[e.capacite] = self.volet_en_propre(demande, clarification, trace)
-            else:
-                a_deleguer.append(e)
-        resultats.update(self.coordonner(demande, a_deleguer, clarification, trace))
+        a_deleguer = [e for e in experts if e.cle != PRINCIPAL.cle]
+        principale = next((e for e in experts if e.cle == PRINCIPAL.cle), None)
+        jalon("clarification",
+              f"Besoin identifie : {clarification.get('besoin_principal') or demande}"
+              f"\n\nVolets consultes : {', '.join(e.capacite for e in experts)}."
+              "\n\nLa consultation des experts est en cours…")
+        erreur_volet: Exception | None = None
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            delegation = (pool.submit(self.coordonner, demande, a_deleguer, clarification, trace)
+                          if a_deleguer else None)
+            if principale is not None:
+                try:
+                    resultats[principale.capacite] = self.volet_en_propre(demande, clarification,
+                                                                          trace)
+                except Exception as e:              # on remonte apres avoir recolte les volets
+                    erreur_volet = e
+            if delegation is not None:
+                resultats.update(delegation.result())
+        if erreur_volet is not None:
+            raise erreur_volet
+        # Jalon : un extrait reel du volet principal pendant que la synthese se redige.
+        extrait = next((r.get("result") for r in resultats.values()
+                        if r.get("status") == "completed" and r.get("result")), "")
+        if extrait:
+            jalon("volets", extrait[:2000].rstrip()
+                  + "\n\n… Rédaction de la réponse complète (synthèse des volets en cours).")
         # ------------------------------------------------------------ ACT
         for capacite, rep in resultats.items():
             journal.entree("ACT", agent=rep.get("agent_name") or capacite, action="execution_volet",
@@ -812,7 +850,14 @@ class Coordonnateur:
                                                     else None))
 
         # ------------------------------------------------------------ VERIFY
-        synthese = self.synthetiser(demande, clarification, resultats, trace)
+        tampon_synthese = {"texte": ""}
+
+        def delta_synthese(morceau: str) -> None:
+            tampon_synthese["texte"] += morceau
+            jalon("synthese", tampon_synthese["texte"])
+
+        synthese = self.synthetiser(demande, clarification, resultats, trace,
+                                    on_delta=delta_synthese if progres else None)
         verification = self.verifier(resultats, synthese["texte"], dossier, trace, journal)
         etat = journal.etat_final()
         if verification["statut"] == "ECHEC" and etat == "TERMINEE_VERIFIEE":

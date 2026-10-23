@@ -37,6 +37,7 @@ services:
       AGRO_CORS_ORIGINS: ${AGRO_CORS_ORIGINS}
       AGRO_MAX_CONCURRENCE: ${AGRO_MAX_CONCURRENCE:-2}
       AGRO_BUDGET_S: ${AGRO_BUDGET_S:-300}
+      HEARTBEAT_MS: "2000"              # reprise des taches deleguees : 1 s d'attente moyenne
       AGRO_LLM_MODEL: ${AGRO_LLM_MODEL:-}
       DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY}
       ORCH_ATTENTE_S: "120"

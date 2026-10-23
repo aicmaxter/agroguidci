@@ -218,11 +218,21 @@ def maj_message(message_id: str, **champs: Any) -> None:
 
 def repondre(conversation_id: str, message_id: str, contenu: str, statut: str,
              mission_id: str | None = None, sources: list | None = None,
-             erreur: str | None = None) -> dict[str, Any]:
-    """Clôt la question et ajoute la réponse de l'agent (message distinct)."""
+             erreur: str | None = None, assistant_id: str | None = None) -> dict[str, Any]:
+    """Clôt la question et publie la réponse de l'agent.
+
+    `assistant_id` : identifiant d'un message d'avancement déjà publié dans le fil
+    (extrait réel pendant la rédaction). Il est alors MIS À JOUR au lieu d'ajouter
+    une seconde bulle : un seul message d'agent par question.
+    """
     contenu = (contenu or "").strip() or "Aucune réponse exploitable n'a été produite."
+    sources_json = json.dumps(sources, ensure_ascii=False) if sources else None
     maj_message(message_id, statut=statut, mission_id=mission_id, erreur=erreur,
-                sources_json=json.dumps(sources, ensure_ascii=False) if sources else None)
+                sources_json=sources_json)
+    if assistant_id:
+        maj_message(assistant_id, contenu=contenu, statut=statut, mission_id=mission_id,
+                    sources_json=sources_json)
+        return {"message_id": assistant_id, "rejoue": True}
     return ajouter_message(conversation_id, "assistant", contenu, statut=statut,
                            mission_id=mission_id, sources=sources)
 

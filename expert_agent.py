@@ -232,7 +232,9 @@ def boucle(expert: Expertise, orch: Orchestrateur, llm: LLM, kb: BaseConnaissanc
     if une_fois:
         return 0
     while True:
-        time.sleep(max(periode_ms, 3000) / 1000.0)
+        # Cadence de reprise des taches : c'est elle qui fixe le delai entre la
+        # delegation et le debut du travail de l'agent (moyenne = periode / 2).
+        time.sleep(max(periode_ms, 1500) / 1000.0)
         tick()
 
 

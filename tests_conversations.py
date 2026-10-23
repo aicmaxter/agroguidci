@@ -179,6 +179,40 @@ class TestMessages(Base):
         with self.assertRaises(ValueError):
             conv.ajouter_message(cid, "assistant", "a" * (conv.MAX_REPONSE + 1))
 
+    def test_avancement_puis_reponse_dans_la_meme_bulle(self):
+        """L'extrait publié pendant la rédaction est remplacé, pas dupliqué."""
+        sid = conv.creer_session()["session_id"]
+        cid = conv.creer_conversation(sid)["conversation_id"]
+        question = conv.ajouter_message(cid, "user", "Comment planter le fonio ?")
+        etat: dict = {"id": None}
+        api._publier_avancement(cid, "Besoin identifié : planter le fonio.", etat)
+        self.assertIsNotNone(etat["id"])
+        # deuxième jalon immédiat : ignoré (lissage des écritures en base)
+        api._publier_avancement(cid, "Extrait trop rapproché, doit être ignoré.", etat)
+        fil = conv.fil(sid, cid)
+        agents = [m for m in fil["messages"] if m["role"] == "assistant"]
+        self.assertEqual(len(agents), 1, agents)
+        self.assertEqual(agents[0]["contenu"], "Besoin identifié : planter le fonio.")
+        # après la fenêtre de lissage, l'extrait suivant remplace bien le précédent
+        etat["maj"] = 0.0
+        api._publier_avancement(cid, "Extrait du volet agronomique en cours.", etat)
+        fil = conv.fil(sid, cid)
+        agents = [m for m in fil["messages"] if m["role"] == "assistant"]
+        self.assertEqual(len(agents), 1, agents)
+        self.assertIn("Extrait du volet", agents[0]["contenu"])
+        self.assertEqual(agents[0]["statut"], "en_cours")
+        # la réponse finale réutilise la bulle d'avancement
+        conv.repondre(cid, question["message_id"], "Réponse finale de l'agent.", "termine",
+                      sources=[{"titre": "knowledge/fonio.md"}], assistant_id=etat["id"])
+        fil = conv.fil(sid, cid)
+        agents = [m for m in fil["messages"] if m["role"] == "assistant"]
+        self.assertEqual(len(agents), 1, "une seule bulle d'agent par question")
+        self.assertEqual(agents[0]["message_id"], etat["id"])
+        self.assertEqual(agents[0]["contenu"], "Réponse finale de l'agent.")
+        self.assertEqual(agents[0]["statut"], "termine")
+        self.assertEqual(len(agents[0]["sources"]), 1)
+        self.assertEqual(fil["messages"][0]["statut"], "termine")
+
     def test_message_vide_refuse(self):
         jeton = self.session()
         cid = self.conversation(jeton)

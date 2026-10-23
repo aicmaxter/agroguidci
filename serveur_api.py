@@ -468,39 +468,71 @@ def _tronquer_reponse(texte: str) -> str:
     return (coupe or texte[: conv.MAX_REPONSE - len(suffixe) - 2]) + suffixe
 
 
+def _publier_avancement(cid: str, contenu: str, state: dict) -> None:
+    """Publie un extrait réel dans le fil pendant la rédaction (jamais bloquant).
+
+    Le premier extrait crée la bulle de l'agent (statut en_cours) ; les suivants la
+    mettent à jour, au plus une fois toutes les ~1,2 s (la synthèse arrive par
+    fragments : inutile d'écrire en base à chaque jeton). La réponse finale réutilise
+    ce même message.
+    """
+    contenu = (contenu or "").strip()
+    if not contenu:
+        return
+    maintenant = time.monotonic()
+    if state.get("id") is not None and maintenant - float(state.get("maj") or 0.0) < 1.2:
+        return
+    contenu = contenu[: conv.MAX_REPONSE]
+    try:
+        if state.get("id") is None:
+            m = conv.ajouter_message(cid, "assistant", contenu, statut="en_cours")
+            state["id"] = m["message_id"]
+        else:
+            conv.maj_message(state["id"], contenu=contenu, statut="en_cours")
+        state["maj"] = maintenant
+    except Exception as e:                     # confort d'affichage : jamais une erreur
+        journalise(evenement="chat_avancement_ignore", type=type(e).__name__)
+
+
 def _executer_message(cid: str, mid: str, texte: str, profil: Profil | None) -> None:
     """Exécute une demande de chat et publie la réponse dans le fil."""
     if not _VERROU.acquire(timeout=BUDGET_S):
         conv.repondre(cid, mid, "Le moteur est occupé : réessayez dans un instant.", "echec",
                       erreur="moteur occupé")
         return
+    avancement: dict[str, str | None] = {"id": None}
     try:
         coord = Coordonnateur()
-        resultat = coord.traiter(texte, None, None)
+        resultat = coord.traiter(texte, None, None,
+                                 progres=lambda etape, txt: _publier_avancement(cid, txt, avancement))
         corps = _enveloppe(texte, profil, resultat, 0.0)
         etat = corps.get("etat_final")
         reponse = _tronquer_reponse((corps.get("rapport") or {}).get("reponse") or "")
         conv.repondre(cid, mid, reponse, _statut_message(etat),
                       mission_id=corps.get("id"),
-                      sources=(corps.get("rapport") or {}).get("sources") or [])
+                      sources=(corps.get("rapport") or {}).get("sources") or [],
+                      assistant_id=avancement.get("id"))
         journalise(evenement="chat_reponse", id=corps.get("id"), etat=etat,
-                   caracteres=len(reponse))
+                   caracteres=len(reponse), avancement=bool(avancement.get("id")))
     except RuntimeError:
         journalise(evenement="chat_moteur_indisponible")
         _publier_echec(cid, mid, "Le moteur de l'agent agronome est indisponible : orchestrateur "
-                       "ou agents non démarrés. Réessayez plus tard.", "moteur indisponible")
+                       "ou agents non démarrés. Réessayez plus tard.", "moteur indisponible",
+                       avancement.get("id"))
     except Exception as e:
         journalise(evenement="chat_erreur", type=type(e).__name__, detail=str(e)[:200])
         _publier_echec(cid, mid, "Une erreur technique est survenue : aucune réponse n'a été "
-                       "produite.", f"erreur du moteur ({type(e).__name__})")
+                       "produite.", f"erreur du moteur ({type(e).__name__})",
+                       avancement.get("id"))
     finally:
         _VERROU.release()
 
 
-def _publier_echec(cid: str, mid: str, texte: str, erreur: str) -> None:
+def _publier_echec(cid: str, mid: str, texte: str, erreur: str,
+                   assistant_id: str | None = None) -> None:
     """Publie un échec sans jamais laisser la question en « en_cours »."""
     try:
-        conv.repondre(cid, mid, texte, "echec", erreur=erreur)
+        conv.repondre(cid, mid, texte, "echec", erreur=erreur, assistant_id=assistant_id)
     except Exception as e:                     # dernier recours : clore la question
         journalise(evenement="chat_echec_publication", type=type(e).__name__)
         try:

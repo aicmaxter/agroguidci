@@ -148,6 +148,42 @@ def _http(method: str, url: str, corps: dict | None = None, entetes: dict | None
     raise ErreurOrchestrateur(f"{method} {url} injoignable : {derniere}")
 
 
+def _http_stream(url: str, corps: dict, entetes: dict, timeout: float = 180.0,
+                 on_delta: Any = None) -> tuple[int, str, str | None]:
+    """POST en flux (SSE) : renvoie (code, texte complet, finish_reason).
+
+    `on_delta(morceau)` est appele a chaque fragment recu : c'est ce qui permet
+    d'afficher la reponse au fur et a mesure au lieu d'attendre la fin.
+    """
+    donnees = json.dumps(corps, ensure_ascii=False).encode("utf-8")
+    entetes_finaux = {"Accept": "text/event-stream", "Content-Type": "application/json",
+                      "Connection": "close", **(entetes or {})}
+    req = urllib.request.Request(url, data=donnees, method="POST", headers=entetes_finaux)
+    morceaux: list[str] = []
+    fin: str | None = None
+    with urllib.request.urlopen(req, timeout=timeout) as r:
+        for brut in r:
+            ligne = brut.decode("utf-8", errors="replace").strip()
+            if not ligne.startswith("data:"):
+                continue
+            charge = ligne[5:].strip()
+            if charge == "[DONE]":
+                break
+            try:
+                evt = json.loads(charge)
+            except ValueError:
+                continue
+            choix = (evt.get("choices") or [{}])[0]
+            delta = (choix.get("delta") or {}).get("content") or ""
+            if delta:
+                morceaux.append(delta)
+                if on_delta is not None:
+                    on_delta(delta)
+            if choix.get("finish_reason"):
+                fin = choix["finish_reason"]
+    return 200, "".join(morceaux).strip(), fin
+
+
 # --------------------------------------------------------------------------- orchestrateur
 class Orchestrateur:
     """Client des deux protocoles de l'orchestrateur local."""
@@ -301,7 +337,7 @@ class LLM:
 
     def chat(self, messages: list[dict], temperature: float | None = None,
              max_tokens: int | None = None, json_mode: bool = False,
-             tentatives: int = 3) -> str:
+             tentatives: int = 3, stream: bool = False, on_delta: Any = None) -> str:
         if not self.cle:
             raise ErreurLLM("DEEPSEEK_API_KEY absente : impossible d'appeler le modele "
                             "(aucune reponse ne sera inventee a la place).")
@@ -314,6 +350,21 @@ class LLM:
         }
         if json_mode:
             corps["response_format"] = {"type": "json_object"}
+        # Flux : la reponse s'affiche au fur et a mesure (repli automatique sur
+        # l'appel classique si le fournisseur ne streame pas correctement).
+        if stream and on_delta is not None:
+            try:
+                code, texte, fin = _http_stream(f"{self.base}/chat/completions",
+                                                corps | {"stream": True},
+                                                {"Authorization": f"Bearer {self.cle}"},
+                                                on_delta=on_delta)
+                if code == 200 and texte:
+                    with self._verrou:
+                        self._appels += 1
+                        self.derniere_finish = fin
+                    return texte
+            except (urllib.error.URLError, TimeoutError, OSError, ValueError):
+                pass                        # on retombe sur l'appel non streame
         derniere = ""
         for essai in range(tentatives):
             try:
@@ -420,18 +471,20 @@ class Trace:
     dossier: Path
     etapes: list[dict] = field(default_factory=list)
     debut: float = field(default_factory=time.time)
+    _verrou: Any = field(default_factory=threading.Lock, repr=False, compare=False)
 
     def ajoute(self, etape: str, acteur: str, detail: str = "", **extra: Any) -> dict:
-        evt = {
-            "n": len(self.etapes) + 1,
-            "etape": etape,
-            "acteur": acteur,
-            "heure": horodate(),
-            "ecoule_s": round(time.time() - self.debut, 2),
-            "detail": detail,
-            **extra,
-        }
-        self.etapes.append(evt)
+        with self._verrou:          # volets traites en parallele : numero et ordre coherents
+            evt = {
+                "n": len(self.etapes) + 1,
+                "etape": etape,
+                "acteur": acteur,
+                "heure": horodate(),
+                "ecoule_s": round(time.time() - self.debut, 2),
+                "detail": detail,
+                **extra,
+            }
+            self.etapes.append(evt)
         dire(etape, f"{acteur} — {detail}" if detail else acteur)
         return evt
 

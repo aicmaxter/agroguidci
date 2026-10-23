@@ -8,7 +8,7 @@
   "use strict";
 
   var CLE_FIL = "agro.conversation.v1";
-  var INTERVALLE = 2500;
+  var INTERVALLE = 2000;      // cadence de rafraîchissement du fil pendant la rédaction
   var ATTENTE_MAX = 5 * 60 * 1000;
 
   var dialogue, fil, formulaire, zone, bouton, etat, titreCulture;
