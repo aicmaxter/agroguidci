@@ -1173,6 +1173,10 @@ html, body { max-width: 100%; }
 .chat-systeme { align-self: center; background: #fff5e0; color: #6b4a00; font-size: .84rem; }
 .chat-auteur { margin: 0 0 .25rem; font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; opacity: .75; }
 .chat-texte { white-space: pre-wrap; overflow-wrap: anywhere; }
+.chat-texte strong { font-weight: 650; }
+.chat-texte em { font-style: italic; }
+.chat-texte code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .92em;
+  background: rgba(11, 58, 34, .08); border-radius: 4px; padding: .05em .3em; }
 .chat-badge { margin-left: .45rem; padding: .05rem .4rem; border-radius: 999px; font-size: .62rem;
   letter-spacing: .04em; text-transform: none; }
 .chat-badge.attente { background: #e6f2d8; color: #2f5d17; }

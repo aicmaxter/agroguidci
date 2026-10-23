@@ -458,6 +458,16 @@ def _statut_message(etat: str | None) -> str:
             "ECHEC_OUTIL": "echec"}.get(etat or "", "echec")
 
 
+def _tronquer_reponse(texte: str) -> str:
+    """Borne la réponse publiée dans le fil (conv.MAX_REPONSE), coupée sur un mot."""
+    texte = (texte or "").strip()
+    if len(texte) <= conv.MAX_REPONSE:
+        return texte
+    suffixe = "\n\n… (réponse abrégée)"
+    coupe = texte[: conv.MAX_REPONSE - len(suffixe) - 2].rsplit(" ", 1)[0]
+    return (coupe or texte[: conv.MAX_REPONSE - len(suffixe) - 2]) + suffixe
+
+
 def _executer_message(cid: str, mid: str, texte: str, profil: Profil | None) -> None:
     """Exécute une demande de chat et publie la réponse dans le fil."""
     if not _VERROU.acquire(timeout=BUDGET_S):
@@ -469,21 +479,34 @@ def _executer_message(cid: str, mid: str, texte: str, profil: Profil | None) -> 
         resultat = coord.traiter(texte, None, None)
         corps = _enveloppe(texte, profil, resultat, 0.0)
         etat = corps.get("etat_final")
-        conv.repondre(cid, mid, corps["rapport"]["reponse"][:4000], _statut_message(etat),
+        reponse = _tronquer_reponse((corps.get("rapport") or {}).get("reponse") or "")
+        conv.repondre(cid, mid, reponse, _statut_message(etat),
                       mission_id=corps.get("id"),
                       sources=(corps.get("rapport") or {}).get("sources") or [])
-        journalise(evenement="chat_reponse", id=corps.get("id"), etat=etat)
+        journalise(evenement="chat_reponse", id=corps.get("id"), etat=etat,
+                   caracteres=len(reponse))
     except RuntimeError:
-        conv.repondre(cid, mid, "Le moteur de l'agent agronome est indisponible : orchestrateur "
-                      "ou agents non démarrés. Réessayez plus tard.", "echec",
-                      erreur="moteur indisponible")
         journalise(evenement="chat_moteur_indisponible")
+        _publier_echec(cid, mid, "Le moteur de l'agent agronome est indisponible : orchestrateur "
+                       "ou agents non démarrés. Réessayez plus tard.", "moteur indisponible")
     except Exception as e:
-        conv.repondre(cid, mid, "Une erreur technique est survenue : aucune réponse n'a été produite.",
-                      "echec", erreur=f"erreur du moteur ({type(e).__name__})")
-        journalise(evenement="chat_erreur", type=type(e).__name__)
+        journalise(evenement="chat_erreur", type=type(e).__name__, detail=str(e)[:200])
+        _publier_echec(cid, mid, "Une erreur technique est survenue : aucune réponse n'a été "
+                       "produite.", f"erreur du moteur ({type(e).__name__})")
     finally:
         _VERROU.release()
+
+
+def _publier_echec(cid: str, mid: str, texte: str, erreur: str) -> None:
+    """Publie un échec sans jamais laisser la question en « en_cours »."""
+    try:
+        conv.repondre(cid, mid, texte, "echec", erreur=erreur)
+    except Exception as e:                     # dernier recours : clore la question
+        journalise(evenement="chat_echec_publication", type=type(e).__name__)
+        try:
+            conv.maj_message(mid, statut="echec", erreur=erreur[:200])
+        except Exception:
+            pass
 
 
 @app.post("/api/sessions")

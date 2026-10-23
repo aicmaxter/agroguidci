@@ -33,6 +33,7 @@ CHEMIN = Path(os.environ.get("AGRO_CONVERSATIONS_DB") or (ROOT / "data" / "conve
 TTL_CONVERSATION_S = int(float(os.environ.get("AGRO_CONV_TTL_JOURS", "90") or 90) * 86400)
 DUREE_SESSION_S = int(float(os.environ.get("AGRO_SESSION_JOURS", "30") or 30) * 86400)
 MAX_MESSAGE = 2000
+MAX_REPONSE = 4000       # une réponse d'agent dépasse la limite d'une question (plafond du schéma)
 MAX_TOURS = 200          # garde-fou : une conversation ne peut pas grossir sans fin
 
 # Quotas : valeurs proposées, volontairement NON appliquées (validation requise).
@@ -175,8 +176,10 @@ def ajouter_message(conversation_id: str, role: str, contenu: str, statut: str =
     contenu = (contenu or "").strip()
     if not contenu:
         raise ValueError("message vide")
-    if len(contenu) > MAX_MESSAGE:
-        raise ValueError(f"message trop long ({len(contenu)} > {MAX_MESSAGE})")
+    # Une question est bornée à MAX_MESSAGE ; une réponse d'agent peut être plus longue.
+    limite = MAX_REPONSE if role == "assistant" else MAX_MESSAGE
+    if len(contenu) > limite:
+        raise ValueError(f"message trop long ({len(contenu)} > {limite})")
     c = _db()
     if idempotency_key:
         deja = c.execute(

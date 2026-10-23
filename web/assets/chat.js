@@ -27,6 +27,19 @@
     });
   }
 
+  /* Markdown minimal et sûr : le texte est échappé AVANT toute mise en forme,
+   * donc aucun HTML de la réponse ne peut être interprété par le navigateur. */
+  function formater(texte) {
+    var s = echapper(texte);
+    s = s.replace(/^#{1,6}\s*(.+)$/gm, "<strong>$1</strong>");
+    s = s.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+    s = s.replace(/(^|[\s(])\*([^*\n]+)\*/g, "$1<em>$2</em>");
+    s = s.replace(/`([^`\n]+)`/g, "<code>$1</code>");
+    s = s.replace(/^\s*[-*•]\s+/gm, "• ");
+    s = s.replace(/\n{3,}/g, "\n\n");
+    return s.replace(/\n/g, "<br>");
+  }
+
   function lireStockage() {
     try { return localStorage.getItem(CLE_FIL) || ""; } catch (e) { return ""; }
   }
@@ -58,7 +71,7 @@
       else if (message.statut === "echec") badges = '<span class="chat-badge err">échec</span>';
     }
     var sources = "";
-    if (Array.isArray(message.sources) && message.sources.length) {
+    if (role === "agent" && Array.isArray(message.sources) && message.sources.length) {
       sources = '<details class="chat-sources"><summary>Sources (' + message.sources.length + ")</summary><ul>" +
         message.sources.map(function (s) {
           var libelle = typeof s === "string" ? s : (s.titre || s.fichier || s.url || "source");
@@ -68,7 +81,7 @@
     }
     article.innerHTML =
       '<p class="chat-auteur">' + auteur + badges + "</p>" +
-      '<div class="chat-texte">' + echapper(message.contenu).replace(/\n/g, "<br>") + "</div>" +
+      '<div class="chat-texte">' + formater(message.contenu) + "</div>" +
       sources;
     return article;
   }
@@ -85,10 +98,12 @@
     }
     (donnees.messages || []).forEach(function (m) { fil.appendChild(bulle(m)); });
     var dernier = (donnees.messages || []).slice(-1)[0];
-    var attente = dernier && dernier.role === "assistant" && dernier.statut === "en_cours";
+    // Une question posée attend sa réponse : le dernier message est encore « en_cours »,
+    // qu'il soit la question du producteur ou la réponse en cours de l'agent.
+    var attente = !!(dernier && dernier.statut === "en_cours");
     fil.setAttribute("aria-busy", attente ? "true" : "false");
     if (attente) afficherEtat("L'agent agronome travaille…", "attente");
-    else if (dernier && dernier.role === "assistant") afficherEtat("", "");
+    else if (dernier) afficherEtat("", "");
     fil.scrollTop = fil.scrollHeight;
     return attente;
   }

@@ -160,6 +160,25 @@ class TestMessages(Base):
                              headers={"X-Session-Token": jeton})
         self.assertEqual(r.status_code, 422)
 
+    def test_reponse_longue_acceptee(self):
+        """Une réponse d'agent dépasse la limite d'une question sans être perdue."""
+        cid = conv.creer_conversation(conv.creer_session()["session_id"])["conversation_id"]
+        question = conv.ajouter_message(cid, "user", "Comment fertiliser le maïs ?")
+        longue = "Réponse détaillée. " * 150            # ~2850 caractères : > MAX_MESSAGE
+        self.assertGreater(len(longue), conv.MAX_MESSAGE)
+        rep = conv.repondre(cid, question["message_id"], longue, "termine")
+        fil = conv.fil(conv._db().execute(
+            "SELECT session_id FROM conversations WHERE conversation_id=?", (cid,)).fetchone()["session_id"],
+            cid)
+        assistant = [m for m in fil["messages"] if m["role"] == "assistant"]
+        self.assertEqual(len(assistant), 1, fil["messages"])
+        self.assertGreater(len(assistant[0]["contenu"]), conv.MAX_MESSAGE)
+        self.assertEqual(assistant[0]["statut"], "termine")
+        self.assertTrue(rep["message_id"].startswith("msg_"))
+        # au-delà de MAX_REPONSE, on refuse toujours (garde-fou)
+        with self.assertRaises(ValueError):
+            conv.ajouter_message(cid, "assistant", "a" * (conv.MAX_REPONSE + 1))
+
     def test_message_vide_refuse(self):
         jeton = self.session()
         cid = self.conversation(jeton)
