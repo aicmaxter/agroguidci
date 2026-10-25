@@ -256,6 +256,8 @@
         if (attente) suivre();
         else {
           afficherEtat("", "");
+          // la réponse a été débitée côté serveur : on réaffiche le solde réel
+          document.dispatchEvent(new CustomEvent("agro:credits"));
           rendreSuggestions(suggestionsActuelles);   // relancer la conversation
         }
       } catch (e) {
@@ -294,6 +296,12 @@
         ecrireStockage(""); conversationId = null;
         afficherEtat("Votre session a expiré : une nouvelle conversation a été ouverte.", "warn");
         await ouvrirConversation();
+      } else if (e.statut === 402) {
+        // Refus serveur, avant toute exécution : aucune réponse, donc aucun débit.
+        afficherEtat(e.message + " Les packs de crédits ne sont pas encore en vente.", "warn");
+        document.dispatchEvent(new CustomEvent("agro:credits"));
+        var lien = document.getElementById("creditsRecharge");
+        if (lien) lien.focus();
       } else {
         afficherEtat("Envoi impossible : " + e.message, "err");
       }
@@ -331,6 +339,8 @@
     if (typeof dialogue.showModal === "function") dialogue.showModal();
     else dialogue.setAttribute("open", "open");
     dialogue.classList.add("ouvert");
+    // solde rafraîchi à l'ouverture (le serveur attribue le lot de la période si besoin)
+    document.dispatchEvent(new CustomEvent("agro:credits"));
     rendreSuggestions(options.suggestions && options.suggestions.length
       ? options.suggestions : SUGGESTIONS_DEFAUT);
     afficherEtat("Connexion à l'agent agronome…", "attente");
@@ -370,6 +380,17 @@
           localite: declencheur.getAttribute("data-localite") || null,
         });
       });
+    });
+
+    // Le formulaire du panneau Conseil reprend sa question ici : un seul chemin
+    // vers l'agent, donc un seul débit de crédit.
+    document.addEventListener("agro:question", function (e) {
+      var d = e.detail || {};
+      ouvrir({ localite: d.localite || null });
+      if (zone && d.texte) {
+        zone.value = d.texte;
+        zone.focus();
+      }
     });
 
     var fermeture = $("chatFermer");

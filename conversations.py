@@ -38,6 +38,16 @@ MAX_REPONSE = LIMITE_CONTENU
 MAX_TOURS = 200          # garde-fou : une conversation ne peut pas grossir sans fin
 VERSION_SCHEMA = 2       # 2 : limite de contenu 4000 -> LIMITE_CONTENU (migration ci-dessous)
 
+# ---------------------------------------------------------------- crédits
+# 15 crédits gratuits par fenêtre de 7 h, renouvelés automatiquement au passage de
+# fenêtre (comportement retenu : l'ancien quota se remettait déjà à zéro sans action
+# de l'utilisateur). Calcul en UTC, idempotent par (session, période).
+CREDITS_GRATUITS = int(os.environ.get("AGRO_CREDITS_GRATUITS", "15") or 15)
+PERIODE_CREDITS_S = int(float(os.environ.get("AGRO_CREDITS_PERIODE_H", "7") or 7) * 3600)
+COUT_CONSULTATION = int(os.environ.get("AGRO_CREDITS_COUT", "1") or 1)
+MAX_CREDITS_ACHAT = 100000   # garde-fou de saisie, jamais atteint par les packs publics
+
+
 # Quotas : valeurs proposées, volontairement NON appliquées (validation requise).
 QUOTAS_PROPOSES = {
     "messages_par_session_heure": 20,
@@ -95,6 +105,25 @@ CREATE TABLE IF NOT EXISTS conversations (
 );
 CREATE INDEX IF NOT EXISTS ix_conv_session ON conversations(session_id, updated_at DESC);
 CREATE INDEX IF NOT EXISTS ix_conv_expire  ON conversations(expires_at);
+
+-- Journal des mouvements de crédits : la seule source de vérité du solde.
+-- 'gratuit' : lot de la fenêtre courante (periode = index de fenêtre UTC) ;
+-- 'achete'  : crédits payés, sans expiration, consommés après les gratuits.
+CREATE TABLE IF NOT EXISTS credits (
+  credit_id   TEXT PRIMARY KEY,
+  session_id  TEXT NOT NULL REFERENCES sessions(session_id) ON DELETE CASCADE,
+  bucket      TEXT NOT NULL CHECK (bucket IN ('gratuit','achete')),
+  delta       INTEGER NOT NULL,
+  raison      TEXT NOT NULL,
+  reference   TEXT,
+  periode     INTEGER,
+  created_at  INTEGER NOT NULL
+);
+CREATE UNIQUE INDEX IF NOT EXISTS ux_credits_lot
+  ON credits(session_id, periode) WHERE raison = 'gratuit_periode';
+CREATE UNIQUE INDEX IF NOT EXISTS ux_credits_debit
+  ON credits(session_id, reference) WHERE raison = 'consultation';
+CREATE INDEX IF NOT EXISTS ix_credits_session ON credits(session_id, created_at);
 """ + _DDL_MESSAGES.format(ifnot="IF NOT EXISTS ", table="messages", limite=LIMITE_CONTENU) + _INDEX_MESSAGES
 
 _connexion: sqlite3.Connection | None = None
@@ -301,6 +330,125 @@ def fil(session_id: str, conversation_id: str) -> dict[str, Any] | None:
             for m in msgs
         ],
     }
+
+
+def periode_courante(now: int | None = None) -> int:
+    """Index de la fenêtre de crédits gratuits (UTC, 7 h par défaut)."""
+    return int((now if now is not None else time.time()) // PERIODE_CREDITS_S)
+
+
+def _lot_gratuit(session_id: str, now: int) -> int:
+    """Attribue le lot gratuit de la fenêtre courante — idempotent.
+
+    L'index unique partiel `(session_id, periode) WHERE raison='gratuit_periode'`
+    garantit qu'une même fenêtre ne peut pas être créditée deux fois, même sous
+    requêtes simultanées : le second INSERT est ignoré.
+    """
+    periode = periode_courante(now)
+    c = _db()
+    c.execute(
+        "INSERT OR IGNORE INTO credits(credit_id, session_id, bucket, delta, raison, reference, periode, created_at) "
+        "VALUES(?, ?, 'gratuit', ?, 'gratuit_periode', NULL, ?, ?)",
+        ("crt_" + uuid.uuid4().hex, session_id, CREDITS_GRATUITS, periode, now))
+    c.commit()
+    return periode
+
+
+def solde(session_id: str, now: int | None = None) -> dict[str, Any]:
+    """Solde réel calculé depuis le journal des mouvements (jamais depuis le navigateur)."""
+    now = int(now if now is not None else time.time())
+    periode = _lot_gratuit(session_id, now)
+    c = _db()
+    gratuits = c.execute(
+        "SELECT COALESCE(SUM(delta), 0) FROM credits WHERE session_id=? AND bucket='gratuit' AND periode=?",
+        (session_id, periode)).fetchone()[0] or 0
+    achetes = c.execute(
+        "SELECT COALESCE(SUM(delta), 0) FROM credits WHERE session_id=? AND bucket='achete'",
+        (session_id,)).fetchone()[0] or 0
+    gratuits, achetes = max(0, gratuits), max(0, achetes)
+    fin = (periode + 1) * PERIODE_CREDITS_S
+    return {
+        "gratuits": gratuits,
+        "achetes": achetes,
+        "total": gratuits + achetes,
+        "lot_gratuit": CREDITS_GRATUITS,
+        "periode_heures": round(PERIODE_CREDITS_S / 3600, 2),
+        "periode": periode,
+        "periode_debut": periode * PERIODE_CREDITS_S,
+        "renouvellement_at": fin,
+        "secondes_avant_renouvellement": max(0, fin - now),
+        "cout_consultation": COUT_CONSULTATION,
+        "serveur_maintenant": now,
+    }
+
+
+def deja_debite(session_id: str, reference: str) -> bool:
+    """Vrai si cette référence (message_id) a déjà été débitée."""
+    row = _db().execute(
+        "SELECT 1 FROM credits WHERE session_id=? AND reference=? AND raison='consultation'",
+        (session_id, reference)).fetchone()
+    return bool(row)
+
+
+def consommer(session_id: str, reference: str, cout: int | None = None) -> dict[str, Any] | None:
+    """Débite une consultation. Renvoie le solde, ou None si le solde est insuffisant.
+
+    - un seul débit par `reference` (contrainte UNIQUE partielle) : un renvoi de la
+      même requête ne peut pas débiter deux fois ;
+    - le débit est conditionné, dans la requête SQL elle-même, à un solde suffisant :
+      le solde ne peut pas devenir négatif ;
+    - les crédits gratuits de la fenêtre sont consommés avant les crédits achetés.
+    """
+    cout = COUT_CONSULTATION if cout is None else max(1, int(cout))
+    now = int(time.time())
+    periode = _lot_gratuit(session_id, now)
+    c = _db()
+    if deja_debite(session_id, reference):
+        return solde(session_id, now)
+    for bucket, garde in (
+        ("gratuit", "SELECT COALESCE(SUM(delta),0) FROM credits WHERE session_id=? AND bucket='gratuit' AND periode=?"),
+        ("achete", "SELECT COALESCE(SUM(delta),0) FROM credits WHERE session_id=? AND bucket='achete'"),
+    ):
+        params_garde = (session_id, periode) if bucket == "gratuit" else (session_id,)
+        insere = c.execute(
+            "INSERT INTO credits(credit_id, session_id, bucket, delta, raison, reference, periode, created_at) "
+            "SELECT ?, ?, ?, ?, 'consultation', ?, ?, ? WHERE (" + garde + ") >= ?",
+            ("crt_" + uuid.uuid4().hex, session_id, bucket, -cout, reference, periode, now,
+             *params_garde, cout)).rowcount
+        c.commit()
+        if insere:
+            return solde(session_id, now)
+    return None
+
+
+def historique(session_id: str, limite: int = 50) -> list[dict[str, Any]]:
+    """Mouvements récents (trace auditable : jamais de donnée de paiement ici)."""
+    rows = _db().execute(
+        "SELECT bucket, delta, raison, reference, periode, created_at FROM credits "
+        "WHERE session_id=? ORDER BY created_at DESC, rowid DESC LIMIT ?",
+        (session_id, max(1, min(200, int(limite))))).fetchall()
+    return [dict(r) for r in rows]
+
+
+def ajouter_credits_achetes(session_id: str, quantite: int, reference: str) -> dict[str, Any]:
+    """Crédite un achat CONFIRMÉ (appelé uniquement par un webhook vérifié).
+
+    Idempotent : la même référence de paiement ne crédite qu'une fois.
+    """
+    quantite = int(quantite)
+    if quantite <= 0 or quantite > MAX_CREDITS_ACHAT:
+        raise ValueError("quantité de crédits invalide")
+    now = int(time.time())
+    c = _db()
+    if c.execute("SELECT 1 FROM credits WHERE session_id=? AND reference=? AND raison='achat'",
+                 (session_id, reference)).fetchone():
+        return solde(session_id, now)
+    c.execute(
+        "INSERT INTO credits(credit_id, session_id, bucket, delta, raison, reference, periode, created_at) "
+        "VALUES(?, ?, 'achete', ?, 'achat', ?, NULL, ?)",
+        ("crt_" + uuid.uuid4().hex, session_id, quantite, reference, now))
+    c.commit()
+    return solde(session_id, now)
 
 
 def purger_expire(limite: int = 500) -> dict[str, int]:

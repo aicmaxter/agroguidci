@@ -555,6 +555,11 @@ def _statut_message(etat: str | None) -> str:
             "ECHEC_OUTIL": "echec"}.get(etat or "", "echec")
 
 
+# Une consultation n'est débitée que si l'agent a réellement répondu : une
+# clarification (il manque une information) ou un échec restent gratuits.
+STATUTS_DEBITES = {"termine", "escalade"}
+
+
 def _tronquer_reponse(texte: str) -> str:
     """Borne la réponse publiée dans le fil (conv.MAX_REPONSE), coupée sur un mot."""
     texte = (texte or "").strip()
@@ -596,7 +601,8 @@ def _publier_avancement(cid: str, contenu: str, state: dict) -> None:
         journalise(evenement="chat_avancement_ignore", type=type(e).__name__)
 
 
-def _executer_message(cid: str, mid: str, texte: str, profil: Profil | None) -> None:
+def _executer_message(cid: str, mid: str, texte: str, profil: Profil | None,
+                      sid: str | None = None) -> None:
     """Exécute une demande de chat et publie la réponse dans le fil."""
     if not _VERROU.acquire(timeout=BUDGET_S):
         conv.repondre(cid, mid, "Le moteur est occupé : réessayez dans un instant.", "echec",
@@ -610,10 +616,17 @@ def _executer_message(cid: str, mid: str, texte: str, profil: Profil | None) -> 
         corps = _enveloppe(texte, profil, resultat, 0.0)
         etat = corps.get("etat_final")
         reponse = _tronquer_reponse((corps.get("rapport") or {}).get("reponse") or "")
-        conv.repondre(cid, mid, reponse, _statut_message(etat),
+        statut = _statut_message(etat)
+        conv.repondre(cid, mid, reponse, statut,
                       mission_id=corps.get("id"),
                       sources=(corps.get("rapport") or {}).get("sources") or [],
                       assistant_id=avancement.get("id"))
+        # Débit APRÈS la réponse, une seule fois par message (idempotent), et
+        # seulement si l'agent a réellement répondu.
+        if sid and statut in STATUTS_DEBITES and reponse.strip():
+            reste = conv.consommer(sid, mid)
+            journalise(evenement="credits_debite", message=mid,
+                       reste=(reste or {}).get("total"), statut=statut)
         journalise(evenement="chat_reponse", id=corps.get("id"), etat=etat,
                    caracteres=len(reponse), avancement=bool(avancement.get("id")))
     except RuntimeError:
@@ -652,6 +665,23 @@ def nouvelle_session(_: None = Depends(garde_cle)) -> dict[str, Any]:
             "expires_at": s["expires_at"]}
 
 
+@app.get("/api/credits")
+def etat_credits(x_session_token: str | None = Header(default=None, alias="X-Session-Token"),
+                 _: None = Depends(garde_cle)) -> dict[str, Any]:
+    """Solde réel du compte anonyme (calculé en base, jamais depuis le navigateur).
+
+    Le lot gratuit de la période courante est attribué ici de façon idempotente :
+    recharger la page ou rejouer la requête ne crédite pas deux fois.
+    """
+    sid = _session(x_session_token)
+    s = conv.solde(sid)
+    s["packs"] = [
+        {"id": "decouverte", "nom": "Pack Découverte", "prix_fcfa": 599, "credits": 30, "disponible": False},
+        {"id": "avance", "nom": "Pack Avancé", "prix_fcfa": 3999, "credits": 200, "disponible": False},
+    ]
+    return s
+
+
 @app.post("/api/conversations")
 def nouvelle_conversation(corps: NouvelleConversation | None = None,
                           x_session_token: str | None = Header(default=None, alias="X-Session-Token"),
@@ -682,6 +712,14 @@ def envoyer_message(cid: str, d: NouveauMessage,
     sid = _session(x_session_token)
     if not conv.conversation_de(sid, cid):
         raise HTTPException(status_code=404, detail="conversation inconnue")
+    # Solde vérifié côté serveur AVANT toute exécution : aucun appel au moteur,
+    # aucun message créé si le compte n'a plus de crédit.
+    etat_credits = conv.solde(sid)
+    if etat_credits["total"] < etat_credits["cout_consultation"]:
+        return JSONResponse(status_code=402, content={
+            "erreur": "Crédits épuisés : les 15 crédits gratuits reviennent à la prochaine période.",
+            "credits": etat_credits,
+        })
     contexte = []
     culture = (d.culture_id or "").strip() or culture_detectee(d.texte) or ""
     if culture:
@@ -706,7 +744,8 @@ def envoyer_message(cid: str, d: NouveauMessage,
     if msg.get("rejoue"):
         return JSONResponse(status_code=200, content={"message_id": msg["message_id"],
                                                       "statut": msg["statut"], "rejoue": True})
-    thread = threading.Thread(target=_executer_message, args=(cid, msg["message_id"], texte, None), daemon=True)
+    thread = threading.Thread(target=_executer_message,
+                              args=(cid, msg["message_id"], texte, None, sid), daemon=True)
     thread.start()
     journalise(evenement="chat_demande", conversation=cid, message=msg["message_id"])
     return JSONResponse(status_code=202, content={"message_id": msg["message_id"],

@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="assets/hero.webp" type="image/webp" fetchpriority="high">
-<link rel="stylesheet" href="assets/site.css?v=14">
+<link rel="stylesheet" href="assets/site.css?v=15">
 </head>
 <body>
 <a class="skip" href="#app">Aller au contenu</a>
@@ -36,7 +36,6 @@
       <a href="#tarifs">Tarifs</a>
       <a href="confidentialite.html">Confidentialité</a>
     </nav>
-    <a class="btn btn-primary header-cta" href="#conseil" data-tab="conseil">Conseil gratuit</a>
     <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMobile" aria-label="Ouvrir le menu">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg>
     </button>
@@ -71,7 +70,7 @@
     </div>
     <div class="wrap app-hero-grid">
       <div class="hero-copy">
-        <p class="badge-pill"><span class="dot" aria-hidden="true"></span> Gratuit chaque jour &middot; sans carte bancaire</p>
+        <p class="badge-pill"><span class="dot" aria-hidden="true"></span> 15 cr&eacute;dits gratuits toutes les 7 heures &middot; sans carte bancaire</p>
         <h1 class="hero-title"><span class="mot"><span style="--i:0">Le bon conseil</span></span> <span class="mot"><span style="--i:1">agricole,</span></span> <span class="mot accent"><span style="--i:2">au bon moment</span></span></h1>
         <p class="lead">Une application, quatre onglets : conseil, cultures et &eacute;pices, prix du kilo, actualit&eacute;s. Les agents experts r&eacute;pondent avec des donn&eacute;es r&eacute;elles, des sources et leurs limites.</p>
         <div class="hero-actions">
@@ -143,10 +142,10 @@
       </div>
 
       <form class="panel-form" id="conseilForm" novalidate>
-        <div class="credits-bar" id="creditsBar">
-          <span class="pill">Crédits du jour : <strong id="creditsCount">2</strong></span>
-          <span id="creditsTexte">Gratuit chaque jour : 2 conseils, remis à zéro chaque matin.</span>
-          <a href="#tarifs" id="creditsRecharge">Crédits : 599 FCFA les 10</a>
+        <div class="credits-bar" id="creditsBar" aria-live="polite">
+          <span class="pill">Crédits : <strong id="creditsCount">&mdash;</strong></span>
+          <span id="creditsTexte">Solde en cours de chargement&hellip;</span>
+          <a href="#tarifs" id="creditsRecharge">Packs de cr&eacute;dits</a>
         </div>
 
         <div class="field-grid">
@@ -178,7 +177,7 @@
         </div>
 
         <div class="form-actions">
-          <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">Demander un conseil</button>
+          <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">Envoyer ma question</button>
           <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
         </div>
 
@@ -539,61 +538,60 @@
     </div>
   </section>
 
-  <!-- ===================== TARIFS ===================== -->
+  <!-- ===================== OFFRES ===================== -->
   <section class="section" id="tarifs">
     <div class="wrap">
       <div class="panel-intro reveal">
-        <span class="eyebrow">Accès gratuit chaque jour</span>
-        <h2>Gratuit tous les jours. Deux formules payantes, pas plus.</h2>
-        <p>Chaque personne dispose de 2 conseils gratuits par jour, sans carte bancaire et sans inscription. Au-delà : un pack de crédits à l'usage, ou un suivi personnalisé.</p>
+        <span class="eyebrow">Crédits gratuits et packs</span>
+        <h2>15 crédits gratuits toutes les 7 heures. Deux packs, pas plus.</h2>
+        <p>Une consultation coûte 1 crédit, débité seulement quand l'agent a produit une réponse. Au-delà des 15 crédits offerts, deux packs à l'usage — sans abonnement.</p>
       </div>
 
-      <div class="plans plans-3">
-        <article class="plan reveal">
-          <h3>Gratuit</h3>
-          <p class="who">Pour tout le monde, chaque jour.</p>
-          <p class="price"><span class="amount">0</span><span class="cur">FCFA</span></p>
-          <p class="per">2 conseils par jour · remis à zéro chaque matin</p>
-          <ul>
-            <li>2 conseils IA par jour, sans carte bancaire</li>
-            <li>Météo 12 mois et prévision 7 jours</li>
-            <li>Calculs de marge, densité et semences</li>
-            <li>Prix du marché, cultures et épices</li>
-          </ul>
-          <a class="btn btn-primary btn-block plan-cta" href="#conseil" data-tab="conseil">Demander mon conseil du jour</a>
-        </article>
+      <div class="gratuit-bande reveal">
+        <div class="gratuit-chiffre">
+          <strong>15</strong>
+          <span>crédits gratuits</span>
+        </div>
+        <div class="gratuit-texte">
+          <p><strong>Renouvel&eacute;s automatiquement toutes les 7 heures.</strong> Sans carte bancaire, sans compte.
+          Les cr&eacute;dits non utilis&eacute;s d'une p&eacute;riode ne sont pas report&eacute;s : le lot repart &agrave; 15 &agrave; chaque nouvelle p&eacute;riode.</p>
+          <p class="gratuit-detail">1 cr&eacute;dit par consultation, d&eacute;bit&eacute; uniquement lorsque l'agent a r&eacute;pondu. Une question rest&eacute;e sans r&eacute;ponse ne co&ucirc;te rien.</p>
+        </div>
+      </div>
 
-        <article class="plan reveal">
-          <h3>Crédits</h3>
-          <p class="who">Pour payer à l'usage, sans abonnement.</p>
+      <div class="plans plans-2">
+        <article class="plan reveal" data-pack="decouverte">
+          <h3>Pack D&eacute;couverte</h3>
+          <p class="who">Pour payer &agrave; l'usage, sans abonnement.</p>
           <p class="price"><span class="amount">599</span><span class="cur">FCFA</span></p>
-          <p class="per">les 10 conseils · valables 12 mois</p>
+          <p class="per"><strong>30 cr&eacute;dits</strong> &middot; environ 19,97 FCFA le cr&eacute;dit</p>
           <ul>
-            <li>10 conseils à utiliser quand vous voulez</li>
+            <li>30 consultations de l'agent agronome</li>
             <li>Ni abonnement, ni reconduction</li>
-            <li>S'ajoutent aux 2 conseils gratuits du jour</li>
-            <li>Paiement mobile money (Orange Money, MTN, Wave)</li>
+            <li>S'ajoutent aux 15 cr&eacute;dits gratuits</li>
+            <li>Les cr&eacute;dits achet&eacute;s n'expirent pas</li>
           </ul>
-          <a class="btn btn-outline btn-block plan-cta" href="#contact">Acheter 10 crédits</a>
+          <button class="btn btn-outline btn-block plan-cta" type="button" data-achat="decouverte" disabled aria-describedby="paiementNote">Acheter des cr&eacute;dits</button>
+          <p class="achat-note">Achat en ligne pas encore disponible.</p>
         </article>
 
-        <article class="plan featured reveal">
-          <span class="tag">Suivi</span>
-          <h3>Suivi personnalisé</h3>
-          <p class="who">Pour être accompagné, pas seulement dépanné.</p>
-          <p class="price"><span class="amount">9 900</span><span class="cur">FCFA</span></p>
-          <p class="per">par mois, sans engagement</p>
+        <article class="plan reveal" data-pack="avance">
+          <h3>Pack Avanc&eacute;</h3>
+          <p class="who">Pour un usage r&eacute;gulier sur la campagne.</p>
+          <p class="price"><span class="amount">3&nbsp;999</span><span class="cur">FCFA</span></p>
+          <p class="per"><strong>200 cr&eacute;dits</strong> &middot; environ 20 FCFA le cr&eacute;dit</p>
           <ul>
-            <li>Conseils illimités</li>
-            <li>2 parcelles ou ateliers suivis, avec historique</li>
-            <li>Calendrier cultural personnalisé et rappels</li>
-            <li>Revue mensuelle avec un conseiller</li>
+            <li>200 consultations de l'agent agronome</li>
+            <li>Ni abonnement, ni reconduction</li>
+            <li>S'ajoutent aux 15 cr&eacute;dits gratuits</li>
+            <li>Les cr&eacute;dits achet&eacute;s n'expirent pas</li>
           </ul>
-          <a class="btn btn-primary btn-block plan-cta" href="#contact">Choisir le suivi</a>
+          <button class="btn btn-outline btn-block plan-cta" type="button" data-achat="avance" disabled aria-describedby="paiementNote">Acheter des cr&eacute;dits</button>
+          <p class="achat-note">Achat en ligne pas encore disponible.</p>
         </article>
       </div>
 
-      <p class="pricing-note reveal"><span class="momo">Orange Money · MTN MoMo · Wave</span> — facture disponible. Tarifs de lancement indicatifs, hors taxes. Le quota gratuit est réinitialisé chaque jour.</p>
+      <p class="pricing-note reveal" id="paiementNote"><strong>Achat en ligne pas encore disponible.</strong> Aucun paiement n'est ouvert aujourd'hui : les deux packs sont affich&eacute;s &agrave; titre informatif et aucun cr&eacute;dit n'est ajout&eacute; sur simple clic. Le paiement mobile money (Orange Money, MTN MoMo, Wave) sera activ&eacute; apr&egrave;s validation d'un parcours v&eacute;rifi&eacute; &mdash; les cr&eacute;dits ne seront alors ajout&eacute;s qu'apr&egrave;s confirmation du prestataire. Prix unitaires indicatifs, hors taxes.</p>
     </div>
   </section>
 
@@ -606,12 +604,12 @@
       </div>
       <div class="faq reveal">
         <details>
-          <summary>Le gratuit, c'est vraiment tous les jours ?</summary>
-          <p>Oui : 2 conseils par jour, sans carte bancaire ni inscription, remis à zéro chaque matin. Au-delà, deux formules seulement : 10 crédits à 599 FCFA (valables 12 mois) ou le suivi personnalisé à 9 900 FCFA par mois.</p>
+          <summary>Comment fonctionnent les 15 crédits gratuits ?</summary>
+          <p>Chaque compte re&ccedil;oit 15 cr&eacute;dits, renouvel&eacute;s automatiquement toutes les 7 heures, sans carte bancaire ni inscription. Une consultation co&ucirc;te 1 cr&eacute;dit, d&eacute;bit&eacute; seulement quand l'agent a produit une r&eacute;ponse : une question sans r&eacute;ponse ne co&ucirc;te rien. Les cr&eacute;dits non utilis&eacute;s d'une p&eacute;riode ne sont pas report&eacute;s.</p>
         </details>
         <details>
-          <summary>Pourquoi seulement deux formules payantes ?</summary>
-          <p>Parce qu'un producteur doit pouvoir décider vite : payer à l'usage quand il a un coup de feu, ou être suivi dans la durée. Les offres entreprises se traitent au cas par cas par e-mail, sans figurer dans la grille.</p>
+          <summary>Pourquoi seulement deux packs ?</summary>
+          <p>Parce qu'un producteur doit pouvoir d&eacute;cider vite : 15 cr&eacute;dits gratuits pour un d&eacute;pannage, puis un pack &agrave; l'usage quand le besoin est plus fr&eacute;quent. Pas d'abonnement, pas de reconduction. Les offres sur mesure se traitent au cas par cas par e-mail, sans figurer dans la grille.</p>
         </details>
         <details>
           <summary>Les épices font-elles partie des cultures ?</summary>
@@ -632,8 +630,8 @@
   <section class="section-tight" id="contact">
     <div class="wrap">
       <div class="cta-band reveal">
-        <h2>Deux conseils gratuits vous attendent aujourd'hui.</h2>
-        <p>Sans inscription, sans carte bancaire. Posez votre question à l'agent agronome : il répond avec ses sources, ses hypothèses et ses limites.</p>
+        <h2>Vos 15 crédits gratuits vous attendent.</h2>
+        <p>Sans inscription, sans carte bancaire. Posez votre question &agrave; l'agent agronome : il r&eacute;pond avec ses sources, ses hypoth&egrave;ses et ses limites.</p>
         <div class="hero-actions hero-actions-centre">
           <button class="btn btn-primary btn-lg btn-attention" type="button" id="ctaPoserQuestion" data-chat="ouvrir" data-tab="conseil">Poser ma question</button>
         </div>
@@ -719,8 +717,8 @@
 
 <script src="assets/geo.js?v=13"></script>
 <script src="assets/motion.js?v=13"></script>
-<script src="assets/ui.js?v=13"></script>
+<script src="assets/ui.js?v=14"></script>
 <script src="assets/app.js?v=13"></script>
-<script src="assets/chat.js?v=19"></script>
+<script src="assets/chat.js?v=20"></script>
 </body>
 </html>

@@ -11,6 +11,7 @@ Aucun réseau, aucun appel de modèle. Trois familles de contrôles observables 
 from __future__ import annotations
 
 import json
+import html
 import os
 import sys
 import tempfile
@@ -95,21 +96,24 @@ verifie("journal : effacement réel garde la ligne récente",
 verifie("journal : sauvegarde créée", bool(list(purge.OUT.glob("journal-experts.jsonl.bak-*"))))
 
 # ------------------------------------------------------------------ 3. page d'accueil
-accueil = (ROOT / "web" / "index.html").read_text(encoding="utf-8")
+accueil = html.unescape((ROOT / "web" / "index.html").read_text(encoding="utf-8"))
 css = (ROOT / "web" / "assets" / "site.css").read_text(encoding="utf-8")
 verifie("accueil : onglet actualités", 'id="panel-actus"' in accueil and 'class="actu reveal' in accueil)
 verifie("accueil : onglet prix au kilo", 'id="panel-prix"' in accueil and "prixBody" in accueil)
 verifie("accueil : onglet cultures", 'id="panel-cultures"' in accueil and "Voandzou" in accueil)
-verifie("accueil : deux offres payantes + gratuit",
-        all(x in accueil for x in ("Gratuit", "Crédits", "Suivi personnalisé")) and "Professionnels" not in accueil)
-verifie("accueil : crédits à 599 FCFA", "599" in accueil and "10 conseils" in accueil)
+verifie("accueil : deux packs + crédits gratuits, sans suivi",
+        all(x in accueil for x in ("Pack Découverte", "Pack Avancé", "15 crédits gratuits"))
+        and "Suivi personnalisé" not in accueil and "Professionnels" not in accueil)
+verifie("accueil : pack 599 FCFA / 30 crédits et 3 999 FCFA / 200 crédits",
+        "599" in accueil and "30 crédits" in accueil and "200 crédits" in accueil)
 verifie("accueil : consentement explicite", 'id="consent"' in accueil and "confidentialite.html" in accueil)
 verifie("accueil : compteur de crédits", 'id="creditsCount"' in accueil)
 verifie("accueil : plus d'onglets conseillers", "Les 7 agents" not in accueil and "agents-grid" not in accueil)
 verifie("accueil : palette verte", "--green-600" in css and "--orange:" not in css)
 verifie("accueil : fichiers JS chargés", "assets/ui.js" in accueil and "assets/motion.js" in accueil)
-verifie("accueil : quota gratuit quotidien", "chaque jour" in accueil.lower() and "GRATUITS_PAR_JOUR = 2" in
-        (ROOT / "web" / "assets" / "ui.js").read_text(encoding="utf-8"))
+verifie("accueil : solde de crédits tenu par le serveur",
+        "15 crédits gratuits" in accueil and "toutes les 7 heures" in accueil
+        and "/api/credits" in (ROOT / "web" / "assets" / "ui.js").read_text(encoding="utf-8"))
 verifie("accueil : météo temps réel (Open-Meteo)", "api.open-meteo.com" in
         (ROOT / "web" / "assets" / "ui.js").read_text(encoding="utf-8"))
 verifie("accueil : clignotement des nouveautés", "clignote" in css and "flash-card" in accueil)
@@ -132,7 +136,7 @@ verifie("accueil : crédits photo Wikimedia", accueil.count('class="crop-credit"
         accueil.count('class="crop-credit"'))
 verifie("accueil : bandeau temps réel", 'id="prixTicker"' in accueil and "chargerMeteo" in (ROOT / "web" / "assets" / "ui.js").read_text(encoding="utf-8"))
 verifie("accueil : application à onglets", accueil.count('role="tab"') == 4 and accueil.count('role="tabpanel"') == 4)
-verifie("accueil : hero vert", ".hero {" in css and "#0b3a22" in css)
+verifie("accueil : hero nuit de forêt", ".app-hero {" in css and "--forest" in css and "#062b1d" in css)
 verifie("photos présentes sur le disque",
         all((ROOT / "web" / "assets" / "cultures" / f"{c['id']}.jpg").exists() for c in _cultures),
         [c["id"] for c in _cultures if not (ROOT / "web" / "assets" / "cultures" / f"{c['id']}.jpg").exists()])

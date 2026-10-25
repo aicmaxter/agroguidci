@@ -889,7 +889,7 @@ body:has(.app-hero) .site-header:not(.stuck) .header-cta:hover {
   overflow: hidden;
   box-shadow: var(--shadow-xs);
   transition: transform .5s var(--ease), box-shadow .5s var(--ease), border-color .5s var(--ease);
-  animation: carteIn .6s var(--ease) both;
+  animation: carteIn .6s var(--ease) backwards;
   animation-delay: calc(var(--rang, 0) * 45ms);
 }
 .crop:nth-child(1) { --rang: 0; }
@@ -912,6 +912,8 @@ body:has(.app-hero) .site-header:not(.stuck) .header-cta:hover {
 
 /* le reveal JS ne doit pas se battre avec l'animation des cartes */
 .crop.reveal { opacity: 1; transform: none; transition: transform .5s var(--ease), box-shadow .5s var(--ease), border-color .5s var(--ease); }
+/* « backwards » et non « both » : une fois l'animation finie, le survol reprend
+   la main sur transform (sinon le relief au pointeur ne s'applique jamais). */
 
 .crop:hover {
   transform: translateY(-6px) perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
@@ -1613,6 +1615,110 @@ li[data-role="user"] .chat-auteur { color: var(--green-700); }
 .prose, .chat-texte { overflow-wrap: anywhere; }
 [hidden] { display: none !important; }
 
+/* ------------------------------------------------------------------ crédits & offres */
+.credits-bar .pill strong { font-variant-numeric: tabular-nums; }
+.credits-bar.indisponible {
+  background: var(--paper-2);
+  border-color: var(--line);
+  color: var(--muted);
+}
+.credits-bar.epuise { animation: bordureVive 5s ease-in-out infinite; }
+
+/* deux packs, pas trois : la grille suit */
+.plans-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+.gratuit-bande {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  gap: clamp(1rem, 2.5vw, 1.8rem);
+  align-items: center;
+  padding: clamp(1.1rem, 2.4vw, 1.8rem);
+  margin-bottom: 1.3rem;
+  border-radius: var(--r-xl);
+  background:
+    radial-gradient(560px 300px at 0% 0%, rgba(201, 243, 107, .24), transparent 66%),
+    var(--grad-night);
+  color: var(--paper);
+  box-shadow: var(--shadow-md);
+}
+.gratuit-chiffre { text-align: center; }
+.gratuit-chiffre strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 4.6vw, 3.6rem);
+  line-height: 1;
+  color: var(--lime);
+  letter-spacing: -.03em;
+}
+.gratuit-chiffre span {
+  display: block; margin-top: .35rem;
+  font-size: .7rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(250, 247, 239, .68);
+}
+.gratuit-texte p { color: rgba(250, 247, 239, .86); font-size: .94rem; line-height: 1.6; margin: 0 0 .5rem; }
+.gratuit-texte p:last-child { margin-bottom: 0; }
+.gratuit-texte strong { color: #fff; }
+.gratuit-detail { font-size: .82rem; color: rgba(250, 247, 239, .62); }
+
+.plan .achat-note { margin: .7rem 0 0; font-size: .75rem; color: var(--muted); text-align: center; }
+.plan .plan-cta[disabled] {
+  opacity: .5; cursor: not-allowed;
+  transform: none; box-shadow: none; border-style: dashed;
+}
+.plan .plan-cta[disabled]:hover { transform: none; background: transparent; }
+.plan .per strong { color: var(--ink); font-weight: 800; }
+
+/* le panneau de réponse historique n'est plus alimenté : pas de cadre vide */
+.answer:empty { display: none; }
+
+/* ------------------------------------------------------------------ curseur main */
+/* « cursor en forme de doigt » partout où un clic a un effet */
+button,
+[role="tab"],
+[role="button"],
+summary,
+select,
+label.consent,
+.filtre,
+.crop-lien-img,
+.crop-plus a,
+.navlink,
+.legal-sommaire a,
+.chat-suggestions button {
+  cursor: pointer;
+}
+button[disabled],
+.btn[disabled],
+.plan-cta[disabled] { cursor: not-allowed; }
+
+/* ------------------------------------------------------------------ veille animée */
+.veille-note { position: relative; overflow: hidden; }
+.veille-note::after {
+  content: "";
+  position: absolute; inset: 0;
+  pointer-events: none;
+  background: linear-gradient(100deg, transparent 32%, rgba(255, 255, 255, .45) 50%, transparent 68%);
+  transform: translateX(-130%);
+  animation: veilleBalayage 7.5s ease-in-out infinite;
+}
+@keyframes veilleBalayage {
+  0%, 58% { transform: translateX(-130%); }
+  88%, 100% { transform: translateX(130%); }
+}
+.veille-note > * { position: relative; z-index: 1; }
+
+/* les cartes d'actualité entrent en cascade à l'ouverture de l'onglet */
+.actu.reveal { opacity: 1; transform: none; }
+.actu {
+  animation: carteIn .55s var(--ease) backwards;
+}
+.actu:nth-child(1) { animation-delay: .03s; }
+.actu:nth-child(2) { animation-delay: .09s; }
+.actu:nth-child(3) { animation-delay: .15s; }
+.actu:nth-child(4) { animation-delay: .21s; }
+.actu:nth-child(5) { animation-delay: .27s; }
+.actu:nth-child(6) { animation-delay: .33s; }
+
 /* ------------------------------------------------------------------ responsive */
 @media (max-width: 1180px) {
   .crops-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -1661,6 +1767,9 @@ li[data-role="user"] .chat-auteur { color: var(--green-700); }
 @media (max-width: 760px) {
   :root { --h-header: 60px; }
   body { font-size: 15.5px; }
+  .gratuit-bande { grid-template-columns: minmax(0, 1fr); gap: .8rem; }
+  .gratuit-chiffre { display: flex; align-items: baseline; gap: .6rem; text-align: left; }
+  .gratuit-chiffre span { margin-top: 0; }
   .hero-title { font-size: clamp(2rem, 8.6vw, 2.9rem); }
   .hero-mini { grid-template-columns: minmax(0, 1fr); }
   .mini-card { flex-direction: row; align-items: center; }

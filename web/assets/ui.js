@@ -4,9 +4,7 @@
 (function () {
   "use strict";
 
-  var CLE_CREDITS = "agro.credits.v2";
   var CLE_CONSENT = "agro.consentement.v1";
-  var GRATUITS_PAR_JOUR = 2;
   var VILLES = [
     { nom: "Abidjan", lat: 5.354, lon: -4.002 },
     { nom: "Bouaké", lat: 7.690, lon: -5.030 },
@@ -20,7 +18,6 @@
     });
   }
   function fcfa(n) { return Number(n).toLocaleString("fr-FR"); }
-  function aujourdhui() { return new Date().toISOString().slice(0, 10); }
 
   /* ------------------------------------------------------------------ onglets */
   var panneaux = ["conseil", "cultures", "prix", "actus"];
@@ -259,51 +256,70 @@
   setInterval(construireBandeau, 60000);
   setInterval(chargerMeteo, 600000);      // météo rafraîchie toutes les 10 minutes
 
-  /* ------------------------------------------------------------------ quota quotidien */
-  function lireCredits() {
-    var c = { jour: aujourdhui(), gratuits: GRATUITS_PAR_JOUR, payants: 0 };
-    try {
-      var brut = JSON.parse(localStorage.getItem(CLE_CREDITS) || "null");
-      if (brut && typeof brut === "object") c = brut;
-    } catch (e) { /* stockage indisponible : quota par défaut */ }
-    if (c.jour !== aujourdhui()) { c.jour = aujourdhui(); c.gratuits = GRATUITS_PAR_JOUR; }
-    if (typeof c.gratuits !== "number") c.gratuits = GRATUITS_PAR_JOUR;
-    if (typeof c.payants !== "number") c.payants = 0;
-    return c;
-  }
-  function ecrireCredits(c) {
-    try { localStorage.setItem(CLE_CREDITS, JSON.stringify(c)); } catch (e) { /* ignore */ }
-  }
-  function total(c) { return Math.max(0, c.gratuits) + Math.max(0, c.payants); }
+  /* ------------------------------------------------------------------ crédits (serveur) */
+  // Le solde fait foi côté serveur (/api/credits) : ce bloc ne fait que l'afficher.
+  // Aucun crédit n'est accordé, débité ou rechargé depuis le navigateur.
+  var creditsEtat = null;
 
-  function afficherCredits() {
+  function delaiLisible(secondes) {
+    secondes = Math.max(0, Math.round(secondes));
+    var h = Math.floor(secondes / 3600);
+    var m = Math.round((secondes % 3600) / 60);
+    if (h >= 1) return h + " h " + (m < 10 ? "0" + m : m) + " min";
+    if (m >= 1) return m + " min";
+    return "moins d'une minute";
+  }
+
+  function texteCredits(d, reste) {
+    reste = (reste == null) ? d.secondes_avant_renouvellement : reste;
+    var lot = d.lot_gratuit;
+    var renouv = "Renouvellement de " + lot + " crédits gratuits dans " + delaiLisible(reste) + ".";
+    if (d.total <= 0) {
+      return "<strong>Crédits épuisés.</strong> " + renouv + " Les packs ne sont pas encore en vente.";
+    }
+    if (d.achetes > 0) {
+      return d.gratuits + " gratuit(s) + " + d.achetes + " acheté(s) · 1 crédit par consultation. " + renouv;
+    }
+    return d.total + " sur " + lot + " · 1 crédit par consultation. " + renouv;
+  }
+
+  function afficherCredits(d) {
     var barre = document.getElementById("creditsBar");
     var compte = document.getElementById("creditsCount");
-    if (!compte) return;
-    var c = lireCredits(), t = total(c);
-    compte.textContent = t;
-    if (barre) barre.classList.toggle("epuise", t === 0);
     var texte = document.getElementById("creditsTexte");
-    if (texte) {
-      texte.innerHTML = t > 0
-        ? "Gratuit chaque jour : " + Math.max(0, c.gratuits) + "/" + GRATUITS_PAR_JOUR +
-          " aujourd'hui" + (c.payants ? " + " + c.payants + " crédit(s) acheté(s)" : "") + "."
-        : "Quota du jour épuisé. Il revient demain matin — ou rechargez 10 crédits à 599 FCFA.";
+    if (!d) {
+      if (barre) { barre.classList.add("indisponible"); barre.classList.remove("epuise"); }
+      if (texte) texte.textContent = "Solde indisponible pour le moment : le service de crédits ne répond pas.";
+      return;
     }
-    var bouton = document.getElementById("submitBtn");
-    if (bouton) {
-      bouton.disabled = t === 0;
-      bouton.textContent = t === 0 ? "Quota du jour épuisé" : "Demander un conseil";
+    creditsEtat = d;
+    creditsEtat.expire_local = Date.now() + (d.secondes_avant_renouvellement || 0) * 1000;
+    if (compte) compte.textContent = d.total;
+    if (barre) {
+      barre.classList.remove("indisponible");
+      barre.classList.toggle("epuise", d.total <= 0);
     }
+    if (texte) texte.innerHTML = texteCredits(d);
   }
 
-  function consommer() {
-    var c = lireCredits();
-    if (c.gratuits > 0) c.gratuits -= 1;
-    else if (c.payants > 0) c.payants -= 1;
-    ecrireCredits(c);
-    afficherCredits();
+  function chargerCredits() {
+    return fetch("/api/credits", { credentials: "same-origin", cache: "no-store" })
+      .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+      .then(function (d) { afficherCredits(d); return d; })
+      .catch(function () { afficherCredits(null); return null; });
   }
+
+  // Décompte local entre deux appels serveur ; au passage de période, on redemande
+  // le solde (le serveur attribue alors le nouveau lot de 15).
+  setInterval(function () {
+    if (!creditsEtat) return;
+    var reste = (creditsEtat.expire_local - Date.now()) / 1000;
+    if (reste <= 0) { chargerCredits(); return; }
+    var texte = document.getElementById("creditsTexte");
+    if (texte) texte.innerHTML = texteCredits(creditsEtat, reste);
+  }, 30000);
+
+  document.addEventListener("agro:credits", chargerCredits);
 
   /* ------------------------------------------------------------------ consentement + envoi */
   var caseConsent = document.getElementById("consent");
@@ -314,40 +330,49 @@
     });
   }
 
+  // Le formulaire du panneau Conseil ne lance plus une seconde consultation :
+  // il reprend la question (et le contexte saisi) dans la chatbox, seul chemin
+  // vers l'agent — donc seul chemin débité.
   var formulaire = document.getElementById("conseilForm");
   if (formulaire) {
     formulaire.addEventListener("submit", function (e) {
+      e.preventDefault();
+      // app.js écoute aussi « submit » sur ce formulaire : sans cela, la mission
+      // /api/demande partirait en parallèle de la conversation.
+      e.stopImmediatePropagation();
       var statut = document.getElementById("formStatus");
-      if (total(lireCredits()) === 0) {
-        e.preventDefault(); e.stopPropagation();
-        if (statut) { statut.className = "form-status error"; statut.textContent = "Quota du jour épuisé : rechargez 599 FCFA ou revenez demain."; }
+      var question = ((document.getElementById("question") || {}).value || "").trim();
+      if (question.length < 5) {
+        if (statut) { statut.className = "form-status error"; statut.textContent = "Décrivez votre situation en quelques mots (5 caractères minimum)."; }
+        var zone = document.getElementById("question");
+        if (zone) zone.focus();
         return;
       }
       if (caseConsent && !caseConsent.checked) {
-        e.preventDefault(); e.stopPropagation();
         if (statut) { statut.className = "form-status error"; statut.textContent = "Cochez l'accord de traitement des données pour envoyer votre question."; }
         caseConsent.focus();
         return;
       }
-      consommer();
+      var lieu = [];
+      var loc = ((document.getElementById("localite") || {}).value || "").trim();
+      if (loc) lieu.push(loc);
+      ["departement", "region"].forEach(function (id) {
+        var sel = document.getElementById(id);
+        if (sel && sel.selectedIndex > 0) lieu.push(sel.options[sel.selectedIndex].text);
+      });
+      var contexte = [];
+      if (lieu.length) contexte.push("Localité : " + lieu.join(", "));
+      var surface = ((document.getElementById("surface") || {}).value || "").replace(",", ".").trim();
+      if (surface && !isNaN(parseFloat(surface))) contexte.push("Surface : " + parseFloat(surface) + " ha");
+      var texte = question + (contexte.length ? "\n\n" + contexte.join(" · ") : "");
+      document.dispatchEvent(new CustomEvent("agro:question", { detail: { texte: texte } }));
+      if (statut) {
+        statut.className = "form-status";
+        statut.textContent = "Votre question est reprise dans la conversation : appuyez sur Envoyer pour la transmettre à l’agent.";
+      }
     }, true);
   }
 
-  var recharge = document.getElementById("creditsRecharge");
-  if (recharge) {
-    recharge.addEventListener("click", function () {
-      var c = lireCredits();
-      c.payants += 10;
-      ecrireCredits(c);
-      afficherCredits();
-      var statut = document.getElementById("formStatus");
-      if (statut) {
-        statut.className = "form-status";
-        statut.textContent = "10 crédits ajoutés localement. En production, le pack s'active après confirmation du paiement mobile money.";
-      }
-    });
-  }
-
-  afficherCredits();
+  chargerCredits();
   revelerFiches();
 })();

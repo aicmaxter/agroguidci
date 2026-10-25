@@ -8,6 +8,7 @@ fichiers produits et des données sources.
 
 from __future__ import annotations
 
+import html
 import json
 import re
 import sys
@@ -18,7 +19,8 @@ ROOT = Path(__file__).resolve().parent
 WEB = ROOT / "web"
 CONTENU = ROOT / "content"
 
-INDEX = (WEB / "index.html").read_text(encoding="utf-8")
+INDEX_BRUT = (WEB / "index.html").read_text(encoding="utf-8")
+INDEX = html.unescape(INDEX_BRUT)
 DATA = json.loads((WEB / "assets" / "cultures.json").read_text(encoding="utf-8"))["cultures"]
 CHAT = (WEB / "assets" / "chat.js").read_text(encoding="utf-8")
 UI = (WEB / "assets" / "ui.js").read_text(encoding="utf-8")
@@ -39,7 +41,7 @@ class TestBlocAccueil(unittest.TestCase):
     def test_texte_sans_abonnement_dans_le_bloc(self):
         bloc = INDEX.split('class="cta-band reveal"')[1].split("</div>")[0]
         self.assertNotIn("abonnement", bloc.lower())
-        self.assertIn("Deux conseils gratuits vous attendent aujourd'hui", bloc)
+        self.assertIn("Vos 15 crédits gratuits vous attendent.", bloc)
 
     def test_bouton_unique_et_pulsation(self):
         bloc = INDEX.split('class="cta-band reveal"')[1].split("</div>")[0]
@@ -54,6 +56,58 @@ class TestBlocAccueil(unittest.TestCase):
         self.assertIn('data-chat="ouvrir"', INDEX)
         self.assertTrue('data-chat=' in CHAT and "addEventListener" in CHAT,
                         "chat.js doit brancher les déclencheurs data-chat")
+
+
+class TestOffresEtAppels(unittest.TestCase):
+    """§3 et §6 : un seul appel à la question, deux packs, pas de suivi."""
+
+    def test_un_seul_appel_dans_le_hero(self):
+        hero = INDEX.split('<section class="app-hero">')[1].split("</section>")[0]
+        self.assertEqual(hero.count('data-chat="ouvrir"'), 1,
+                         "un seul bouton de question dans le bloc d'accueil")
+        self.assertEqual(hero.count("<button"), 2,
+                         "hero : la question + la navigation vers les cultures, rien d'autre")
+
+    def test_pas_de_bouton_de_question_dans_l_entete(self):
+        entete = INDEX.split('<header class="site-header"')[1].split("</header>")[0]
+        self.assertNotIn('data-chat="ouvrir"', entete)
+        self.assertNotIn("Conseil gratuit", entete)
+
+    def test_suivi_personnalise_absent(self):
+        for terme in ("Suivi personnalisé", "9 900", "Choisir le suivi"):
+            self.assertNotIn(terme, INDEX, f"offre de suivi encore présentée : {terme}")
+
+    def test_deux_packs_avec_montants_et_credits(self):
+        self.assertIn('data-pack="decouverte"', INDEX)
+        self.assertIn('data-pack="avance"', INDEX)
+        self.assertIn('<span class="amount">599</span>', INDEX)
+        self.assertIn('<span class="amount">3\u00a0999</span>', INDEX, "montant du pack Avancé (espace insécable)")
+        self.assertIn("<strong>30 crédits</strong>", INDEX)
+        self.assertIn("<strong>200 crédits</strong>", INDEX)
+        self.assertEqual(INDEX.count("data-achat="), 2, "exactement deux packs")
+        self.assertEqual(INDEX.count('class="plan reveal"'), 2, "aucune offre intermédiaire")
+
+    def test_aucun_achat_presente_comme_disponible(self):
+        self.assertIn("Achat en ligne pas encore disponible", INDEX)
+        for m in re.finditer(r'<button[^>]*data-achat="[^"]+"[^>]*>', INDEX):
+            self.assertIn("disabled", m.group(0),
+                          "sans paiement vérifié, le bouton d'achat doit être désactivé")
+
+    def test_aucun_credit_local_dans_le_navigateur(self):
+        self.assertNotIn("agro.credits", UI, "plus de solde manipulable en localStorage")
+        self.assertNotIn("CLE_CREDITS", UI)
+        self.assertNotIn("crédits ajoutés localement", UI)
+        self.assertIn("/api/credits", UI, "le solde vient du serveur")
+
+    def test_le_formulaire_reprend_la_question_dans_le_chat(self):
+        self.assertIn("agro:question", UI)
+        self.assertIn("agro:question", CHAT)
+        self.assertIn("stopImmediatePropagation", UI,
+                      "le formulaire ne doit pas lancer une seconde consultation")
+
+    def test_gratuit_affiche_15_et_7_heures(self):
+        self.assertIn("15 crédits gratuits", INDEX)
+        self.assertIn("toutes les 7 heures", INDEX)
 
 
 class TestCultures(unittest.TestCase):
