@@ -484,20 +484,112 @@ def extrait_fiche(culture_id: str | None, limite: int = 1800) -> str:
 
 
 CONSIGNE_CHAT = (
-    "[CONSIGNE_INTERNE] COMMENT RÉPONDRE (demande posée dans la chatbox du site)\n"
-    "- Français simple et direct, phrases courtes, comme on explique à un producteur "
-    "dans son champ : pas de jargon administratif.\n"
-    "- Si un terme technique est indispensable (nématode, buttage, densité), explique-le "
-    "en quelques mots entre parenthèses.\n"
-    "- Donne d'abord la réponse concrète, ensuite les détails ; termine par ce qu'il faut "
-    "vérifier sur place ou auprès d'un service technique.\n"
-    "- Vouvoie le producteur, sans familiarité."
+    "[CONSIGNE_INTERNE] Référentiel agronomique obligatoire (aide à la décision).\n"
+    "Tu es un assistant d'aide à la décision agricole. Tu n'es ni un agronome humain, ni un "
+    "vétérinaire, ni un laboratoire : ne le prétends jamais.\n"
+    "Réponds en français simple, phrases courtes, vouvoiement, contexte ivoirien. Explique les "
+    "termes techniques en quelques mots.\n\n"
+    "MÉTHODE\n"
+    "1. Reformule en une phrase les faits donnés par le producteur.\n"
+    "2. Si les informations manquent, pose au maximum TROIS questions prioritaires avant "
+    "d'orienter (culture/variété, localité, stade, symptômes, partie touchée, surface, "
+    "traitements récents, photos).\n"
+    "3. Propose au maximum TROIS hypothèses, jamais un diagnostic affirmé. Dis ce qui permet "
+    "de les distinguer et ce qu'il faut vérifier sur le terrain.\n"
+    "4. Va toujours du préventif vers le curatif : observation, mesures culturales, hygiène, "
+    "eau/sol/nutrition, méthodes mécaniques ou biologiques, lutte intégrée, et seulement en "
+    "dernier recours une intervention chimique justifiée.\n"
+    "5. Termine par le niveau de confiance : faible, moyen ou élevé, avec une justification "
+    "courte.\n\n"
+    "PRODUITS PHYTOSANITAIRES\n"
+    "Ne cite jamais un nom commercial de pesticide, d'herbicide ou de fongicide de mémoire. "
+    "Sans étiquette homologuée ivoirienne vérifiée, tu ne donnes AUCUN dosage et tu écris : "
+    "« Je ne peux pas confirmer un produit ou un dosage sûr avec les informations disponibles. "
+    "Consultez l'étiquette homologuée et faites valider le choix par un professionnel local. » "
+    "Interdits absolus : inventer ou convertir un dosage, recommander un mélange non autorisé, "
+    "dépasser l'étiquette, réutiliser un contenant alimentaire, présenter un produit naturel "
+    "comme sans danger. Rappelle les équipements de protection et les délais avant récolte.\n\n"
+    "INTOXICATION OU EXPOSITION\n"
+    "Si la question évoque une intoxication, un malaise, un contact avec les yeux, une ingestion "
+    "ou une exposition importante : tu interromps le diagnostic agricole et tu affiches "
+    "uniquement le message d'urgence (santé humaine d'abord, sans remède domestique, sans faire "
+    "vomir).\n\n"
+    "ANIMAUX\n"
+    "Aucun diagnostic certain, aucune prescription de médicament vétérinaire, aucun antibiotique "
+    "sans vétérinaire, jamais de médicament humain pour un animal. Face à une détresse "
+    "respiratoire, des convulsions, un saignement, une mortalité inhabituelle ou plusieurs "
+    "animaux atteints : oriente immédiatement vers un vétérinaire.\n\n"
+    "FERTILISATION\n"
+    "Ne donne une dose précise que si la culture, le stade, la surface et les apports précédents "
+    "sont connus ; sinon, propose une fourchette prudente, signale l'absence d'analyse de sol et "
+    "les risques (brûlure, gaspillage, pollution). Ne garantis jamais une hausse de rendement.\n\n"
+    "MÉTÉO, PRIX, SOURCES\n"
+    "Distingue toujours une donnée observée, une prévision et une moyenne historique. Si aucune "
+    "donnée météo n'a été consultée, écris-le. Pour un prix, précise produit, unité, marché, "
+    "type de prix (producteur, gros, détail), source et date du relevé ; aucun prix ancien "
+    "présenté comme actuel, aucune promesse de hausse. Ne cite que des sources réellement "
+    "consultées ; sinon écris : « Aucune source externe vérifiée n'a été consultée pour cette "
+    "réponse. » Une institution citée n'est jamais présentée comme partenaire.\n\n"
+    "FORMAT OBLIGATOIRE pour un problème agricole (titres courts, dans cet ordre) :\n"
+    "1. Situation comprise\n2. Informations manquantes\n3. Hypothèses possibles (3 maximum)\n"
+    "4. Comment les différencier\n5. Actions prudentes immédiates\n6. À éviter\n"
+    "7. Quand consulter un professionnel\n8. Sources et dates\n9. Limites\n"
+    "10. Niveau de confiance (faible, moyen ou élevé, avec une phrase de justification)\n"
+    "Pour une simple demande d'information, tu peux répondre plus court, mais tu gardes les "
+    "limites et le niveau de confiance.\n\n"
+    "Tu ne signes jamais « validé par un agronome » : la réponse est générée automatiquement."
 )
+
+MESSAGE_URGENCE = (
+    "⚠️ Cette situation peut être urgente. Éloignez la personne de l'exposition sans vous mettre "
+    "en danger et contactez immédiatement un centre médical ou les services d'urgence. Gardez "
+    "l'emballage du produit pour le montrer aux soignants. Ne faites pas vomir la personne et "
+    "n'appliquez aucun remède domestique."
+)
+
+MENTION_NON_VALIDEE = "Réponse générée automatiquement — non validée par un agronome."
 
 
 def _sans_accents(t: str) -> str:
     return "".join(c for c in unicodedata.normalize("NFD", t or "")
                    if unicodedata.category(c) != "Mn").lower()
+
+
+URGENCE_MOTIFS = (
+    "intoxiqu", "intoxication", "empoisonn", "avale", "ingere", "ingestion", "ingurgit",
+    "dans les yeux", "dans l oeil", "projection dans l oeil", "malaise", "vomi",
+    "a bu", "bu le produit", "s est pulverise", "pulverise sur la peau", "sur la peau",
+    "respiration difficile apres traitement", "enfant a pris", "animal a avale",
+)
+
+RISQUE_ELEVE_MOTIFS = (
+    "pesticide", "herbicide", "fongicide", "insecticide", "acaricide", "nematicide", "dose",
+    "dosage", "melange de produit", "melanger", "mortalite", "mort subite", "avortement",
+    "epidemie", "contagieux", "antibiotique", "traitement chimique",
+)
+
+RISQUE_MODERE_MOTIFS = (
+    "malad", "tache", "jauniss", "jauni", "fletri", "pourri", "chenill", "puceron",
+    "insecte", "ravageur", "champignon", "virus", "carence", "verse", "rongeur",
+    "oiseau", "secheresse", "inondation", "mildiou", "rouille", "fumagine",
+)
+
+
+def risque_agronomique(texte: str) -> tuple[str, bool]:
+    """Niveau de risque interne + indicateur d'urgence (santé humaine).
+
+    Déterministe et volontairement prudent : une question citant un pesticide, une
+    dose ou une mortalité animale est classée « élevé » même si le modèle répond
+    avec assurance. L'urgence est réservée aux atteintes à la santé humaine.
+    """
+    t = _sans_accents(texte or "")
+    if any(m in t for m in URGENCE_MOTIFS):
+        return "eleve", True
+    if any(m in t for m in RISQUE_ELEVE_MOTIFS):
+        return "eleve", False
+    if any(m in t for m in RISQUE_MODERE_MOTIFS):
+        return "modere", False
+    return "faible", False
 
 
 def culture_detectee(texte: str) -> str | None:
@@ -536,6 +628,11 @@ class NouveauMessage(BaseModel):
     localite: str | None = Field(default=None, max_length=120)
     stade: str | None = Field(default=None, max_length=60)
     idempotency_key: str | None = Field(default=None, max_length=100)
+
+
+class ValidationMessage(BaseModel):
+    statut: str = Field(pattern="^(relu|valide)$")
+    validateur: str = Field(min_length=3, max_length=120)
 
 
 def _session(x_session_token: str | None) -> str:
@@ -602,7 +699,8 @@ def _publier_avancement(cid: str, contenu: str, state: dict) -> None:
 
 
 def _executer_message(cid: str, mid: str, texte: str, profil: Profil | None,
-                      sid: str | None = None) -> None:
+                      sid: str | None = None, risque: str = "faible",
+                      urgence: bool = False) -> None:
     """Exécute une demande de chat et publie la réponse dans le fil."""
     if not _VERROU.acquire(timeout=BUDGET_S):
         conv.repondre(cid, mid, "Le moteur est occupé : réessayez dans un instant.", "echec",
@@ -617,10 +715,19 @@ def _executer_message(cid: str, mid: str, texte: str, profil: Profil | None,
         etat = corps.get("etat_final")
         reponse = _tronquer_reponse((corps.get("rapport") or {}).get("reponse") or "")
         statut = _statut_message(etat)
+        # Garde-fous déterministes, indépendants du modèle : une réponse à risque
+        # ne peut pas être publiée sans l'avertissement d'urgence ni le renvoi
+        # vers un professionnel.
+        if urgence and MESSAGE_URGENCE.split(".")[0][:20] not in reponse:
+            reponse = MESSAGE_URGENCE + "\n\n" + reponse
+        if risque == "eleve" and "professionnel" not in _sans_accents(reponse):
+            reponse = (reponse.rstrip() + "\n\nFaites confirmer ce point par un professionnel "
+                       "compétent (agent ANADER, laboratoire ou vétérinaire) avant toute "
+                       "intervention, en particulier avant un traitement chimique.")
         conv.repondre(cid, mid, reponse, statut,
                       mission_id=corps.get("id"),
                       sources=(corps.get("rapport") or {}).get("sources") or [],
-                      assistant_id=avancement.get("id"))
+                      assistant_id=avancement.get("id"), risque=risque)
         # Débit APRÈS la réponse, une seule fois par message (idempotent), et
         # seulement si l'agent a réellement répondu.
         if sid and statut in STATUTS_DEBITES and reponse.strip():
@@ -736,6 +843,7 @@ def envoyer_message(cid: str, d: NouveauMessage,
         if fiche:
             texte = texte + saut + saut + fiche
     texte = texte + saut + saut + CONSIGNE_CHAT
+    risque, urgence = risque_agronomique(d.texte)
     try:
         msg = conv.ajouter_message(cid, "user", d.texte.strip(), statut="en_cours",
                                    idempotency_key=d.idempotency_key)
@@ -745,11 +853,27 @@ def envoyer_message(cid: str, d: NouveauMessage,
         return JSONResponse(status_code=200, content={"message_id": msg["message_id"],
                                                       "statut": msg["statut"], "rejoue": True})
     thread = threading.Thread(target=_executer_message,
-                              args=(cid, msg["message_id"], texte, None, sid), daemon=True)
+                              args=(cid, msg["message_id"], texte, None, sid, risque, urgence),
+                              daemon=True)
     thread.start()
     journalise(evenement="chat_demande", conversation=cid, message=msg["message_id"])
     return JSONResponse(status_code=202, content={"message_id": msg["message_id"],
                                                   "statut": "en_cours", "rejoue": False})
+
+
+@app.post("/api/conversations/{cid}/messages/{mid}/validation")
+def valider_reponse(cid: str, mid: str, d: ValidationMessage,
+                    _: None = Depends(garde_cle)) -> dict[str, Any]:
+    """Trace une relecture ou une validation humaine (clé du moteur requise).
+
+    La réponse reste « auto » tant que cet appel n'a pas eu lieu : l'interface
+    n'affiche « validée par un agronome » que si ce statut est réellement en base.
+    """
+    r = conv.valider_message(cid, mid, d.statut, d.validateur)
+    if not r:
+        raise HTTPException(status_code=404, detail="message inconnu")
+    journalise(evenement="validation_humaine", conversation=cid, message=mid, statut=d.statut)
+    return r
 
 
 @app.exception_handler(413)

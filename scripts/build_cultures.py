@@ -251,17 +251,58 @@ def ancres(cultures: dict) -> dict:
     return {}
 
 
+def section_fertilisation(fert: dict) -> str:
+    """Tableau « quoi, combien, quand » — la partie la plus consultée d'une fiche."""
+    apports = fert.get("apports") or []
+    if not apports:
+        return ""
+    libelles = {"organique": "Organique", "mineral": "Minéral", "inoculant": "Inoculant"}
+    lignes = []
+    for a in apports:
+        typ = a.get("type") or "mineral"
+        lignes.append(
+            '<tr data-type="%s">'
+            '<td><span class="engrais-tag %s">%s</span><strong>%s</strong></td>'
+            '<td class="dose">%s</td><td>%s</td><td>%s</td></tr>' % (
+                e(typ), e(typ), e(libelles.get(typ, typ)), e(a.get("produit")),
+                e(a.get("dose")), e(a.get("moment")), e(a.get("methode"))))
+    principe = f'<p class="engrais-principe">{e(fert.get("principe"))}</p>' if fert.get("principe") else ""
+    note = f'<p class="engrais-note">{e(fert.get("note"))}</p>' if fert.get("note") else ""
+    liens = " · ".join(
+        f'<a href="{e(s["url"])}" target="_blank" rel="noreferrer">{e(s["organisme"])}</a>'
+        for s in (fert.get("sources") or []) if s.get("url"))
+    sources = f'<p class="engrais-sources">Repères de fumure : {liens}</p>' if liens else ""
+    return f'''    <section class="fiche-section fiche-engrais" id="fertilisation">
+      <h2>Engrais : quoi, combien, quand</h2>
+      {principe}
+      <div class="engrais-defilement">
+        <table class="engrais-table">
+          <thead><tr><th scope="col">Apport</th><th scope="col">Dose</th><th scope="col">Quand</th><th scope="col">Comment</th></tr></thead>
+          <tbody>{"".join(lignes)}</tbody>
+        </table>
+      </div>
+      {note}
+      {sources}
+    </section>'''
+
+
 def page(cid: str, c: dict, photos: dict, maj: str) -> str:
     sommaire, sections = [], []
+    fert = c.get("fertilisation") or {}
     for cle, titre in TITRES:
         texte = (c.get(cle) or "").strip()
-        if not texte:
+        if not texte and not (cle == "entretien" and fert.get("apports")):
             continue
         sommaire.append(f'<li><a href="#{cle}">{e(titre)}</a></li>')
         sections.append(f'''    <section class="fiche-section" id="{cle}">
       <h2>{e(titre)}</h2>
       <p>{e(texte)}</p>
     </section>''')
+        if cle == "entretien":
+            bloc_fert = section_fertilisation(fert)
+            if bloc_fert:
+                sommaire.append('<li><a href="#fertilisation">Engrais : doses et moments</a></li>')
+                sections.append(bloc_fert)
     sommaire.append('<li><a href="#tutoriel">Tutoriel étape par étape</a></li>')
     sommaire.append('<li><a href="#sources">Sources et limites</a></li>')
 

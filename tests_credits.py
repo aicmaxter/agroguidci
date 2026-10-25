@@ -217,9 +217,9 @@ class TestRoutes(Base):
         jeton = self.session()
         sid = self.sid(jeton)
         cid = self.conversation(jeton)
-        api._executer_message(cid, "msg_test_1", "question", None, sid)
+        api._executer_message(cid, "msg_test_1", "question", None, sid, "faible", False)
         self.assertEqual(conv.solde(sid)["total"], 14)
-        api._executer_message(cid, "msg_test_1", "question", None, sid)
+        api._executer_message(cid, "msg_test_1", "question", None, sid, "faible", False)
         self.assertEqual(conv.solde(sid)["total"], 14, "le rejeu du même message ne débite pas")
 
     def test_echec_ne_debite_pas(self):
@@ -227,7 +227,7 @@ class TestRoutes(Base):
         jeton = self.session()
         sid = self.sid(jeton)
         cid = self.conversation(jeton)
-        api._executer_message(cid, "msg_test_2", "question", None, sid)
+        api._executer_message(cid, "msg_test_2", "question", None, sid, "faible", False)
         self.assertEqual(conv.solde(sid)["total"], 15, "un échec du moteur est gratuit")
 
     def test_clarification_ne_debite_pas(self):
@@ -235,7 +235,7 @@ class TestRoutes(Base):
         jeton = self.session()
         sid = self.sid(jeton)
         cid = self.conversation(jeton)
-        api._executer_message(cid, "msg_test_3", "question", None, sid)
+        api._executer_message(cid, "msg_test_3", "question", None, sid, "faible", False)
         self.assertEqual(conv.solde(sid)["total"], 15)
 
     def test_reponse_vide_ne_debite_pas(self):
@@ -243,7 +243,7 @@ class TestRoutes(Base):
         jeton = self.session()
         sid = self.sid(jeton)
         cid = self.conversation(jeton)
-        api._executer_message(cid, "msg_test_4", "question", None, sid)
+        api._executer_message(cid, "msg_test_4", "question", None, sid, "faible", False)
         self.assertEqual(conv.solde(sid)["total"], 15)
 
     def test_credits_exigent_une_session(self):

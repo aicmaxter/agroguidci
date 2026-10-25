@@ -123,6 +123,23 @@
       else if (message.statut === "clarification") badges = '<span class="chat-badge info">précisions demandées</span>';
       else if (message.statut === "escalade") badges = '<span class="chat-badge warn">validation humaine</span>';
       else if (message.statut === "echec") badges = '<span class="chat-badge err">échec</span>';
+      if (message.risque === "eleve") {
+        badges += '<span class="chat-badge risque" title="Demande à risque : traitement, maladie grave ou santé">⚠ risque élevé</span>';
+      }
+    }
+    // Statut de validation : jamais « validé » sans validation humaine réelle.
+    var mention = "";
+    if (role === "agent" && message.statut !== "en_cours") {
+      var quand = message.valide_le ? new Date(message.valide_le * 1000).toLocaleDateString("fr-FR") : "";
+      if (message.validation === "valide") {
+        mention = '<p class="chat-mention valide">Validée par un agronome'
+          + (message.validateur ? " (" + echapper(message.validateur) + ")" : "") + (quand ? " le " + quand : "") + ".</p>";
+      } else if (message.validation === "relu") {
+        mention = '<p class="chat-mention relu">Relue par ' + echapper(message.validateur || "un agronome")
+          + (quand ? " le " + quand : "") + " — pas encore validée.</p>";
+      } else {
+        mention = '<p class="chat-mention auto">Réponse générée automatiquement — non validée par un agronome.</p>';
+      }
     }
     var sources = "";
     if (role === "agent" && Array.isArray(message.sources) && message.sources.length) {
@@ -136,7 +153,7 @@
     article.innerHTML =
       '<p class="chat-auteur">' + auteur + badges + "</p>" +
       '<div class="chat-texte">' + formater(message.contenu) + "</div>" +
-      sources;
+      mention + sources;
     return article;
   }
 

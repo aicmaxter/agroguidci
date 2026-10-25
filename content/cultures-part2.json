@@ -64,7 +64,62 @@
           "consulte_le": "2026-10-21"
         }
       ],
-      "limites": "Variétés, densités, rendements et prix non documentés. Les pertes de transport sont souvent le premier facteur de marge : à mesurer localement."
+      "limites": "Variétés, densités, rendements et prix non documentés. Les pertes de transport sont souvent le premier facteur de marge : à mesurer localement.",
+      "fertilisation": {
+        "principe": "Le bananier est très gourmand en potassium : c'est lui qui remplit le régime. Les doses s'expriment par pied, pas par hectare.",
+        "note": "Doses par hectare de culture pure, à ajuster selon l'analyse de sol. Sans analyse, rester dans la fourchette basse et fractionner l'azote : c'est le geste qui évite de brûler la culture et de payer un engrais qui ne sera pas valorisé.",
+        "apports": [
+          {
+            "produit": "Fumier composté",
+            "dose": "10 à 20 kg/pied/an",
+            "moment": "Début et milieu de saison des pluies",
+            "methode": "En couronne, à 30-40 cm du pied",
+            "type": "organique"
+          },
+          {
+            "produit": "Azote (N)",
+            "dose": "200 à 300 g/pied/an",
+            "moment": "En 3 à 4 fois",
+            "methode": "En couronne, sol humide",
+            "type": "mineral"
+          },
+          {
+            "produit": "Potassium (K2O)",
+            "dose": "300 à 400 g/pied/an",
+            "moment": "En 3 à 4 fois (dont 1 avant floraison)",
+            "methode": "En couronne",
+            "type": "mineral"
+          },
+          {
+            "produit": "Phosphore (P2O5)",
+            "dose": "50 à 100 g/pied/an",
+            "moment": "Une fois, en début de cycle",
+            "methode": "En couronne",
+            "type": "mineral"
+          },
+          {
+            "produit": "Paillage (résidus, herbe sèche)",
+            "dose": "10 à 15 kg/pied/an",
+            "moment": "Début de saison sèche",
+            "methode": "Autour du pied, sans toucher le rejet",
+            "type": "organique"
+          }
+        ],
+        "sources": [
+          {
+            "organisme": "FAO",
+            "titre": "Gestion de la fertilité des sols et fumure organique en Afrique de l'Ouest",
+            "url": "https://www.fao.org/soils-portal/fr/",
+            "consulte_le": "2026-10-25"
+          },
+          {
+            "organisme": "ANADER",
+            "titre": "Fiches techniques cultures vivrières et maraîchères",
+            "url": "https://www.anader.ci/",
+            "consulte_le": "2026-10-25"
+          }
+        ]
+      }
     },
     "poivre": {
       "nom": "Poivre noir",
@@ -122,7 +177,48 @@
           "consulte_le": "2026-10-21"
         }
       ],
-      "limites": "Aucune donnée ivoirienne vérifiée sur les variétés, les rendements, les prix ni les acheteurs. Cette fiche doit être complétée par une enquête de marché avant d'être utilisée pour décider un investissement."
+      "limites": "Aucune donnée ivoirienne vérifiée sur les variétés, les rendements, les prix ni les acheteurs. Cette fiche doit être complétée par une enquête de marché avant d'être utilisée pour décider un investissement.",
+      "fertilisation": {
+        "principe": "Liane pérenne : la fumure se juge sur l'année, pas sur la campagne. Un excès d'azote rend la liane tendre et sensible aux maladies.",
+        "note": "Doses par hectare de culture pure, à ajuster selon l'analyse de sol. Sans analyse, rester dans la fourchette basse et fractionner l'azote : c'est le geste qui évite de brûler la culture et de payer un engrais qui ne sera pas valorisé.",
+        "apports": [
+          {
+            "produit": "Fumier composté",
+            "dose": "5 à 10 kg/pied/an",
+            "moment": "Début de saison des pluies",
+            "methode": "En couronne, sous le paillage",
+            "type": "organique"
+          },
+          {
+            "produit": "NPK 15-15-15",
+            "dose": "100 à 250 g/pied/an",
+            "moment": "En 2 à 3 apports (reprise, floraison)",
+            "methode": "En couronne, à 20 cm du tuteur",
+            "type": "mineral"
+          },
+          {
+            "produit": "Potassium (K2O)",
+            "dose": "renforcer en fructification",
+            "moment": "Après la floraison",
+            "methode": "Apport complémentaire type sulfate de potasse",
+            "type": "mineral"
+          }
+        ],
+        "sources": [
+          {
+            "organisme": "FAO",
+            "titre": "Gestion de la fertilité des sols et fumure organique en Afrique de l'Ouest",
+            "url": "https://www.fao.org/soils-portal/fr/",
+            "consulte_le": "2026-10-25"
+          },
+          {
+            "organisme": "ANADER",
+            "titre": "Fiches techniques cultures vivrières et maraîchères",
+            "url": "https://www.anader.ci/",
+            "consulte_le": "2026-10-25"
+          }
+        ]
+      }
     },
     "gingembre": {
       "nom": "Gingembre",
@@ -180,7 +276,55 @@
           "consulte_le": "2026-10-21"
         }
       ],
-      "limites": "Variétés, densités, rendements et prix non vérifiés. La demande locale est réelle mais les prix varient fortement selon la saison."
+      "limites": "Variétés, densités, rendements et prix non vérifiés. La demande locale est réelle mais les prix varient fortement selon la saison.",
+      "fertilisation": {
+        "principe": "Le rhizome se remplit en fin de cycle : l'azote tôt, le potassium après la floraison.",
+        "note": "Doses par hectare de culture pure, à ajuster selon l'analyse de sol. Sans analyse, rester dans la fourchette basse et fractionner l'azote : c'est le geste qui évite de brûler la culture et de payer un engrais qui ne sera pas valorisé.",
+        "apports": [
+          {
+            "produit": "Fumier ou compost",
+            "dose": "10 à 20 t/ha",
+            "moment": "Avant la plantation",
+            "methode": "Incorporé dans les billons",
+            "type": "organique"
+          },
+          {
+            "produit": "Azote (N)",
+            "dose": "60 à 80 kg/ha",
+            "moment": "1/2 à 30 jours, 1/2 à 90 jours",
+            "methode": "Épandu entre les rangs",
+            "type": "mineral"
+          },
+          {
+            "produit": "Phosphore (P2O5)",
+            "dose": "40 à 50 kg/ha",
+            "moment": "À la plantation",
+            "methode": "En poquet près des rhizomes",
+            "type": "mineral"
+          },
+          {
+            "produit": "Potassium (K2O)",
+            "dose": "60 à 80 kg/ha",
+            "moment": "À 90 puis 150 jours",
+            "methode": "En bande",
+            "type": "mineral"
+          }
+        ],
+        "sources": [
+          {
+            "organisme": "FAO",
+            "titre": "Gestion de la fertilité des sols et fumure organique en Afrique de l'Ouest",
+            "url": "https://www.fao.org/soils-portal/fr/",
+            "consulte_le": "2026-10-25"
+          },
+          {
+            "organisme": "ANADER",
+            "titre": "Fiches techniques cultures vivrières et maraîchères",
+            "url": "https://www.anader.ci/",
+            "consulte_le": "2026-10-25"
+          }
+        ]
+      }
     },
     "curcuma": {
       "nom": "Curcuma",
@@ -238,7 +382,55 @@
           "consulte_le": "2026-10-21"
         }
       ],
-      "limites": "Aucune donnée locale vérifiée sur variétés, rendements, prix, débouchés industriels. À compléter par une enquête de marché."
+      "limites": "Aucune donnée locale vérifiée sur variétés, rendements, prix, débouchés industriels. À compléter par une enquête de marché.",
+      "fertilisation": {
+        "principe": "Même famille et même logique que le gingembre : organique au départ, potassium en fin de cycle.",
+        "note": "Doses par hectare de culture pure, à ajuster selon l'analyse de sol. Sans analyse, rester dans la fourchette basse et fractionner l'azote : c'est le geste qui évite de brûler la culture et de payer un engrais qui ne sera pas valorisé.",
+        "apports": [
+          {
+            "produit": "Fumier ou compost",
+            "dose": "10 à 15 t/ha",
+            "moment": "Avant la plantation",
+            "methode": "Incorporé dans les billons",
+            "type": "organique"
+          },
+          {
+            "produit": "Azote (N)",
+            "dose": "50 à 75 kg/ha",
+            "moment": "1/2 à 30 jours, 1/2 à 75 jours",
+            "methode": "Épandu entre les rangs",
+            "type": "mineral"
+          },
+          {
+            "produit": "Phosphore (P2O5)",
+            "dose": "30 à 50 kg/ha",
+            "moment": "À la plantation",
+            "methode": "En poquet",
+            "type": "mineral"
+          },
+          {
+            "produit": "Potassium (K2O)",
+            "dose": "60 à 90 kg/ha",
+            "moment": "À 90 puis 150 jours",
+            "methode": "En bande",
+            "type": "mineral"
+          }
+        ],
+        "sources": [
+          {
+            "organisme": "FAO",
+            "titre": "Gestion de la fertilité des sols et fumure organique en Afrique de l'Ouest",
+            "url": "https://www.fao.org/soils-portal/fr/",
+            "consulte_le": "2026-10-25"
+          },
+          {
+            "organisme": "ANADER",
+            "titre": "Fiches techniques cultures vivrières et maraîchères",
+            "url": "https://www.anader.ci/",
+            "consulte_le": "2026-10-25"
+          }
+        ]
+      }
     },
     "piment": {
       "nom": "Piment",
@@ -296,7 +488,62 @@
           "consulte_le": "2026-10-21"
         }
       ],
-      "limites": "Variétés, densités, rendements et prix non vérifiés. Le piquant attendu par le marché local doit être précisé avant de choisir la semence."
+      "limites": "Variétés, densités, rendements et prix non vérifiés. Le piquant attendu par le marché local doit être précisé avant de choisir la semence.",
+      "fertilisation": {
+        "principe": "Récolte étalée : la fumure se fractionne pour tenir la production jusqu'à la fin, sans relancer le feuillage au détriment des fruits.",
+        "note": "Doses par hectare de culture pure, à ajuster selon l'analyse de sol. Sans analyse, rester dans la fourchette basse et fractionner l'azote : c'est le geste qui évite de brûler la culture et de payer un engrais qui ne sera pas valorisé.",
+        "apports": [
+          {
+            "produit": "Fumier ou compost",
+            "dose": "10 à 20 t/ha",
+            "moment": "Avant la plantation",
+            "methode": "Incorporé dans les planches",
+            "type": "organique"
+          },
+          {
+            "produit": "Azote (N)",
+            "dose": "60 à 100 kg/ha",
+            "moment": "En 3 apports (reprise, floraison, 1re récolte)",
+            "methode": "En bande",
+            "type": "mineral"
+          },
+          {
+            "produit": "Phosphore (P2O5)",
+            "dose": "40 à 60 kg/ha",
+            "moment": "À la plantation",
+            "methode": "En poquet",
+            "type": "mineral"
+          },
+          {
+            "produit": "Potassium (K2O)",
+            "dose": "60 à 100 kg/ha",
+            "moment": "Dès la floraison, en 2 fois",
+            "methode": "En bande",
+            "type": "mineral"
+          },
+          {
+            "produit": "Cendre de bois (potasse)",
+            "dose": "1 à 2 t/ha",
+            "moment": "En complément, avant floraison",
+            "methode": "Épandue et incorporée",
+            "type": "organique"
+          }
+        ],
+        "sources": [
+          {
+            "organisme": "FAO",
+            "titre": "Gestion de la fertilité des sols et fumure organique en Afrique de l'Ouest",
+            "url": "https://www.fao.org/soils-portal/fr/",
+            "consulte_le": "2026-10-25"
+          },
+          {
+            "organisme": "ANADER",
+            "titre": "Fiches techniques cultures vivrières et maraîchères",
+            "url": "https://www.anader.ci/",
+            "consulte_le": "2026-10-25"
+          }
+        ]
+      }
     }
   }
 }

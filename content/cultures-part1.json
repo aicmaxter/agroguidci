@@ -79,7 +79,55 @@
           "consulte_le": "2026-10-21"
         }
       ],
-      "limites": "Variétés, densités et seuils de traitement ne sont pas documentés dans les sources internes. Aucune donnée de rendement ni de prix vérifiée n'est disponible : à collecter auprès de l'ANADER ou d'une station de recherche avant de chiffrer un budget."
+      "limites": "Variétés, densités et seuils de traitement ne sont pas documentés dans les sources internes. Aucune donnée de rendement ni de prix vérifiée n'est disponible : à collecter auprès de l'ANADER ou d'une station de recherche avant de chiffrer un budget.",
+      "fertilisation": {
+        "principe": "Légumineuse : elle fixe l'azote de l'air. Le raisonnement porte donc sur le phosphore et le potassium, pas sur l'urée.",
+        "note": "Doses par hectare de culture pure, à ajuster selon l'analyse de sol. Sans analyse, rester dans la fourchette basse et fractionner l'azote : c'est le geste qui évite de brûler la culture et de payer un engrais qui ne sera pas valorisé.",
+        "apports": [
+          {
+            "produit": "Compost ou fumier bien décomposé",
+            "dose": "5 à 10 t/ha",
+            "moment": "2 à 3 semaines avant le semis",
+            "methode": "Épandu puis enfoui au labour",
+            "type": "organique"
+          },
+          {
+            "produit": "Phosphore (P2O5)",
+            "dose": "20 à 40 kg/ha",
+            "moment": "Au semis",
+            "methode": "Localisé en poquet, sous la graine (éviter le contact direct)",
+            "type": "mineral"
+          },
+          {
+            "produit": "Potassium (K2O)",
+            "dose": "10 à 20 kg/ha",
+            "moment": "Au semis",
+            "methode": "Seulement si le sol est carencé (cendre de bois possible)",
+            "type": "mineral"
+          },
+          {
+            "produit": "Azote (N)",
+            "dose": "0 kg/ha",
+            "moment": "—",
+            "methode": "Aucun apport : la nodulation fournit l'azote. Un sol vierge gagne à être inoculé.",
+            "type": "mineral"
+          }
+        ],
+        "sources": [
+          {
+            "organisme": "FAO",
+            "titre": "Gestion de la fertilité des sols et fumure organique en Afrique de l'Ouest",
+            "url": "https://www.fao.org/soils-portal/fr/",
+            "consulte_le": "2026-10-25"
+          },
+          {
+            "organisme": "ANADER",
+            "titre": "Fiches techniques cultures vivrières et maraîchères",
+            "url": "https://www.anader.ci/",
+            "consulte_le": "2026-10-25"
+          }
+        ]
+      }
     },
     "fonio": {
       "nom": "Fonio",
@@ -137,7 +185,48 @@
           "consulte_le": "2026-10-21"
         }
       ],
-      "limites": "Variétés, densités et rendements non documentés dans les sources internes. Aucun prix vérifié : à collecter avant toute projection économique."
+      "limites": "Variétés, densités et rendements non documentés dans les sources internes. Aucun prix vérifié : à collecter avant toute projection économique.",
+      "fertilisation": {
+        "principe": "Céréale très précoce : l'azote doit être disponible tôt, avant la montaison.",
+        "note": "Doses par hectare de culture pure, à ajuster selon l'analyse de sol. Sans analyse, rester dans la fourchette basse et fractionner l'azote : c'est le geste qui évite de brûler la culture et de payer un engrais qui ne sera pas valorisé.",
+        "apports": [
+          {
+            "produit": "Fumier ou compost",
+            "dose": "3 à 5 t/ha",
+            "moment": "Avant le semis",
+            "methode": "Épandu et incorporé superficiellement",
+            "type": "organique"
+          },
+          {
+            "produit": "Azote (N)",
+            "dose": "30 à 60 kg/ha",
+            "moment": "1/2 au tallage, 1/2 à la montaison",
+            "methode": "Épandu à la volée sur sol humide",
+            "type": "mineral"
+          },
+          {
+            "produit": "Phosphore (P2O5)",
+            "dose": "15 à 30 kg/ha",
+            "moment": "Au semis",
+            "methode": "Enfoui avec la semence",
+            "type": "mineral"
+          }
+        ],
+        "sources": [
+          {
+            "organisme": "FAO",
+            "titre": "Gestion de la fertilité des sols et fumure organique en Afrique de l'Ouest",
+            "url": "https://www.fao.org/soils-portal/fr/",
+            "consulte_le": "2026-10-25"
+          },
+          {
+            "organisme": "ANADER",
+            "titre": "Fiches techniques cultures vivrières et maraîchères",
+            "url": "https://www.anader.ci/",
+            "consulte_le": "2026-10-25"
+          }
+        ]
+      }
     },
     "sesame": {
       "nom": "Sésame",
@@ -195,7 +284,48 @@
           "consulte_le": "2026-10-21"
         }
       ],
-      "limites": "Variétés et rendements non documentés. Le prix à l'export n'est pas vérifié : ne pas annoncer de revenu sans contrat ou relevé réel."
+      "limites": "Variétés et rendements non documentés. Le prix à l'export n'est pas vérifié : ne pas annoncer de revenu sans contrat ou relevé réel.",
+      "fertilisation": {
+        "principe": "Le sésame valorise mieux un sol correctement pourvu en phosphore. Un excès d'azote produit de la tige et peu de capsules.",
+        "note": "Doses par hectare de culture pure, à ajuster selon l'analyse de sol. Sans analyse, rester dans la fourchette basse et fractionner l'azote : c'est le geste qui évite de brûler la culture et de payer un engrais qui ne sera pas valorisé.",
+        "apports": [
+          {
+            "produit": "Compost",
+            "dose": "5 t/ha",
+            "moment": "Avant le semis",
+            "methode": "Incorporé au labour",
+            "type": "organique"
+          },
+          {
+            "produit": "Azote (N)",
+            "dose": "25 à 50 kg/ha",
+            "moment": "1/2 au semis, 1/2 à la floraison",
+            "methode": "Épandu entre les rangs",
+            "type": "mineral"
+          },
+          {
+            "produit": "Phosphore (P2O5)",
+            "dose": "20 à 40 kg/ha",
+            "moment": "Au semis",
+            "methode": "Localisé à côté de la graine",
+            "type": "mineral"
+          }
+        ],
+        "sources": [
+          {
+            "organisme": "FAO",
+            "titre": "Gestion de la fertilité des sols et fumure organique en Afrique de l'Ouest",
+            "url": "https://www.fao.org/soils-portal/fr/",
+            "consulte_le": "2026-10-25"
+          },
+          {
+            "organisme": "ANADER",
+            "titre": "Fiches techniques cultures vivrières et maraîchères",
+            "url": "https://www.anader.ci/",
+            "consulte_le": "2026-10-25"
+          }
+        ]
+      }
     },
     "patatedouce": {
       "nom": "Patate douce à chair orange",
@@ -253,7 +383,55 @@
           "consulte_le": "2026-10-21"
         }
       ],
-      "limites": "Variétés, densités et rendements non documentés. Le prix du frais et de la farine n'est pas vérifié."
+      "limites": "Variétés, densités et rendements non documentés. Le prix du frais et de la farine n'est pas vérifié.",
+      "fertilisation": {
+        "principe": "Culture de tubérisation : c'est le potassium qui fait le rendement. L'azote en excès donne du feuillage et des racines fines.",
+        "note": "Doses par hectare de culture pure, à ajuster selon l'analyse de sol. Sans analyse, rester dans la fourchette basse et fractionner l'azote : c'est le geste qui évite de brûler la culture et de payer un engrais qui ne sera pas valorisé.",
+        "apports": [
+          {
+            "produit": "Fumier bien décomposé",
+            "dose": "10 à 20 t/ha",
+            "moment": "3 à 4 semaines avant la plantation",
+            "methode": "Sur billons, incorporé avant buttage",
+            "type": "organique"
+          },
+          {
+            "produit": "Potassium (K2O)",
+            "dose": "60 à 100 kg/ha",
+            "moment": "1/2 à la plantation, 1/2 à 30-40 jours",
+            "methode": "En bande sur le billon (ou cendre de bois)",
+            "type": "mineral"
+          },
+          {
+            "produit": "Azote (N)",
+            "dose": "30 à 50 kg/ha",
+            "moment": "30 jours après plantation",
+            "methode": "Épandu puis butté",
+            "type": "mineral"
+          },
+          {
+            "produit": "Phosphore (P2O5)",
+            "dose": "30 à 60 kg/ha",
+            "moment": "À la plantation",
+            "methode": "En poquet près des boutures",
+            "type": "mineral"
+          }
+        ],
+        "sources": [
+          {
+            "organisme": "FAO",
+            "titre": "Gestion de la fertilité des sols et fumure organique en Afrique de l'Ouest",
+            "url": "https://www.fao.org/soils-portal/fr/",
+            "consulte_le": "2026-10-25"
+          },
+          {
+            "organisme": "ANADER",
+            "titre": "Fiches techniques cultures vivrières et maraîchères",
+            "url": "https://www.anader.ci/",
+            "consulte_le": "2026-10-25"
+          }
+        ]
+      }
     },
     "soja": {
       "nom": "Soja",
@@ -311,7 +489,55 @@
           "consulte_le": "2026-10-21"
         }
       ],
-      "limites": "Variétés et rendements non documentés. Le prix et l'existence d'un débouché local doivent être vérifiés avant tout investissement."
+      "limites": "Variétés et rendements non documentés. Le prix et l'existence d'un débouché local doivent être vérifiés avant tout investissement.",
+      "fertilisation": {
+        "principe": "L'inoculation remplace l'azote : c'est l'apport le plus rentable sur un sol qui n'a jamais porté de soja.",
+        "note": "Doses par hectare de culture pure, à ajuster selon l'analyse de sol. Sans analyse, rester dans la fourchette basse et fractionner l'azote : c'est le geste qui évite de brûler la culture et de payer un engrais qui ne sera pas valorisé.",
+        "apports": [
+          {
+            "produit": "Inoculant (Bradyrhizobium japonicum)",
+            "dose": "1 sachet pour 10 à 20 kg de semence",
+            "moment": "Au semis, à l'ombre",
+            "methode": "Traitement des graines juste avant le semis, sans soleil direct",
+            "type": "inoculant"
+          },
+          {
+            "produit": "Phosphore (P2O5)",
+            "dose": "30 à 60 kg/ha",
+            "moment": "Au semis",
+            "methode": "En bande ou en poquet",
+            "type": "mineral"
+          },
+          {
+            "produit": "Potassium (K2O)",
+            "dose": "20 à 40 kg/ha",
+            "moment": "Au semis",
+            "methode": "En bande",
+            "type": "mineral"
+          },
+          {
+            "produit": "Compost",
+            "dose": "3 à 5 t/ha",
+            "moment": "Avant le semis",
+            "methode": "Incorporé (facultatif si le sol est déjà riche)",
+            "type": "organique"
+          }
+        ],
+        "sources": [
+          {
+            "organisme": "FAO",
+            "titre": "Gestion de la fertilité des sols et fumure organique en Afrique de l'Ouest",
+            "url": "https://www.fao.org/soils-portal/fr/",
+            "consulte_le": "2026-10-25"
+          },
+          {
+            "organisme": "ANADER",
+            "titre": "Fiches techniques cultures vivrières et maraîchères",
+            "url": "https://www.anader.ci/",
+            "consulte_le": "2026-10-25"
+          }
+        ]
+      }
     },
     "igname": {
       "nom": "Igname",
@@ -375,7 +601,55 @@
           "consulte_le": "2026-10-21"
         }
       ],
-      "limites": "Rendements, densités et performances variétales non documentés. Les prix de gros varient : consulter le relevé OCPV le plus récent plutôt qu'une estimation."
+      "limites": "Rendements, densités et performances variétales non documentés. Les prix de gros varient : consulter le relevé OCPV le plus récent plutôt qu'une estimation.",
+      "fertilisation": {
+        "principe": "L'igname construit une grosse réserve : elle demande une fumure organique conséquente dans la butte et un potassium soutenu.",
+        "note": "Doses par hectare de culture pure, à ajuster selon l'analyse de sol. Sans analyse, rester dans la fourchette basse et fractionner l'azote : c'est le geste qui évite de brûler la culture et de payer un engrais qui ne sera pas valorisé.",
+        "apports": [
+          {
+            "produit": "Fumier ou compost",
+            "dose": "10 à 20 t/ha",
+            "moment": "3 à 4 semaines avant plantation",
+            "methode": "Dans la butte, mélangé à la terre",
+            "type": "organique"
+          },
+          {
+            "produit": "Azote (N)",
+            "dose": "60 à 100 kg/ha",
+            "moment": "1/3 à 30 jours, 2/3 à 90 jours",
+            "methode": "En couronne autour du tuteur",
+            "type": "mineral"
+          },
+          {
+            "produit": "Phosphore (P2O5)",
+            "dose": "30 à 50 kg/ha",
+            "moment": "À la plantation",
+            "methode": "Dans la butte près du semenceau",
+            "type": "mineral"
+          },
+          {
+            "produit": "Potassium (K2O)",
+            "dose": "60 à 100 kg/ha",
+            "moment": "À 60 puis 120 jours",
+            "methode": "En bande sur le billon",
+            "type": "mineral"
+          }
+        ],
+        "sources": [
+          {
+            "organisme": "FAO",
+            "titre": "Gestion de la fertilité des sols et fumure organique en Afrique de l'Ouest",
+            "url": "https://www.fao.org/soils-portal/fr/",
+            "consulte_le": "2026-10-25"
+          },
+          {
+            "organisme": "ANADER",
+            "titre": "Fiches techniques cultures vivrières et maraîchères",
+            "url": "https://www.anader.ci/",
+            "consulte_le": "2026-10-25"
+          }
+        ]
+      }
     }
   }
 }

@@ -221,6 +221,38 @@
 .crop-plus a { color: var(--green-800); font-weight: 700; text-decoration: none; }
 .crop-plus a:hover { text-decoration: underline; }
 
+
+/* ---------- engrais : quoi, combien, quand ---------- */
+.fiche-engrais .engrais-principe { font-weight: 600; color: var(--ink); margin-bottom: .8rem; }
+.engrais-defilement { overflow-x: auto; margin: .4rem 0 .8rem; }
+.engrais-table { width: 100%; border-collapse: collapse; font-size: .88rem; min-width: 540px; }
+.engrais-table th {
+  text-align: left; padding: .55rem .6rem;
+  font-size: .66rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--muted); background: var(--paper-2);
+  border-bottom: 1px solid var(--line);
+}
+.engrais-table td { padding: .6rem; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--ink-2); }
+.engrais-table tr:last-child td { border-bottom: 0; }
+.engrais-table tr:hover td { background: rgba(201, 243, 107, .09); }
+.engrais-table .dose { font-weight: 800; color: var(--ink); white-space: nowrap; }
+.engrais-table td strong { display: block; font-weight: 700; color: var(--ink); }
+.engrais-tag {
+  display: inline-block; margin-bottom: .25rem;
+  padding: .1rem .45rem; border-radius: 999px;
+  font-size: .6rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+}
+.engrais-tag.organique { background: var(--green-soft); color: var(--green-800); }
+.engrais-tag.mineral { background: var(--amber-soft); color: #7a5200; }
+.engrais-tag.inoculant { background: #e9f0fb; color: #1d4ed8; }
+.engrais-note {
+  margin: .2rem 0 .5rem; padding: .7rem .85rem;
+  border-radius: var(--r-sm); background: var(--paper-2);
+  font-size: .82rem; color: var(--muted); line-height: 1.55;
+}
+.engrais-sources { margin: 0; font-size: .74rem; color: var(--muted); }
+.engrais-sources a { color: var(--green-800); text-decoration: underline; }
+
 @media (max-width: 820px) {
   .fiche-entete { grid-template-columns: 1fr; }
   .fiche-photo { order: -1; min-height: 0; }

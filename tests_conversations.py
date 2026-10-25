@@ -38,7 +38,7 @@ class Base(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         # double d'exécution : le fil passe directement à « terminé » avec une réponse fixe
-        def faux_executeur(cid, mid, texte, profil, sid=None):
+        def faux_executeur(cid, mid, texte, profil, sid=None, risque="faible", urgence=False):
             conv.repondre(cid, mid, "Réponse de test de l'agent agronome.", "termine",
                           mission_id="mis_test")
         api._executer_message = faux_executeur
@@ -271,7 +271,7 @@ class TestMessages(Base):
         cid = self.conversation(jeton)
         vus = {}
 
-        def capture(cid, mid, texte, profil, sid=None):
+        def capture(cid, mid, texte, profil, sid=None, risque="faible", urgence=False):
             vus["texte"] = texte
         ancien = api._executer_message
         api._executer_message = capture

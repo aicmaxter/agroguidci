@@ -85,6 +85,20 @@ html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
 }
+
+/* ------------------------------------------------------------------ mention de validation */
+.chat-badge.risque { background: #fdeaea; color: #a3241c; border: 1px solid #f3c9c5; }
+.chat-mention {
+  margin: .35rem 0 0;
+  font-size: .7rem;
+  line-height: 1.4;
+  color: var(--muted);
+}
+.chat-mention.auto { font-style: italic; }
+.chat-mention.relu { color: #8a5a0d; font-weight: 700; }
+.chat-mention.valide { color: var(--green-800); font-weight: 800; }
+.chat-mention.valide::before { content: "✓ "; }
+
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 body {

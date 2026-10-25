@@ -36,7 +36,7 @@ MAX_MESSAGE = 2000
 LIMITE_CONTENU = 12000   # plafond du schéma : une réponse d'agent (synthèse) tient entière
 MAX_REPONSE = LIMITE_CONTENU
 MAX_TOURS = 200          # garde-fou : une conversation ne peut pas grossir sans fin
-VERSION_SCHEMA = 2       # 2 : limite de contenu 4000 -> LIMITE_CONTENU (migration ci-dessous)
+VERSION_SCHEMA = 3       # 3 : validation humaine (auto/relu/valide) et niveau de risque
 
 # ---------------------------------------------------------------- crédits
 # 15 crédits gratuits par fenêtre de 7 h, renouvelés automatiquement au passage de
@@ -68,6 +68,11 @@ CREATE TABLE {ifnot}{table} (
   demande_id      TEXT,
   erreur          TEXT,
   sources_json    TEXT,
+  validation      TEXT NOT NULL DEFAULT 'auto'
+                  CHECK (validation IN ('auto','relu','valide')),
+  validateur      TEXT,
+  valide_le       INTEGER,
+  risque          TEXT CHECK (risque IN ('faible','modere','eleve')),
   idempotency_key TEXT,
   created_at      INTEGER NOT NULL,
   updated_at      INTEGER NOT NULL,
@@ -150,7 +155,10 @@ def _migrer(conn: sqlite3.Connection) -> None:
             conn.executescript(
                 "BEGIN;DROP TABLE IF EXISTS messages_v2;"
                 + _DDL_MESSAGES.format(ifnot="", table="messages_v2", limite=LIMITE_CONTENU)
-                + "INSERT INTO messages_v2 SELECT * FROM messages;"
+                + "INSERT INTO messages_v2 (message_id, conversation_id, role, contenu, statut,"
+                + " mission_id, demande_id, erreur, sources_json, idempotency_key, created_at, updated_at)"
+                + " SELECT message_id, conversation_id, role, contenu, statut, mission_id, demande_id,"
+                + " erreur, sources_json, idempotency_key, created_at, updated_at FROM messages;"
                 + "DROP TABLE messages;"
                 + "ALTER TABLE messages_v2 RENAME TO messages;" + _INDEX_MESSAGES + "COMMIT;")
         except Exception:
@@ -158,6 +166,18 @@ def _migrer(conn: sqlite3.Connection) -> None:
             raise
         finally:
             conn.execute("PRAGMA foreign_keys=ON")
+    # 3 : validation humaine (auto/relu/valide), validateur et niveau de risque.
+    #     ALTER TABLE ADD COLUMN est additif : aucune ligne n'est perdue.
+    colonnes = {r[1] for r in conn.execute("PRAGMA table_info(messages)")}
+    for nom, typ in {
+        "validation": "TEXT NOT NULL DEFAULT 'auto'",
+        "validateur": "TEXT",
+        "valide_le": "INTEGER",
+        "risque": "TEXT",
+    }.items():
+        if nom not in colonnes:
+            conn.execute(f"ALTER TABLE messages ADD COLUMN {nom} {typ}")
+
     conn.execute(f"PRAGMA user_version={VERSION_SCHEMA}")
     conn.commit()
 
@@ -274,7 +294,8 @@ def ajouter_message(conversation_id: str, role: str, contenu: str, statut: str =
 
 
 def maj_message(message_id: str, **champs: Any) -> None:
-    autorises = {"statut", "contenu", "mission_id", "demande_id", "erreur", "sources_json"}
+    autorises = {"statut", "contenu", "mission_id", "demande_id", "erreur", "sources_json",
+                 "risque", "validation", "validateur", "valide_le"}
     champs = {k: v for k, v in champs.items() if k in autorises}
     if not champs:
         return
@@ -287,7 +308,8 @@ def maj_message(message_id: str, **champs: Any) -> None:
 
 def repondre(conversation_id: str, message_id: str, contenu: str, statut: str,
              mission_id: str | None = None, sources: list | None = None,
-             erreur: str | None = None, assistant_id: str | None = None) -> dict[str, Any]:
+             erreur: str | None = None, assistant_id: str | None = None,
+             risque: str | None = None) -> dict[str, Any]:
     """Clôt la question et publie la réponse de l'agent.
 
     `assistant_id` : identifiant d'un message d'avancement déjà publié dans le fil
@@ -297,13 +319,40 @@ def repondre(conversation_id: str, message_id: str, contenu: str, statut: str,
     contenu = (contenu or "").strip() or "Aucune réponse exploitable n'a été produite."
     sources_json = json.dumps(sources, ensure_ascii=False) if sources else None
     maj_message(message_id, statut=statut, mission_id=mission_id, erreur=erreur,
-                sources_json=sources_json)
+                sources_json=sources_json, risque=risque)
     if assistant_id:
         maj_message(assistant_id, contenu=contenu, statut=statut, mission_id=mission_id,
-                    sources_json=sources_json)
+                    sources_json=sources_json, risque=risque)
         return {"message_id": assistant_id, "rejoue": True}
-    return ajouter_message(conversation_id, "assistant", contenu, statut=statut,
-                           mission_id=mission_id, sources=sources)
+    m = ajouter_message(conversation_id, "assistant", contenu, statut=statut,
+                        mission_id=mission_id, sources=sources)
+    if risque:
+        maj_message(m["message_id"], risque=risque)
+    return m
+
+
+def valider_message(conversation_id: str, message_id: str, statut: str, validateur: str) -> dict[str, Any] | None:
+    """Trace une relecture humaine : statut 'relu' ou 'valide' uniquement.
+
+    Aucune réponse ne peut être présentée comme validée sans cet appel : le statut
+    par défaut reste 'auto' (réponse générée automatiquement).
+    """
+    if statut not in ("relu", "valide"):
+        raise ValueError("statut de validation invalide")
+    validateur = (validateur or "").strip()
+    if len(validateur) < 3 or len(validateur) > 120:
+        raise ValueError("identifiant de validateur invalide")
+    c = _db()
+    row = c.execute("SELECT message_id FROM messages WHERE message_id=? AND conversation_id=? AND role='assistant'",
+                    (message_id, conversation_id)).fetchone()
+    if not row:
+        return None
+    c.execute("UPDATE messages SET validation=?, validateur=?, valide_le=?, updated_at=? WHERE message_id=?",
+              (statut, validateur, int(time.time()), int(time.time()), message_id))
+    c.commit()
+    m = c.execute("SELECT * FROM messages WHERE message_id=?", (message_id,)).fetchone()
+    return {"message_id": m["message_id"], "validation": m["validation"],
+            "validateur": m["validateur"], "valide_le": m["valide_le"]}
 
 
 def fil(session_id: str, conversation_id: str) -> dict[str, Any] | None:
@@ -326,6 +375,10 @@ def fil(session_id: str, conversation_id: str) -> dict[str, Any] | None:
              "statut": m["statut"], "mission_id": m["mission_id"],
              "erreur": m["erreur"],
              "sources": json.loads(m["sources_json"]) if m["sources_json"] else [],
+             "validation": m["validation"] if "validation" in m.keys() else "auto",
+             "validateur": m["validateur"] if "validateur" in m.keys() else None,
+             "valide_le": m["valide_le"] if "valide_le" in m.keys() else None,
+             "risque": m["risque"] if "risque" in m.keys() else None,
              "cree_le": m["created_at"]}
             for m in msgs
         ],

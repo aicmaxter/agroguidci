@@ -1,0 +1,388 @@
+{
+  "_note": "Fruits et légumes (maraîchage et arboriculture) — contenu prudent : repères de conduite, doses de fumure en fourchettes, limites explicites. Aucune variété, aucun rendement ni prix n'est avancé sans source.",
+  "_maj": "2026-10-25",
+  "cultures": {
+    "tomate": {
+      "nom": "Tomate",
+      "surnom": "Solanum lycopersicum — culture de rente maraîchère",
+      "type": "legume",
+      "cycle": "90 à 120 jours en saison des pluies, 100 à 130 jours en contre-saison",
+      "confiance": "partiel",
+      "presentation": "Premier légume-fruit de rente en Côte d'Ivoire : marché urbain constant, transformation possible (concentré, séchage). Exigeante en eau et en fertilisation, très sensible aux maladies foliaires en saison humide.",
+      "conditions": "Sol meuble, profond, bien drainé, pH 5,5 à 6,8. Plein soleil. Éviter les sols gorgés et les parcelles ayant porté tomate, piment ou aubergine dans les 3 dernières années (nématodes, flétrissements).",
+      "varietes": "Choisir des variétés adaptées à la saison : résistantes aux virus et à la chaleur pour la contre-saison, variétés de plein champ pour la saison des pluies. Les noms commerciaux disponibles varient selon les semenciers locaux : demander la liste à l'ANADER ou au fournisseur d'intrants.",
+      "calendrier": "Pépinière 3 à 4 semaines avant repiquage. Repiquage en début de saison des pluies (avril-juin) ou en contre-saison avec irrigation (octobre-décembre). Récolte étalée sur 4 à 8 semaines.",
+      "preparation": "Labour profond, planches surélevées de 20 à 30 cm pour éviter l'engorgement. Incorporer la fumure organique 2 à 3 semaines avant repiquage.",
+      "semis": "Semis en pépinière sur planche fine, graines espacées, ombrage léger. Repiquage à 4-6 feuilles, écartement courant 60-80 cm entre rangs et 40-50 cm sur le rang.",
+      "entretien": "Tuteurage (piquets ou ficelles) pour garder les fruits hors du sol, sarclages légers, paillage recommandé pour limiter l'évaporation et les éclaboussures. Irrigation régulière, sans mouiller le feuillage. Taille des gourmands selon la variété.",
+      "sante": "Mildiou et alternariose en saison humide, flétrissement bactérien, viroses transmises par pucerons et aleurodes. Rotation, paillage, plants sains, élimination des plants malades, surveillance des insectes vecteurs.",
+      "recolte": "Récolter à maturité commerciale (fruit coloré mais ferme), 2 à 3 fois par semaine. Manipuler avec précaution : un fruit heurté pourrit en 24 h.",
+      "conservation": "Quelques jours à l'ombre ventilée ; le froid de cuisine abîme la texture. Transformation en concentré ou séchage pour les surplus.",
+      "economie": "Culture à forte valeur mais à risque élevé : le coût des traitements et des tuteurs pèse lourd. Calculer la marge avec les prix réels du marché de destination, jamais avec un prix supposé.",
+      "tutoriel": [
+        {"icone": "parcelle", "titre": "Choisir une parcelle saine", "simple": "Une planche surélevée, au soleil, sans tomate ni piment depuis 3 ans. Si le sol reste humide après la pluie, surélever davantage."},
+        {"icone": "preparation", "titre": "Nourrir la planche avant de planter", "simple": "Épandre le compost ou le fumier décomposé, l'enfouir, laisser reposer 2 à 3 semaines : la terre doit être meuble et sans odeur forte."},
+        {"icone": "semence", "titre": "Faire la pépinière", "simple": "Semer clair sur une planche fine, ombrer légèrement, arroser tous les matins. Le plant est prêt à 4-6 feuilles, en 3 à 4 semaines."},
+        {"icone": "plantation", "titre": "Repiquer et tuteurer", "simple": "Repiquer en fin de journée, arroser aussitôt, poser le tuteur tout de suite : un plant couché reprend mal."},
+        {"icone": "entretien", "titre": "Suivre l'eau et la fumure", "simple": "Arroser au pied, jamais sur les feuilles. Fractionner l'azote et renforcer le potassium dès la floraison."},
+        {"icone": "sante", "titre": "Surveiller deux fois par semaine", "simple": "Regarder le dessous des feuilles (pucerons, aleurodes) et les taches brunes. Retirer les plants malades avant que la planche entière ne soit atteinte."},
+        {"icone": "recolte", "titre": "Récolter sans abîmer", "simple": "Cueillir aux heures fraîches, poser les fruits dans des cagettes peu profondes, une seule couche."},
+        {"icone": "marche", "titre": "Vendre vite", "simple": "La tomate ne se garde pas : caler la récolte sur les jours de marché et annoncer le volume la veille."}
+      ],
+      "sources": [
+        {"organisme": "Base de connaissances interne", "titre": "knowledge/agronomie.md, knowledge/techniques_agricoles.md", "consulte_le": "2026-10-25"},
+        {"organisme": "ANADER", "titre": "Appui-conseil maraîchage (fiches techniques)", "url": "https://www.anader.ci/", "consulte_le": "2026-10-25"}
+      ],
+      "limites": "Aucune variété nommée, aucun rendement ni prix vérifié n'est publié ici : ces données varient par localité et par campagne. Les doses de fumure sont des fourchettes de littérature, à ajuster après analyse de sol.",
+      "fertilisation": {
+        "principe": "La tomate répond fortement à la fumure organique et au potassium. Un excès d'azote donne des plants énormes et peu de fruits.",
+        "note": "Doses par hectare de culture pure, à fractionner : un apport unique se perd avec la pluie.",
+        "apports": [
+          {"produit": "Compost ou fumier bien décomposé", "dose": "15 à 25 t/ha", "moment": "2 à 3 semaines avant repiquage", "methode": "Épandu et enfoui sur la planche", "type": "organique"},
+          {"produit": "Phosphore (P2O5)", "dose": "40 à 60 kg/ha", "moment": "Au repiquage", "methode": "En poquet sous le plant", "type": "mineral"},
+          {"produit": "Azote (N)", "dose": "80 à 120 kg/ha", "moment": "1/3 à la reprise, 2/3 à la floraison", "methode": "En bande, puis arrosage", "type": "mineral"},
+          {"produit": "Potassium (K2O)", "dose": "100 à 150 kg/ha", "moment": "Dès la floraison, en 2 fois", "methode": "En bande", "type": "mineral"},
+          {"produit": "Cendre de bois", "dose": "1 à 2 t/ha", "moment": "Avant la floraison", "methode": "Épandue et incorporée", "type": "organique"}
+        ],
+        "sources": [{"organisme": "ANADER", "titre": "Fiches techniques maraîchage", "url": "https://www.anader.ci/", "consulte_le": "2026-10-25"}]
+      }
+    },
+    "oignon": {
+      "nom": "Oignon",
+      "surnom": "Allium cepa — bulbe de conservation",
+      "type": "legume",
+      "cycle": "90 à 150 jours selon variété et saison",
+      "confiance": "partiel",
+      "presentation": "Bulbe qui se conserve plusieurs mois : il permet de vendre après la récolte, quand les prix montent. Demande une terre fine, un repiquage soigné et un séchage rigoureux.",
+      "conditions": "Sol léger, meuble, sans cailloux, pH 6 à 7. Bonne exposition. Éviter les sols lourds et les parcelles engraissées au fumier frais (pourriture du bulbe).",
+      "varietes": "Variétés de jours courts adaptées à la zone tropicale, à bulbe rouge ou jaune. Le choix dépend du marché visé : demander la liste aux semenciers locaux ou à l'ANADER.",
+      "calendrier": "Pépinière 4 à 6 semaines, repiquage en début de saison sèche avec irrigation, récolte 3 à 5 mois après repiquage. Le bulbe se forme quand les jours sont courts et la température douce.",
+      "preparation": "Travail fin du sol sur 20 cm, planches plates ou légèrement surélevées. Fumure organique bien mûre, incorporée 3 semaines avant.",
+      "semis": "Semis dense en pépinière, repiquage à 10-15 cm entre plants et 20-25 cm entre rangs, collet au niveau du sol (enterré = pourriture, trop haut = verse).",
+      "entretien": "Sarclages manuels (racines superficielles), irrigation régulière puis arrêt 2 à 3 semaines avant récolte. Pas de binage profond.",
+      "sante": "Mildiou de l'oignon, pourriture du collet, thrips. Rotation, plants sains, éviter l'excès d'azote et l'humidité stagnante.",
+      "recolte": "Récolter quand 50 à 70 % des feuilles se couchent. Arracher par temps sec, laisser sécher sur le sol 2 à 3 jours, puis à l'ombre ventilée 2 à 3 semaines.",
+      "conservation": "Local sec et ventilé, en filets ou en tresses, collet bien sec. Le bulbe qui a fleuri (montée à graine) se conserve mal : l'écarter.",
+      "economie": "La valeur vient du stockage : vendre 1 à 3 mois après récolte paye souvent mieux que la vente immédiate, à condition d'avoir un local sec.",
+      "tutoriel": [
+        {"icone": "parcelle", "titre": "Préparer une terre fine", "simple": "L'oignon pousse dans une terre sans mottes ni cailloux : travailler sur 20 cm et casser les mottes avant de repiquer."},
+        {"icone": "preparation", "titre": "Fumure mûre seulement", "simple": "Jamais de fumier frais : il fait pourrir le bulbe. Compost mûr, incorporé 3 semaines avant le repiquage."},
+        {"icone": "semence", "titre": "Semer en pépinière", "simple": "Semer dense, arroser matin et soir, éclaircir si besoin. Les plants sont prêts en 4 à 6 semaines, à la taille d'un crayon."},
+        {"icone": "plantation", "titre": "Repiquer au bon niveau", "simple": "Le collet affleure le sol : ni enterré (pourriture), ni flottant (verse). Tasser légèrement autour des racines."},
+        {"icone": "entretien", "titre": "Arrêter l'eau avant la récolte", "simple": "Deux à trois semaines avant, couper l'irrigation : le bulbe finit de mûrir et se conservera mieux."},
+        {"icone": "recolte", "titre": "Récolter au bon signe", "simple": "Quand les feuilles se couchent à moitié. Arracher par temps sec, laisser sécher sur place une journée."},
+        {"icone": "stockage", "titre": "Sécher puis stocker", "simple": "Séchage à l'ombre ventilée 2 à 3 semaines, puis filets suspendus dans un local sec. Vérifier une fois par mois."}
+      ],
+      "sources": [
+        {"organisme": "Base de connaissances interne", "titre": "knowledge/agronomie.md, knowledge/techniques_agricoles.md", "consulte_le": "2026-10-25"},
+        {"organisme": "ANADER", "titre": "Appui-conseil maraîchage (fiches techniques)", "url": "https://www.anader.ci/", "consulte_le": "2026-10-25"}
+      ],
+      "limites": "Les rendements et les prix de l'oignon varient fortement avec la saison et le lieu de vente : aucune valeur n'est publiée ici. Les variétés doivent être choisies localement (jours courts).",
+      "fertilisation": {
+        "principe": "L'oignon aime le phosphore et le potassium, et redoute l'azote tardif : il retarde la maturation et abîme la conservation.",
+        "note": "Doses par hectare. Arrêter tout apport azoté un mois avant la récolte.",
+        "apports": [
+          {"produit": "Compost mûr", "dose": "15 à 20 t/ha", "moment": "3 semaines avant repiquage", "methode": "Incorporé superficiellement", "type": "organique"},
+          {"produit": "Phosphore (P2O5)", "dose": "50 à 80 kg/ha", "moment": "Avant repiquage", "methode": "Enfoui sur la planche", "type": "mineral"},
+          {"produit": "Azote (N)", "dose": "60 à 90 kg/ha", "moment": "1/2 à la reprise, 1/2 un mois après", "methode": "En bande, puis arrosage", "type": "mineral"},
+          {"produit": "Potassium (K2O)", "dose": "80 à 120 kg/ha", "moment": "Au début de la bulbaison", "methode": "En bande", "type": "mineral"}
+        ],
+        "sources": [{"organisme": "ANADER", "titre": "Fiches techniques maraîchage", "url": "https://www.anader.ci/", "consulte_le": "2026-10-25"}]
+      }
+    },
+    "gombo": {
+      "nom": "Gombo",
+      "surnom": "Abelmoschus esculentus — le légume-fruit du quotidien",
+      "type": "legume",
+      "cycle": "60 à 90 jours pour les premières récoltes, production étalée sur 2 à 3 mois",
+      "confiance": "partiel",
+      "presentation": "Culture robuste et rentable en petites surfaces : la récolte commence tôt et se répète toutes les semaines. Très demandé sur les marchés urbains, frais ou séché.",
+      "conditions": "Sol meuble, bien drainé, pH 5,8 à 6,8. Plein soleil. Supporte la chaleur mieux que la tomate mais craint l'engorgement.",
+      "varietes": "Variétés locales à fruit court ou long, vertes ou rouges selon le marché. Les variétés améliorées se choisissent selon la demande locale (longueur, tendreté).",
+      "calendrier": "Semis direct en début de saison des pluies, récolte 6 à 8 semaines après semis, puis tous les 3 à 4 jours.",
+      "preparation": "Labour léger, planches surélevées si le sol draine mal. Fumure organique 2 à 3 semaines avant le semis.",
+      "semis": "Semis direct en poquets de 2 à 3 graines, 60-80 cm entre rangs et 30-40 cm sur le rang, démariage à 2 plants par poquet.",
+      "entretien": "Deux sarclages, irrigation régulière en saison sèche. Récolter souvent : un fruit trop mûr arrête la production.",
+      "sante": "Oïdium en saison sèche, viroses (mosaïque) transmises par pucerons et aleurodes, nématodes. Rotation et élimination des plants virosés.",
+      "recolte": "Fruit cueilli jeune (5 à 8 cm), tendre, tous les 3 à 4 jours. Gants et manches longues : les poils irritent la peau.",
+      "conservation": "Quelques jours au frais ; séchage en rondelles pour la saison sèche, très recherché.",
+      "economie": "Bon revenu à l'hectare grâce à la récolte étalée ; le séchage permet de lisser les ventes et d'éviter de brader au pic.",
+      "tutoriel": [
+        {"icone": "parcelle", "titre": "Choisir un sol qui draine", "simple": "Le gombo pourrit les pieds dans l'eau : préférer une planche surélevée si la parcelle reste humide."},
+        {"icone": "semence", "titre": "Semer en poquet", "simple": "Deux à trois graines par poquet, 2 cm de profondeur, puis garder les deux plants les plus vigoureux."},
+        {"icone": "entretien", "titre": "Sarcler sans blesser", "simple": "Deux sarclages suffisent. Ne pas biner près des racines, elles sont superficielles."},
+        {"icone": "sante", "titre": "Arracher les plants malades", "simple": "Feuilles en mosaïque ou plant rabougri : arracher et sortir de la parcelle, sinon les pucerons contaminent tout."},
+        {"icone": "recolte", "titre": "Cueillir jeune, souvent", "simple": "Fruit de 5 à 8 cm, tous les 3 à 4 jours. Un fruit laissé mûrir arrête la production du pied."},
+        {"icone": "stockage", "titre": "Sécher pour la saison sèche", "simple": "Trancher fin, sécher au soleil sur claies ou bâche propre, stocker dans un sac fermé au sec."}
+      ],
+      "sources": [
+        {"organisme": "Base de connaissances interne", "titre": "knowledge/agronomie.md, knowledge/techniques_agricoles.md", "consulte_le": "2026-10-25"},
+        {"organisme": "ANADER", "titre": "Appui-conseil maraîchage (fiches techniques)", "url": "https://www.anader.ci/", "consulte_le": "2026-10-25"}
+      ],
+      "limites": "Rendements et prix non publiés (varient selon la saison et le marché). Les variétés et densités doivent être validées localement avec l'ANADER.",
+      "fertilisation": {
+        "principe": "Le gombo réagit vite à l'azote, mais un excès donne de grandes feuilles et peu de fruits : fractionner.",
+        "note": "Doses par hectare, à ajuster selon l'analyse de sol.",
+        "apports": [
+          {"produit": "Compost ou fumier décomposé", "dose": "10 à 15 t/ha", "moment": "2 à 3 semaines avant semis", "methode": "Incorporé au labour", "type": "organique"},
+          {"produit": "Phosphore (P2O5)", "dose": "30 à 50 kg/ha", "moment": "Au semis", "methode": "En poquet", "type": "mineral"},
+          {"produit": "Azote (N)", "dose": "60 à 80 kg/ha", "moment": "1/2 à 3 semaines, 1/2 après la 1re récolte", "methode": "En bande", "type": "mineral"},
+          {"produit": "Potassium (K2O)", "dose": "40 à 60 kg/ha", "moment": "À la floraison", "methode": "En bande", "type": "mineral"}
+        ],
+        "sources": [{"organisme": "ANADER", "titre": "Fiches techniques maraîchage", "url": "https://www.anader.ci/", "consulte_le": "2026-10-25"}]
+      }
+    },
+    "aubergine": {
+      "nom": "Aubergine africaine",
+      "surnom": "Solanum aethiopicum / S. melongena — le « gboma » des sauces",
+      "type": "legume",
+      "cycle": "90 à 120 jours, récolte étalée",
+      "confiance": "partiel",
+      "presentation": "Légume-fruit de base des sauces ivoiriennes : les variétés locales africaines (amères ou douces) sont très demandées. Rustique, productive, moins exigeante que la tomate.",
+      "conditions": "Sol meuble et fertile, pH 5,5 à 6,8, plein soleil. Redoute l'engorgement et les nématodes (même famille que la tomate et le piment).",
+      "varietes": "Deux groupes : aubergines africaines locales (fruits verts, rouges ou blancs, amertume variable) et aubergines européennes (fruit violet allongé). Le marché local décide du choix.",
+      "calendrier": "Pépinière 3 à 4 semaines, repiquage en début de saison des pluies, récolte 2,5 à 4 mois après repiquage.",
+      "preparation": "Labour, planches surélevées, fumure organique 3 semaines avant repiquage.",
+      "semis": "Pépinière fine, repiquage à 4-6 feuilles, 70-80 cm entre rangs et 50-60 cm sur le rang.",
+      "entretien": "Sarclages, paillage conseillé, irrigation régulière sans mouiller le feuillage. Tuteurage léger des variétés lourdes.",
+      "sante": "Flétrissement bactérien, viroses, acariens et aleurodes. Rotation obligatoire, plants sains, surveillance du dessous des feuilles.",
+      "recolte": "Fruit ferme et brillant, avant maturité complète (la chair devient amère et dure). Récolte toutes les semaines.",
+      "conservation": "Quelques jours à l'ombre ; séchage possible en tranches pour les variétés locales.",
+      "economie": "Débouché local solide, y compris auprès des restaurants de rue. Calculer la marge avec le prix du marché de gros de la semaine.",
+      "tutoriel": [
+        {"icone": "parcelle", "titre": "Éviter la parcelle à solanacées", "simple": "Après tomate, piment ou aubergine, attendre 3 ans : les nématodes et le flétrissement restent dans le sol."},
+        {"icone": "semence", "titre": "Faire une pépinière propre", "simple": "Terre fine, semis clair, ombrage léger, arrosage matinal. Repiquer à 4-6 feuilles."},
+        {"icone": "entretien", "titre": "Pailler et arroser au pied", "simple": "Le paillage garde l'humidité et évite les éclaboussures qui propagent les maladies."},
+        {"icone": "sante", "titre": "Surveiller les acariens", "simple": "Feuilles pâles et fines toiles dessous : traiter tôt, retirer les feuilles atteintes."},
+        {"icone": "recolte", "titre": "Récolter ferme", "simple": "Fruit brillant et ferme. Trop mûr, il devient amer et dur."},
+        {"icone": "marche", "titre": "Vendre local", "simple": "Les restaurants et les marchés de quartier achètent en petites quantités régulières : arroser la régularité plutôt que le volume unique."}
+      ],
+      "sources": [
+        {"organisme": "Base de connaissances interne", "titre": "knowledge/agronomie.md, knowledge/techniques_agricoles.md", "consulte_le": "2026-10-25"},
+        {"organisme": "ANADER", "titre": "Appui-conseil maraîchage (fiches techniques)", "url": "https://www.anader.ci/", "consulte_le": "2026-10-25"}
+      ],
+      "limites": "Variétés locales, densités et rendements non documentés dans les sources internes : à confirmer avec l'ANADER de votre zone.",
+      "fertilisation": {
+        "principe": "Même logique que la tomate : fumure organique conséquente, azote fractionné, potassium à la fructification.",
+        "note": "Doses par hectare, à ajuster selon l'analyse de sol.",
+        "apports": [
+          {"produit": "Compost ou fumier décomposé", "dose": "15 à 20 t/ha", "moment": "3 semaines avant repiquage", "methode": "Incorporé sur la planche", "type": "organique"},
+          {"produit": "Phosphore (P2O5)", "dose": "40 à 60 kg/ha", "moment": "Au repiquage", "methode": "En poquet", "type": "mineral"},
+          {"produit": "Azote (N)", "dose": "80 à 100 kg/ha", "moment": "1/2 à la reprise, 1/2 à la floraison", "methode": "En bande", "type": "mineral"},
+          {"produit": "Potassium (K2O)", "dose": "80 à 120 kg/ha", "moment": "Dès la floraison", "methode": "En bande", "type": "mineral"}
+        ],
+        "sources": [{"organisme": "ANADER", "titre": "Fiches techniques maraîchage", "url": "https://www.anader.ci/", "consulte_le": "2026-10-25"}]
+      }
+    },
+    "chou": {
+      "nom": "Chou",
+      "surnom": "Brassica oleracea — pomme de saison fraîche",
+      "type": "legume",
+      "cycle": "75 à 100 jours après repiquage",
+      "confiance": "partiel",
+      "presentation": "Légume-feuille très demandé en saison fraîche et en zone d'altitude. Culture exigeante en eau et en azote, sensible aux chenilles.",
+      "conditions": "Sol profond, riche en matière organique, pH 6 à 7. Préfère les périodes fraîches ; en plaine chaude, viser la saison des pluies ou l'altitude.",
+      "varietes": "Variétés à pomme ronde ou pointue, vertes ou violettes, adaptées à la chaleur ou au froid selon la zone. Liste locale à demander au semencier.",
+      "calendrier": "Pépinière 3 à 4 semaines, repiquage en saison fraîche, récolte 2,5 à 3 mois plus tard.",
+      "preparation": "Labour profond, fumure organique incorporée, planches surélevées si drainage moyen.",
+      "semis": "Pépinière, repiquage à 5-6 feuilles, 60 cm entre rangs et 40-50 cm sur le rang.",
+      "entretien": "Arrosage régulier et copieux (la pomme éclate si l'eau varie brutalement), sarclages, buttage léger.",
+      "sante": "Chenilles (piéride, teigne), pucerons, alternariose. Surveillance feuille par feuille, rotation, filets anti-insectes si possible.",
+      "recolte": "Pomme ferme et lourde, couper au collet. Récolter tôt le matin et garder à l'ombre.",
+      "conservation": "1 à 2 semaines dans un endroit frais et humide ; le chou supporte mal la chaleur sèche.",
+      "economie": "Prix sensible à l'offre : éviter d'arriver en même temps que tout le monde sur le marché, échelonner les repiquages.",
+      "tutoriel": [
+        {"icone": "parcelle", "titre": "Viser la bonne saison", "simple": "Le chou aime la fraîcheur : en plaine, viser la saison des pluies ; en altitude, la saison sèche fraîche."},
+        {"icone": "preparation", "titre": "Une terre riche", "simple": "Compost bien mûr incorporé sur 20 cm : le chou pèse lourd quand la terre est profonde et nourrie."},
+        {"icone": "plantation", "titre": "Repiquer sans enterrer", "simple": "Le collet affleure. Arroser aussitôt, ombrer deux jours si le soleil est fort."},
+        {"icone": "entretien", "titre": "Arroser régulièrement", "simple": "Une pomme qui manque d'eau puis en reçoit beaucoup éclate. Mieux vaut arroser souvent et modérément."},
+        {"icone": "sante", "titre": "Chercher les chenilles", "simple": "Regarder le cœur et le dessous des feuilles deux fois par semaine ; retirer les œufs et les jeunes chenilles à la main."},
+        {"icone": "recolte", "titre": "Récolter lourd", "simple": "Pomme ferme, couper au collet, garder à l'ombre : le chou ramollit vite au soleil."}
+      ],
+      "sources": [
+        {"organisme": "Base de connaissances interne", "titre": "knowledge/agronomie.md, knowledge/techniques_agricoles.md", "consulte_le": "2026-10-25"},
+        {"organisme": "ANADER", "titre": "Appui-conseil maraîchage (fiches techniques)", "url": "https://www.anader.ci/", "consulte_le": "2026-10-25"}
+      ],
+      "limites": "Rendements, prix et variétés non publiés : ils dépendent fortement de la saison et de l'altitude.",
+      "fertilisation": {
+        "principe": "Le chou est un gros consommateur d'azote : il se fractionne sur tout le cycle, sinon la pomme reste légère.",
+        "note": "Doses par hectare, à ajuster selon l'analyse de sol.",
+        "apports": [
+          {"produit": "Compost ou fumier décomposé", "dose": "20 à 30 t/ha", "moment": "3 semaines avant repiquage", "methode": "Incorporé profondément", "type": "organique"},
+          {"produit": "Azote (N)", "dose": "100 à 150 kg/ha", "moment": "En 3 fois : reprise, 1 mois, fermeture de la pomme", "methode": "En bande, puis arrosage", "type": "mineral"},
+          {"produit": "Phosphore (P2O5)", "dose": "50 à 70 kg/ha", "moment": "Au repiquage", "methode": "En poquet", "type": "mineral"},
+          {"produit": "Potassium (K2O)", "dose": "80 à 120 kg/ha", "moment": "À la formation de la pomme", "methode": "En bande", "type": "mineral"}
+        ],
+        "sources": [{"organisme": "ANADER", "titre": "Fiches techniques maraîchage", "url": "https://www.anader.ci/", "consulte_le": "2026-10-25"}]
+      }
+    },
+    "pasteque": {
+      "nom": "Pastèque",
+      "surnom": "Citrullus lanatus — culture de saison sèche",
+      "type": "fruit",
+      "cycle": "75 à 100 jours",
+      "confiance": "partiel",
+      "presentation": "Fruit très demandé en saison chaude, adapté aux sols sableux et à l'irrigation localisée. Une culture de trésorerie quand l'eau est maîtrisée.",
+      "conditions": "Sol sableux ou sablo-limoneux, bien drainé, pH 6 à 7. Plein soleil et chaleur. Craint l'excès d'eau et les sols lourds.",
+      "varietes": "Variétés à fruit rond ou allongé, chair rouge ou jaune, à écorce résistante pour le transport. Les variétés adaptées à la saison sèche sont à privilégier.",
+      "calendrier": "Semis en saison sèche avec irrigation (novembre-février) ou en début de saison des pluies. Récolte 2,5 à 3 mois après semis.",
+      "preparation": "Labour léger, planches ou billons, trous de plantation enrichis en compost.",
+      "semis": "Semis direct en poquets de 2-3 graines, 2 à 3 m entre rangs et 1 à 1,5 m sur le rang.",
+      "entretien": "Irrigation au pied, sarclages jusqu'au recouvrement, pincer les extrémités pour concentrer la production sur 2 à 3 fruits par pied.",
+      "sante": "Oïdium, mildiou, mouches des fruits, viroses. Rotation et élimination des fruits pourris.",
+      "recolte": "Le dessous du fruit jaunit, le pédoncule sèche, le son devient sourd quand on frappe : signes de maturité. Récolter par temps sec.",
+      "conservation": "1 à 2 semaines à l'ombre fraîche ; le fruit coupé ne se garde pas.",
+      "economie": "Bonne valeur en pleine saison chaude ; attention au transport (fruits lourds, chargement soigné).",
+      "tutoriel": [
+        {"icone": "parcelle", "titre": "Choisir un sol léger", "simple": "La pastèque aime le sable et le soleil. Un sol lourd et humide donne des fruits insipides et des racines pourries."},
+        {"icone": "semence", "titre": "Semer en poquet", "simple": "Deux à trois graines par poquet, 2 cm de profondeur. Garder le plant le plus vigoureux."},
+        {"icone": "entretien", "titre": "Irriguer au pied", "simple": "Arroser au pied, jamais sur les feuilles. Réduire l'eau à l'approche de la maturité pour concentrer le sucre."},
+        {"icone": "sante", "titre": "Sortir les fruits pourris", "simple": "Un fruit pourri attire les mouches et contamine la planche : l'enlever dès qu'on le voit."},
+        {"icone": "recolte", "titre": "Reconnaître le bon moment", "simple": "Dessous jaune, pédoncule sec, son sourd : trois signes qui ne trompent pas."},
+        {"icone": "marche", "titre": "Vendre en saison chaude", "simple": "La demande explose quand il fait chaud : échelonner les semis pour être présent plusieurs semaines."}
+      ],
+      "sources": [
+        {"organisme": "Base de connaissances interne", "titre": "knowledge/agronomie.md, knowledge/techniques_agricoles.md", "consulte_le": "2026-10-25"},
+        {"organisme": "ANADER", "titre": "Appui-conseil maraîchage (fiches techniques)", "url": "https://www.anader.ci/", "consulte_le": "2026-10-25"}
+      ],
+      "limites": "Aucun rendement ni prix vérifié n'est publié ; les variétés doivent être choisies localement selon le marché.",
+      "fertilisation": {
+        "principe": "La pastèque répond au potassium (sucre et calibre) ; l'azote doit être modéré pour ne pas produire que des feuilles.",
+        "note": "Doses par hectare, à ajuster selon l'analyse de sol.",
+        "apports": [
+          {"produit": "Compost ou fumier décomposé", "dose": "10 à 15 t/ha", "moment": "Avant le semis, dans les poquets", "methode": "Mélangé à la terre du trou", "type": "organique"},
+          {"produit": "Phosphore (P2O5)", "dose": "40 à 60 kg/ha", "moment": "Au semis", "methode": "En poquet", "type": "mineral"},
+          {"produit": "Azote (N)", "dose": "40 à 70 kg/ha", "moment": "1/2 au démarrage, 1/2 à la floraison", "methode": "En bande", "type": "mineral"},
+          {"produit": "Potassium (K2O)", "dose": "80 à 120 kg/ha", "moment": "À la nouaison", "methode": "En bande", "type": "mineral"}
+        ],
+        "sources": [{"organisme": "ANADER", "titre": "Fiches techniques maraîchage", "url": "https://www.anader.ci/", "consulte_le": "2026-10-25"}]
+      }
+    },
+    "papaye": {
+      "nom": "Papaye",
+      "surnom": "Carica papaya — fruit toute l'année",
+      "type": "fruit",
+      "cycle": "8 à 12 mois jusqu'à la première récolte, production ensuite continue",
+      "confiance": "partiel",
+      "presentation": "Fruit qui produit toute l'année après la première floraison : intéressant pour la trésorerie régulière. Deux marchés : fruit mûr et papaye verte (légume, transformation).",
+      "conditions": "Sol profond, bien drainé, pH 5,5 à 7. Plein soleil, à l'abri du vent (les pieds versent). Redoute l'engorgement et les nématodes.",
+      "varietes": "Variétés dioïques (mâle/femelle) ou hermaphrodites (autofertiles, plus régulières). La forme et le calibre du fruit dépendent du marché visé.",
+      "calendrier": "Plantation au début de la saison des pluies, première récolte 8 à 12 mois après, puis récolte continue toutes les semaines.",
+      "preparation": "Trous de 40 × 40 × 40 cm, remplis de compost et de terre de surface, sur billon si le sol draine mal.",
+      "semis": "Semis en sachet, plants de 20 à 30 cm, plantation à 2-2,5 m entre plants et 3 m entre rangs.",
+      "entretien": "Désherbage autour du pied, paillage, irrigation régulière la première année. Éliminer les pieds mâles excédentaires (garder 1 mâle pour 10 à 20 femelles en variété dioïque).",
+      "sante": "Viroses (mosaïque, anneau brun), pourriture du collet, nématodes, cochenilles. Arracher les pieds virosés, ne jamais replanter papaye sur papaye.",
+      "recolte": "Fruit qui jaunit légèrement pour le marché proche, vert pour le transport long ou la papaye verte.",
+      "conservation": "Le fruit mûr ne se garde que quelques jours ; la papaye verte se transforme (légume, séchage).",
+      "economie": "Production régulière mais prix bas en pleine saison : la transformation (papaye verte râpée, séchée) améliore la valeur.",
+      "tutoriel": [
+        {"icone": "parcelle", "titre": "Un sol profond et drainé", "simple": "La papaye meurt dans l'eau stagnante : planter sur billon si le sol garde l'humidité."},
+        {"icone": "preparation", "titre": "Un grand trou bien nourri", "simple": "40 cm de côté, rempli de compost mûr et de terre de surface. C'est ce qui fait la première année."},
+        {"icone": "plantation", "titre": "Planter au début des pluies", "simple": "Le plant reprend mieux quand la terre est humide en profondeur. Arroser copieusement à la plantation."},
+        {"icone": "entretien", "titre": "Pailler et désherber", "simple": "Le papayer a des racines superficielles : pailler plutôt que biner profondément."},
+        {"icone": "sante", "titre": "Arracher les pieds malades", "simple": "Feuilles en mosaïque ou collet noirci : arracher et brûler. Un pied malade ne guérit pas."},
+        {"icone": "recolte", "titre": "Récolter selon le marché", "simple": "Jaune pour vendre en ville proche, vert pour transporter loin ou transformer."}
+      ],
+      "sources": [
+        {"organisme": "Base de connaissances interne", "titre": "knowledge/agronomie.md, knowledge/techniques_agricoles.md", "consulte_le": "2026-10-25"},
+        {"organisme": "ANADER", "titre": "Appui-conseil arboriculture et maraîchage", "url": "https://www.anader.ci/", "consulte_le": "2026-10-25"}
+      ],
+      "limites": "Variétés, rendements et prix non documentés dans les sources internes. La durée de production dépend fortement du drainage et des virus.",
+      "fertilisation": {
+        "principe": "Le papayer pousse vite et produit en continu : il faut nourrir souvent, en petites quantités, autour du pied.",
+        "note": "Doses par pied et par an, à répartir en 4 à 6 apports.",
+        "apports": [
+          {"produit": "Compost ou fumier décomposé", "dose": "10 à 20 kg/pied/an", "moment": "Tous les 2 à 3 mois", "methode": "En couronne, à 20-30 cm du tronc", "type": "organique"},
+          {"produit": "Azote (N)", "dose": "100 à 200 g/pied/an", "moment": "En 4 à 6 fois", "methode": "En couronne, sol humide", "type": "mineral"},
+          {"produit": "Potassium (K2O)", "dose": "150 à 250 g/pied/an", "moment": "En 4 à 6 fois, renforcé en fructification", "methode": "En couronne", "type": "mineral"},
+          {"produit": "Phosphore (P2O5)", "dose": "50 à 100 g/pied/an", "moment": "2 fois par an", "methode": "Enfoui en couronne", "type": "mineral"}
+        ],
+        "sources": [{"organisme": "ANADER", "titre": "Appui-conseil arboriculture", "url": "https://www.anader.ci/", "consulte_le": "2026-10-25"}]
+      }
+    },
+    "ananas": {
+      "nom": "Ananas",
+      "surnom": "Ananas comosus — fruit d'export et de marché local",
+      "type": "fruit",
+      "cycle": "12 à 18 mois selon le matériel de plantation",
+      "confiance": "partiel",
+      "presentation": "Fruit emblématique de la Côte d'Ivoire, avec un marché local solide et une filière d'export structurée. Culture de longue durée : elle immobilise la parcelle plus d'un an.",
+      "conditions": "Sol sableux, léger, bien drainé, pH 4,5 à 6,5 (acide). Plein soleil. Craint l'engorgement et le froid.",
+      "varietes": "Cayenne lisse (export), variétés locales à chair jaune ou blanche pour le marché intérieur. Le choix se fait avec le débouché, pas avant.",
+      "calendrier": "Plantation des rejets en début de saison des pluies ; récolte 12 à 18 mois après selon la taille du rejet.",
+      "preparation": "Labour léger, billons si drainage moyen, plantation sur deux lignes espacées de 40-60 cm.",
+      "semis": "Plantation de rejets (couronne, rejet latéral) de 25 à 35 cm, enfoncés de 5 cm, 25-30 cm sur la ligne.",
+      "entretien": "Désherbage régulier (l'ananas craint la concurrence), paillage possible, irrigation en saison sèche la première année.",
+      "sante": "Pourriture du cœur, cochenilles, nématodes. Utiliser des rejets sains et ne pas replanter sur une ancienne parcelle d'ananas sans repos.",
+      "recolte": "Le fruit change de couleur et sonne creux ; couper avec un couteau propre, laisser une partie du pédoncule.",
+      "conservation": "1 à 2 semaines au frais ; le fruit est fragile aux chocs.",
+      "economie": "Filière d'export exigeante en qualité et en volume ; pour le marché local, la vente en morceaux prêts à consommer valorise mieux le fruit.",
+      "tutoriel": [
+        {"icone": "parcelle", "titre": "Viser un sol sableux", "simple": "L'ananas préfère un sol léger et acide. Un sol lourd et humide fait pourrir le cœur."},
+        {"icone": "preparation", "titre": "Préparer les billons", "simple": "Si le terrain garde l'eau, planter sur billon : le pied ne doit jamais baigner."},
+        {"icone": "plantation", "titre": "Choisir de bons rejets", "simple": "Rejets de 25 à 35 cm, fermes, sans tache. Un rejet malade contamine la parcelle pour un an et demi."},
+        {"icone": "entretien", "titre": "Désherber sans blesser", "simple": "Les racines sont superficielles : sarcler à la main autour du pied, pailler entre les lignes."},
+        {"icone": "recolte", "titre": "Reconnaître le fruit mûr", "simple": "La couleur tourne du vert au jaune et le fruit sonne creux quand on le tapote."},
+        {"icone": "marche", "titre": "Choisir son débouché avant de planter", "simple": "Export et marché local n'ont ni les mêmes variétés ni les mêmes calibres : décider avant la plantation."}
+      ],
+      "sources": [
+        {"organisme": "Base de connaissances interne", "titre": "knowledge/agronomie.md, knowledge/techniques_agricoles.md", "consulte_le": "2026-10-25"},
+        {"organisme": "ANADER", "titre": "Appui-conseil cultures fruitières", "url": "https://www.anader.ci/", "consulte_le": "2026-10-25"}
+      ],
+      "limites": "Aucune donnée de rendement ni de prix n'est publiée : la filière export a ses propres cahiers des charges, non détaillés ici.",
+      "fertilisation": {
+        "principe": "L'ananas se nourrit surtout par les feuilles, mais la fumure organique de fond reste déterminante la première année.",
+        "note": "Doses par hectare ; en production d'export, suivre le cahier des charges de l'acheteur.",
+        "apports": [
+          {"produit": "Compost ou fumier décomposé", "dose": "15 à 20 t/ha", "moment": "Avant plantation", "methode": "Incorporé dans les billons", "type": "organique"},
+          {"produit": "Azote (N)", "dose": "150 à 250 kg/ha", "moment": "En 4 à 6 apports sur le cycle", "methode": "En bande ou en couronne", "type": "mineral"},
+          {"produit": "Potassium (K2O)", "dose": "150 à 300 kg/ha", "moment": "Fractionné jusqu'à l'induction florale", "methode": "En bande", "type": "mineral"},
+          {"produit": "Phosphore (P2O5)", "dose": "50 à 100 kg/ha", "moment": "À la plantation", "methode": "Sous le rejet", "type": "mineral"}
+        ],
+        "sources": [{"organisme": "ANADER", "titre": "Appui-conseil cultures fruitières", "url": "https://www.anader.ci/", "consulte_le": "2026-10-25"}]
+      }
+    },
+    "manguier": {
+      "nom": "Manguier",
+      "surnom": "Mangifera indica — l'arbre de la saison sèche",
+      "type": "fruit",
+      "cycle": "3 à 5 ans avant la première production, puis arbre pérenne",
+      "confiance": "partiel",
+      "presentation": "Arbre fruitier pérenne : un investissement long mais qui produit pendant des décennies. La mangue ivoirienne a un marché local, régional et export (campagne de contre-saison).",
+      "conditions": "Sol profond, bien drainé, pH 5,5 à 7,5. Plein soleil. Résiste à la sécheresse une fois installé mais pas à l'engorgement.",
+      "varietes": "Kent, Keitt, Amélie (export) ; variétés locales pour le marché intérieur. Le choix dépend du débouché et de la période de production visée.",
+      "calendrier": "Plantation en début de saison des pluies, greffé de préférence (production plus rapide et variété garantie). Floraison en saison sèche, récolte 3 à 5 mois après.",
+      "preparation": "Trou de 50 × 50 × 50 cm, mélange terre/compost, tuteur solide, protection contre les animaux.",
+      "semis": "Plantation de plants greffés de 60 à 80 cm, 8 à 10 m entre arbres (ou 5-6 m en haie fruitière taillée).",
+      "entretien": "Désherbage du jeune âge, taille de formation les 3 premières années, irrigation pendant les 2 premières saisons sèches.",
+      "sante": "Anthracnose (majeure en saison humide), mouche des fruits, oïdium à la floraison, cochenilles. Ramassage des fruits tombés, taille d'aération.",
+      "recolte": "Fruit récolté à maturité physiologique (épaulement rempli), il mûrit ensuite. Cueillir à la perche avec filet, sans choquer.",
+      "conservation": "7 à 15 jours selon la maturité et le froid disponible ; le fruit heurté pourrit vite.",
+      "economie": "Rentabilité à long terme : la première production arrive après 3 à 5 ans. Prévoir l'entretien des jeunes arbres sans revenu immédiat.",
+      "tutoriel": [
+        {"icone": "parcelle", "titre": "Un sol profond, sans eau stagnante", "simple": "Le manguier vit des décennies : vérifier le drainage avant de planter, pas après."},
+        {"icone": "preparation", "titre": "Préparer un grand trou", "simple": "50 cm de côté, compost mélangé à la terre de surface, tuteur solide contre le vent."},
+        {"icone": "plantation", "titre": "Planter un arbre greffé", "simple": "Le greffé produit plus tôt et donne la variété attendue. Point de greffe au-dessus du sol."},
+        {"icone": "entretien", "titre": "Tailler les 3 premières années", "simple": "Former 3 à 4 charpentières bien réparties : l'arbre récolté à la perche se conduit dès le jeune âge."},
+        {"icone": "sante", "titre": "Ramasser les fruits tombés", "simple": "Ils abritent les mouches des fruits : ramasser et enfouir chaque semaine en saison."},
+        {"icone": "recolte", "titre": "Récolter avant maturité", "simple": "Épaule remplie, fruit encore ferme : il mûrit en 5 à 8 jours et supporte le transport."}
+      ],
+      "sources": [
+        {"organisme": "Base de connaissances interne", "titre": "knowledge/agronomie.md, knowledge/techniques_agricoles.md", "consulte_le": "2026-10-25"},
+        {"organisme": "ANADER", "titre": "Appui-conseil arboriculture fruitière", "url": "https://www.anader.ci/", "consulte_le": "2026-10-25"}
+      ],
+      "limites": "Rendements, prix et calendriers variétaux précis non documentés ici. L'anthracnose et la mouche des fruits peuvent annuler une récolte : prévoir la surveillance.",
+      "fertilisation": {
+        "principe": "Jeune arbre : construire la charpente (azote + phosphore). Arbre adulte : potassium pour le calibre et la qualité du fruit.",
+        "note": "Doses par pied et par an ; enfouir en couronne, sous la projection de la frondaison.",
+        "apports": [
+          {"produit": "Fumier ou compost", "dose": "20 à 40 kg/pied/an", "moment": "Début de saison des pluies", "methode": "En couronne, enfoui légèrement", "type": "organique"},
+          {"produit": "Azote (N)", "dose": "200 à 400 g/pied/an", "moment": "En 2 fois (pluies)", "methode": "En couronne", "type": "mineral"},
+          {"produit": "Phosphore (P2O5)", "dose": "150 à 300 g/pied/an", "moment": "1 fois par an", "methode": "Enfoui en couronne", "type": "mineral"},
+          {"produit": "Potassium (K2O)", "dose": "300 à 600 g/pied/an", "moment": "Avant la floraison et après la récolte", "methode": "En couronne", "type": "mineral"}
+        ],
+        "sources": [{"organisme": "ANADER", "titre": "Appui-conseil arboriculture", "url": "https://www.anader.ci/", "consulte_le": "2026-10-25"}]
+      }
+    }
+  }
+}
