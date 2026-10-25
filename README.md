@@ -335,6 +335,41 @@ vercel link --yes --project agroguidci-site   # une fois
 vercel deploy --prod --yes --scope cmaxter    # publie web/ (vercel.json + .vercelignore)
 ```
 
+## Crédits et offres (v11)
+
+**Règle métier.** Chaque session anonyme reçoit **15 crédits gratuits par fenêtre de 7 heures**
+(UTC), renouvelés automatiquement au passage de fenêtre. Une consultation coûte **1 crédit**,
+débité **uniquement lorsque l'agent a produit une réponse** (statut `termine` ou `escalade`) ;
+un échec, une clarification ou une réponse vide ne coûtent rien. Les crédits non utilisés ne
+sont pas reportés ; les crédits achetés, eux, n'expirent pas et sont consommés après les
+gratuits.
+
+**Où vit la vérité.** Dans le journal `credits` (SQLite du moteur, volume `agro-data`), jamais
+dans le navigateur :
+
+| Élément | Détail |
+|---|---|
+| Attribution | `INSERT OR IGNORE` + index unique partiel `(session_id, periode) WHERE raison='gratuit_periode'` : une fenêtre ne peut être créditée deux fois |
+| Débit | `INSERT … SELECT … WHERE solde >= cout` : le solde ne peut pas devenir négatif, et l'index unique `(session_id, reference) WHERE raison='consultation'` rend le débit idempotent par `message_id` |
+| Refus | `POST /api/conversations/{id}/messages` rend **402** *avant* toute exécution si le solde est nul : aucun message créé, aucun appel au moteur |
+| Lecture | `GET /api/credits` (session requise) → solde, délai de renouvellement, packs |
+| Achat | `conversations.ajouter_credits_achetes()` n'est appelable que par un webhook de paiement vérifié ; **aucun paiement n'est branché aujourd'hui**, donc aucun crédit n'est vendu |
+
+Configuration (facultative) : `AGRO_CREDITS_GRATUITS` (défaut 15),
+`AGRO_CREDITS_PERIODE_H` (défaut 7), `AGRO_CREDITS_COUT` (défaut 1).
+
+**Offres affichées** : Pack Découverte 599 FCFA / 30 crédits (~19,97 FCFA le crédit) et Pack
+Avancé 3 999 FCFA / 200 crédits (~20 FCFA le crédit), boutons `Acheter des crédits`
+**désactivés** tant qu'aucun parcours de paiement vérifié n'existe. L'offre « Suivi
+personnalisé » est retirée de la vitrine (code des missions conservé côté moteur).
+
+**Un seul chemin vers l'agent** : le bouton « Poser ma question » (hero et bandeau final) ouvre
+la chatbox ; le formulaire du panneau Conseil ne lance plus `/api/demande`, il reprend la
+question (avec localité et surface) dans la chatbox. C'est ce chemin qui débite.
+
+Tests : `python -m unittest tests_credits` (19 tests, sans LLM) et `tests_vitrine_v9` (24 tests
+dont les appels à l'action et les montants affichés).
+
 ## Interface et animations (v10)
 
 La vitrine est un site statique sans build : `web/assets/site.css` (feuille unique, ~1 700
