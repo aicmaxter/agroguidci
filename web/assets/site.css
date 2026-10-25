@@ -1621,6 +1621,22 @@ li[data-role="user"] .chat-auteur { color: var(--green-700); }
   .nav { display: none; }
   .nav-toggle { display: inline-flex; }
   .header-cta { display: none; }
+  /* pages sans menu déroulant (fiches cultures, pages légales) : la navigation
+     reste utilisable, en rangée défilante, au lieu de disparaître */
+  body:not(:has(.nav-toggle)) .site-header .nav {
+    display: flex;
+    margin-left: auto;
+    gap: .85rem;
+    font-size: .78rem;
+    white-space: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-block: .2rem;
+    -webkit-mask-image: linear-gradient(90deg, #000 0, #000 92%, transparent 100%);
+    mask-image: linear-gradient(90deg, #000 0, #000 92%, transparent 100%);
+  }
+  body:not(:has(.nav-toggle)) .site-header .nav::-webkit-scrollbar { display: none; }
   .app-hero-grid { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
   .hero-mini { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .mini-card { flex-direction: column; align-items: flex-start; gap: .6rem; }
@@ -1678,6 +1694,7 @@ li[data-role="user"] .chat-auteur { color: var(--green-700); }
 @media (max-width: 560px) {
   .crops-grid { grid-template-columns: minmax(0, 1fr); }
   .crop-img { aspect-ratio: 16 / 10; }
+  body:not(:has(.nav-toggle)) .site-header .nav { gap: .7rem; font-size: .74rem; }
   .hero-actions .btn { width: 100%; }
   .hero-mesures > div { flex: 1 1 46%; }
   .tab { padding: .5rem .62rem; gap: .35rem; }
