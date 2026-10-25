@@ -332,8 +332,38 @@ Projet Vercel `agroguidci-site` **non lié à Git** : un `git push` ne déploie 
 ```bash
 cd ~/agents/agroguidci
 vercel link --yes --project agroguidci-site   # une fois
-vercel deploy --prod --yes                    # publie web/ (vercel.json + .vercelignore)
+vercel deploy --prod --yes --scope cmaxter    # publie web/ (vercel.json + .vercelignore)
 ```
+
+## Interface et animations (v10)
+
+La vitrine est un site statique sans build : `web/assets/site.css` (feuille unique, ~1 700
+lignes) et `web/assets/motion.js` (moteur d'animation, sans dépendance). Deux règles à
+respecter en y touchant :
+
+- **Les hooks JS ne changent pas.** `ui.js`, `app.js`, `chat.js`, `geo.js` et les
+  générateurs (`scripts/gen_index.py`, `scripts/build_cultures.py`) pilotent les mêmes
+  classes et identifiants : `.panel`, `.tab`, `.crop.reveal`, `.filtre`, `.actu`,
+  `.meteo-carte`, `#grilleCultures`, `#chatDialogue`. Une refonte change l'apparence,
+  jamais ces noms.
+- **Tout effet a un filet de sécurité.** Les révélations (`.reveal` + `.in`), les
+  compteurs (`[data-count]`) et les bascules d'onglets doivent rester visibles et
+  corrects sans `IntersectionObserver`, sans `requestAnimationFrame` et en
+  `prefers-reduced-motion: reduce`. `motion.js` pose la valeur finale par `setTimeout`
+  et ne classe jamais un élément visible uniquement par animation.
+
+Vérifier une refonte avant de publier :
+
+```bash
+python -m http.server 8123 --directory web          # puis http://localhost:8123/
+python -m unittest tests_vitrine_v9                 # 16 tests (contrat vitrine + fiches)
+python scripts/gen_index.py --verifier              # cartes = cultures.json
+python scripts/build_cultures.py --verifier         # fiches = content/
+```
+
+Si `scripts/build_cultures.py` régénère les fiches avec un autre numéro de version de
+feuille de style, c'est le générateur qu'il faut mettre à jour (les pages `cultures/*.html`
+sont générées, jamais éditées à la main).
 
 **Le runtime de référence reste local** : AGROGUIDCI est un runtime *local* — un
 orchestrateur FastAPI (`127.0.0.1:8000`, SQLite), **sept processus d'agents** qui tournent en
