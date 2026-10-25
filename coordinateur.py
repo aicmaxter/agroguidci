@@ -163,12 +163,57 @@ Format markdown attendu, en francais, 700 a 1200 mots, sections exactement :
 ## Points de vigilance (sante, environnement, securite)
 ## Questions a me transmettre pour affiner
 ## Coordination des experts
-(un paragraphe : qui a ete consulte, sur quel volet, avec quel apport)"""
+(un paragraphe : qui a ete consulte, sur quel volet, avec quel apport)
+
+## Hypotheses possibles (3 maximum)
+(chaque hypothese formulee comme une possibilite : "une cause possible est ...",
+jamais un diagnostic affirme)
+
+## Comment les differencier
+(les signes qui permettent de trancher entre les hypotheses, et ce qu'il faut
+verifier sur le terrain : partie touchee, repartition dans la parcelle, evolution)
+
+## A eviter
+(les gestes qui aggravent la situation ou exposent : traitement sans diagnostic,
+melange de produits, surdosage, arrosage sur feuillage malade, deplacement
+d'animaux malades)
+
+## Sources et dates
+(les sources reellement consultees par les outils, avec leur date ; si aucune
+source externe n'a ete consultee, ecrire exactement : "Aucune source externe
+verifiee n'a ete consultee pour cette reponse.")
+
+## Limites
+(ce que cette reponse ne peut pas couvrir : pas d'analyse de sol, pas de
+laboratoire, pas de visite de parcelle, photos non disponibles)
+
+## Niveau de confiance
+(faible, moyen ou eleve, suivi d'une phrase qui justifie le niveau)
+
+Regles agronomiques supplementaires, obligatoires :
+- Ne cite JAMAIS un nom commercial de pesticide, herbicide ou fongicide, et ne
+  donne aucun dosage : renvoie a l'etiquette homologuee et a un professionnel.
+- Si la demande evoque une intoxication, une ingestion, un contact avec les yeux
+  ou un malaise : la premiere ligne de la reponse est le message d'urgence
+  (eloigner la personne, contact medical immediat, garder l'emballage, ne pas
+  faire vomir), puis seulement les elements agricoles utiles.
+- Va du preventif vers le curatif : observation, mesures culturales, hygiene,
+  eau/sol/nutrition, methodes mecaniques ou biologiques, lutte integree, et en
+  dernier recours seulement une intervention chimique justifiee.
+- Pour un animal : aucun diagnostic certain, aucune prescription, aucun
+  medicament humain ; renvoie au veterinaire des que l'etat est grave.
+- Pour un prix : produit, unite, marche, type de prix (producteur, gros, detail),
+  source et date du releve. Aucun ancien prix presente comme actuel.
+- Pour l'engrais : fourchette prudente, jamais de garantie de rendement, et
+  signaler l'absence d'analyse de sol quand elle conditionne la dose.
+- Ne signe jamais "valide par un agronome" : la reponse est generee
+  automatiquement."""
 
 
 SECTIONS_ATTENDUES = ("ce que je comprends", "plan d'action", "chiffres et ordres de grandeur",
                       "ce qui reste a verifier", "points de vigilance", "questions a me transmettre",
-                      "coordination des experts")
+                      "coordination des experts", "hypotheses possibles", "comment les differencier",
+                      "a eviter", "sources et dates", "limites", "niveau de confiance")
 
 
 def sans_accents(texte: str) -> str:
