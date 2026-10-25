@@ -417,6 +417,7 @@ body:has(.app-hero) .site-header:not(.stuck) .header-cta:hover {
   padding-block: clamp(2.6rem, 6vw, 5rem) clamp(3rem, 7vw, 5.5rem);
 }
 .hero-media { position: absolute; inset: 0; z-index: -1; }
+.hero-media picture { display: block; width: 100%; height: 100%; }
 .hero-photo {
   width: 100%; height: 100%; object-fit: cover; object-position: 62% 55%;
   opacity: .62;
@@ -926,6 +927,7 @@ body:has(.app-hero) .site-header:not(.stuck) .header-cta:hover {
   background: var(--green-tint);
 }
 .crop-lien-img { display: block; width: 100%; height: 100%; }
+.crop-lien-img picture { display: block; width: 100%; height: 100%; }
 .crop-img img {
   width: 100%; height: 100%; object-fit: cover;
   transition: transform .9s var(--ease), filter .6s var(--ease);

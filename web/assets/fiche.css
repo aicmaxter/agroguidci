@@ -75,6 +75,7 @@
   background: var(--green-900);
   overflow: hidden;
 }
+.fiche-photo picture { display: block; width: 100%; height: 100%; }
 .fiche-photo img {
   display: block; width: 100%; height: 100%;
   aspect-ratio: 16 / 11; object-fit: cover;
@@ -173,6 +174,7 @@
 .tuto-corps strong { display: block; margin-bottom: .2rem; color: var(--ink); font-size: .95rem; }
 .tuto-corps p { margin: 0; font-size: .92rem; line-height: 1.58; color: var(--ink-2); }
 .tuto-photo { margin: .7rem 0 0; }
+.tuto-photo picture { display: block; }
 .tuto-photo img {
   display: block; width: 100%; max-width: 520px; height: 190px; object-fit: cover;
   border-radius: var(--r-md); border: 1px solid var(--line); background: var(--green-tint);

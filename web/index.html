@@ -13,8 +13,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="assets/hero.jpg" fetchpriority="high">
-<link rel="stylesheet" href="assets/site.css?v=13">
+<link rel="preload" as="image" href="assets/hero.webp" type="image/webp" fetchpriority="high">
+<link rel="stylesheet" href="assets/site.css?v=14">
 </head>
 <body>
 <a class="skip" href="#app">Aller au contenu</a>
@@ -61,7 +61,7 @@
 
   <section class="app-hero">
     <div class="hero-media" aria-hidden="true">
-      <img class="hero-photo" src="assets/hero.jpg" alt="" width="1600" height="912" fetchpriority="high" decoding="async">
+      <picture><source type="image/webp" srcset="assets/hero.webp"><img class="hero-photo" src="assets/hero.jpg" alt="" width="1600" height="912" fetchpriority="high" decoding="async"></picture>
       <span class="hero-veil"></span>
       <span class="hero-grain"></span>
     </div>
@@ -221,7 +221,7 @@
           <article class="crop reveal" data-type="vivriere" data-nom="voandzou">
             <figure class="crop-img">
               <a class="crop-lien-img" href="cultures/voandzou" aria-label="Lire la fiche Voandzou">
-                <img src="assets/cultures/voandzou.jpg" alt="Voandzou — photographie réelle" width="1200" height="750" loading="lazy">
+                <picture><source type="image/webp" srcset="assets/cultures/480/voandzou.webp 480w, assets/cultures/960/voandzou.webp 960w" sizes="(max-width: 560px) 92vw, (max-width: 760px) 46vw, (max-width: 1180px) 31vw, 280px"><img src="assets/cultures/voandzou.jpg" alt="Voandzou — photographie réelle" width="1200" height="750" loading="lazy" decoding="async"></picture>
               </a>
               <span class="crop-badge">Peu cultivée</span>
             </figure>
@@ -242,7 +242,7 @@
           <article class="crop reveal" data-type="vivriere" data-nom="fonio">
             <figure class="crop-img">
               <a class="crop-lien-img" href="cultures/fonio" aria-label="Lire la fiche Fonio">
-                <img src="assets/cultures/fonio.jpg" alt="Fonio — photographie réelle" width="1200" height="750" loading="lazy">
+                <picture><source type="image/webp" srcset="assets/cultures/480/fonio.webp 480w, assets/cultures/960/fonio.webp 960w" sizes="(max-width: 560px) 92vw, (max-width: 760px) 46vw, (max-width: 1180px) 31vw, 280px"><img src="assets/cultures/fonio.jpg" alt="Fonio — photographie réelle" width="1200" height="750" loading="lazy" decoding="async"></picture>
               </a>
               <span class="crop-badge">Peu cultivée</span>
             </figure>
@@ -263,7 +263,7 @@
           <article class="crop reveal" data-type="vivriere" data-nom="sésame">
             <figure class="crop-img">
               <a class="crop-lien-img" href="cultures/sesame" aria-label="Lire la fiche Sésame">
-                <img src="assets/cultures/sesame.jpg" alt="Sésame — photographie réelle" width="1200" height="750" loading="lazy">
+                <picture><source type="image/webp" srcset="assets/cultures/480/sesame.webp 480w, assets/cultures/960/sesame.webp 960w" sizes="(max-width: 560px) 92vw, (max-width: 760px) 46vw, (max-width: 1180px) 31vw, 280px"><img src="assets/cultures/sesame.jpg" alt="Sésame — photographie réelle" width="1200" height="750" loading="lazy" decoding="async"></picture>
               </a>
               <span class="crop-badge">Peu cultivée</span>
             </figure>
@@ -284,7 +284,7 @@
           <article class="crop reveal" data-type="vivriere" data-nom="patate douce à chair orange">
             <figure class="crop-img">
               <a class="crop-lien-img" href="cultures/patatedouce" aria-label="Lire la fiche Patate douce à chair orange">
-                <img src="assets/cultures/patatedouce.jpg" alt="Patate douce à chair orange — photographie réelle" width="1200" height="750" loading="lazy">
+                <picture><source type="image/webp" srcset="assets/cultures/480/patatedouce.webp 480w, assets/cultures/960/patatedouce.webp 960w" sizes="(max-width: 560px) 92vw, (max-width: 760px) 46vw, (max-width: 1180px) 31vw, 280px"><img src="assets/cultures/patatedouce.jpg" alt="Patate douce à chair orange — photographie réelle" width="1200" height="750" loading="lazy" decoding="async"></picture>
               </a>
               <span class="crop-badge">Peu cultivée</span>
             </figure>
@@ -305,7 +305,7 @@
           <article class="crop reveal" data-type="vivriere" data-nom="soja">
             <figure class="crop-img">
               <a class="crop-lien-img" href="cultures/soja" aria-label="Lire la fiche Soja">
-                <img src="assets/cultures/soja.jpg" alt="Soja — photographie réelle" width="1200" height="750" loading="lazy">
+                <picture><source type="image/webp" srcset="assets/cultures/480/soja.webp 480w, assets/cultures/960/soja.webp 960w" sizes="(max-width: 560px) 92vw, (max-width: 760px) 46vw, (max-width: 1180px) 31vw, 280px"><img src="assets/cultures/soja.jpg" alt="Soja — photographie réelle" width="1200" height="750" loading="lazy" decoding="async"></picture>
               </a>
               <span class="crop-badge nou">Nouvelle fiche</span>
             </figure>
@@ -326,7 +326,7 @@
           <article class="crop reveal" data-type="vivriere" data-nom="igname">
             <figure class="crop-img">
               <a class="crop-lien-img" href="cultures/igname" aria-label="Lire la fiche Igname">
-                <img src="assets/cultures/igname.jpg" alt="Igname — photographie réelle" width="1200" height="750" loading="lazy">
+                <picture><source type="image/webp" srcset="assets/cultures/480/igname.webp 480w, assets/cultures/960/igname.webp 960w" sizes="(max-width: 560px) 92vw, (max-width: 760px) 46vw, (max-width: 1180px) 31vw, 280px"><img src="assets/cultures/igname.jpg" alt="Igname — photographie réelle" width="1200" height="750" loading="lazy" decoding="async"></picture>
               </a>
               <span class="crop-badge nou">Nouvelle fiche</span>
             </figure>
@@ -347,7 +347,7 @@
           <article class="crop reveal" data-type="vivriere" data-nom="banane plantain">
             <figure class="crop-img">
               <a class="crop-lien-img" href="cultures/plantain" aria-label="Lire la fiche Banane plantain">
-                <img src="assets/cultures/plantain.jpg" alt="Banane plantain — photographie réelle" width="1200" height="750" loading="lazy">
+                <picture><source type="image/webp" srcset="assets/cultures/480/plantain.webp 480w, assets/cultures/960/plantain.webp 960w" sizes="(max-width: 560px) 92vw, (max-width: 760px) 46vw, (max-width: 1180px) 31vw, 280px"><img src="assets/cultures/plantain.jpg" alt="Banane plantain — photographie réelle" width="1200" height="750" loading="lazy" decoding="async"></picture>
               </a>
               <span class="crop-badge nou">Nouvelle fiche</span>
             </figure>
@@ -368,7 +368,7 @@
           <article class="crop reveal epice" data-type="epice" data-nom="poivre noir">
             <figure class="crop-img">
               <a class="crop-lien-img" href="cultures/poivre" aria-label="Lire la fiche Poivre noir">
-                <img src="assets/cultures/poivre.jpg" alt="Poivre noir — photographie réelle" width="1200" height="750" loading="lazy">
+                <picture><source type="image/webp" srcset="assets/cultures/480/poivre.webp 480w, assets/cultures/960/poivre.webp 960w" sizes="(max-width: 560px) 92vw, (max-width: 760px) 46vw, (max-width: 1180px) 31vw, 280px"><img src="assets/cultures/poivre.jpg" alt="Poivre noir — photographie réelle" width="1200" height="750" loading="lazy" decoding="async"></picture>
               </a>
               <span class="crop-badge epice nou">Épice</span>
             </figure>
@@ -389,7 +389,7 @@
           <article class="crop reveal epice" data-type="epice" data-nom="gingembre">
             <figure class="crop-img">
               <a class="crop-lien-img" href="cultures/gingembre" aria-label="Lire la fiche Gingembre">
-                <img src="assets/cultures/gingembre.jpg" alt="Gingembre — photographie réelle" width="1200" height="750" loading="lazy">
+                <picture><source type="image/webp" srcset="assets/cultures/480/gingembre.webp 480w, assets/cultures/960/gingembre.webp 960w" sizes="(max-width: 560px) 92vw, (max-width: 760px) 46vw, (max-width: 1180px) 31vw, 280px"><img src="assets/cultures/gingembre.jpg" alt="Gingembre — photographie réelle" width="1200" height="750" loading="lazy" decoding="async"></picture>
               </a>
               <span class="crop-badge epice nou">Épice</span>
             </figure>
@@ -410,7 +410,7 @@
           <article class="crop reveal epice" data-type="epice" data-nom="curcuma">
             <figure class="crop-img">
               <a class="crop-lien-img" href="cultures/curcuma" aria-label="Lire la fiche Curcuma">
-                <img src="assets/cultures/curcuma.jpg" alt="Curcuma — photographie réelle" width="1200" height="750" loading="lazy">
+                <picture><source type="image/webp" srcset="assets/cultures/480/curcuma.webp 480w, assets/cultures/960/curcuma.webp 960w" sizes="(max-width: 560px) 92vw, (max-width: 760px) 46vw, (max-width: 1180px) 31vw, 280px"><img src="assets/cultures/curcuma.jpg" alt="Curcuma — photographie réelle" width="1200" height="750" loading="lazy" decoding="async"></picture>
               </a>
               <span class="crop-badge epice nou">Épice</span>
             </figure>
@@ -431,7 +431,7 @@
           <article class="crop reveal epice" data-type="epice" data-nom="piment">
             <figure class="crop-img">
               <a class="crop-lien-img" href="cultures/piment" aria-label="Lire la fiche Piment">
-                <img src="assets/cultures/piment.jpg" alt="Piment — photographie réelle" width="1200" height="750" loading="lazy">
+                <picture><source type="image/webp" srcset="assets/cultures/480/piment.webp 480w, assets/cultures/960/piment.webp 960w" sizes="(max-width: 560px) 92vw, (max-width: 760px) 46vw, (max-width: 1180px) 31vw, 280px"><img src="assets/cultures/piment.jpg" alt="Piment — photographie réelle" width="1200" height="750" loading="lazy" decoding="async"></picture>
               </a>
               <span class="crop-badge epice nou">Épice</span>
             </figure>

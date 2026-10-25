@@ -44,10 +44,29 @@ def carte(c: dict, photo: dict | None) -> str:
         lien = c.get("source_url") or "#"
         source = ('<p class="crop-source">Pourquoi maintenant : ' + e(c["source"]) +
                   ' — <a href="' + e(lien) + '" target="_blank" rel="noreferrer">source</a></p>')
+
+    # Dérivés WebP (scripts/optimiser_photos.py) : la carte ne télécharge plus
+    # l'original de 1200 px, mais 480 px (~40 Ko). Repli JPEG si le dérivé manque.
+    jpg = f"assets/cultures/{e(c['id'])}.jpg"
+    petit, grand = f"assets/cultures/480/{e(c['id'])}.webp", f"assets/cultures/960/{e(c['id'])}.webp"
+    webp_ok = (ROOT / "web" / petit).exists() and (ROOT / "web" / grand).exists()
+    if webp_ok:
+        image = (
+            '<picture>'
+            f'<source type="image/webp" srcset="{petit} 480w, {grand} 960w" '
+            'sizes="(max-width: 560px) 92vw, (max-width: 760px) 46vw, (max-width: 1180px) 31vw, 280px">'
+            f'<img src="{jpg}" alt="{e(c["nom"])} — photographie réelle" '
+            'width="1200" height="750" loading="lazy" decoding="async">'
+            '</picture>'
+        )
+    else:
+        image = (f'<img src="{jpg}" alt="{e(c["nom"])} — photographie réelle" '
+                 'width="1200" height="750" loading="lazy" decoding="async">')
+
     return f'''          <article class="{classes}" data-type="{e(c['type'])}" data-nom="{e(c['nom'].lower())}">
             <figure class="crop-img">
               <a class="crop-lien-img" href="cultures/{e(c['id'])}" aria-label="Lire la fiche {e(c['nom'])}">
-                <img src="assets/cultures/{e(c['id'])}.jpg" alt="{e(c['nom'])} — photographie réelle" width="1200" height="750" loading="lazy">
+                {image}
               </a>
               <span class="{badge}">{e(c['badge'])}</span>
             </figure>

@@ -45,7 +45,7 @@ GABARIT = """<!DOCTYPE html>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap">
-  <link rel="stylesheet" href="../assets/site.css?v=13">
+  <link rel="stylesheet" href="../assets/site.css?v=14">
   <link rel="stylesheet" href="../assets/fiche.css?v=4">
 </head>
 <body class="fiche-page">
@@ -82,7 +82,7 @@ GABARIT = """<!DOCTYPE html>
         </ul>
       </div>
       <figure class="fiche-photo">
-        <img src="../assets/cultures/{id}.jpg" alt="{nom} — photographie réelle" width="1200" height="750">
+        {photo_entete}
         <figcaption>{credit}</figcaption>
       </figure>
     </header>
@@ -197,6 +197,25 @@ def e(t: object) -> str:
 _PICTO_ENTETE = ('<svg viewBox="0 0 28 28" fill="none" stroke="currentColor" '
                  'stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" '
                  'aria-hidden="true" focusable="false">')
+RACINE_FICHIERS = Path(__file__).resolve().parent.parent
+
+
+def derives_webp(chemin: str) -> tuple[str, str] | None:
+    """« assets/cultures/x.jpg » -> (« assets/cultures/480/x.webp », « .../960/x.webp »).
+
+    Renvoie None si les dérivés n'existent pas sur disque : une <source> cassée
+    afficherait une image vide, contrairement à un repli JPEG.
+    """
+    if not chemin.endswith(".jpg") or "/cultures/" not in chemin:
+        return None
+    base, nom = chemin.rsplit("/", 1)
+    petit, grand = f"{base}/480/{nom[:-4]}.webp", f"{base}/960/{nom[:-4]}.webp"
+    for rel in (petit, grand):
+        if not (RACINE_FICHIERS / "web" / rel).exists():
+            return None
+    return petit, grand
+
+
 PICTOS = {
     "parcelle": _PICTO_ENTETE + '<circle cx="8" cy="8" r="3"/><path d="M3 17h22M5 21h19M7 25h15"/></svg>',
     "preparation": _PICTO_ENTETE + '<path d="M3 22c4-9 10-9 14 0"/><circle cx="20" cy="8" r="1.3"/>'
@@ -255,9 +274,19 @@ def page(cid: str, c: dict, photos: dict, maj: str) -> str:
         credit = " · ".join(x for x in (ph.get("auteur"), ph.get("licence")) if x)
         lien = ph.get("page") or ""
         libelle = f'<a href="{e(lien)}" target="_blank" rel="noreferrer">Wikimedia Commons</a>' if lien else ""
-        return (f'<figure class="tuto-photo"><img src="../{e(ph["fichier"])}" '
-                f'alt="{e(c.get("nom"))} — illustration de cette étape" loading="lazy" '
-                f'decoding="async"><figcaption>{e(credit)}'
+        fichier = ph["fichier"]
+        alt = f'{e(c.get("nom"))} — illustration de cette étape'
+        derives = derives_webp(fichier)
+        if derives:
+            petit, grand = derives
+            image = (f'<picture><source type="image/webp" '
+                     f'srcset="../{e(petit)} 480w, ../{e(grand)} 960w" '
+                     f'sizes="(max-width: 560px) 92vw, 520px">'
+                     f'<img src="../{e(fichier)}" alt="{alt}" loading="lazy" decoding="async">'
+                     f'</picture>')
+        else:
+            image = f'<img src="../{e(fichier)}" alt="{alt}" loading="lazy" decoding="async">'
+        return (f'<figure class="tuto-photo">{image}<figcaption>{e(credit)}'
                 f'{" · " + libelle if libelle else ""}</figcaption></figure>')
 
     tutoriel = "\n".join(
@@ -283,6 +312,25 @@ def page(cid: str, c: dict, photos: dict, maj: str) -> str:
     if photo:
         credit = f'Photo : {e(photo.get("auteur"))} · {e(photo.get("licence"))} · Wikimedia'
 
+    # photo d'en-tête : dérivés WebP si présents, sinon le JPEG d'origine
+    jpg_entete = f"assets/cultures/{cid}.jpg"
+    derives = derives_webp(jpg_entete)
+    if derives:
+        petit, grand = derives
+        photo_entete = (
+            f'<picture><source type="image/webp" '
+            f'srcset="../{petit} 480w, ../{grand} 960w" '
+            f'sizes="(max-width: 820px) 100vw, 44vw">'
+            f'<img src="../{jpg_entete}" alt="{e(c.get("nom"))} — photographie réelle" '
+            f'width="1200" height="750" fetchpriority="high" decoding="async">'
+            f'</picture>'
+        )
+    else:
+        photo_entete = (
+            f'<img src="../{jpg_entete}" alt="{e(c.get("nom"))} — photographie réelle" '
+            f'width="1200" height="750" decoding="async">'
+        )
+
     confiance = c.get("confiance") or "partiel"
     classe = {"documente": "ok", "partiel": "moyen", "faible": "faible"}.get(confiance, "moyen")
     description = (c.get("presentation") or c.get("surnom") or c.get("nom") or "")[:180]
@@ -291,7 +339,7 @@ def page(cid: str, c: dict, photos: dict, maj: str) -> str:
         nom=e(c.get("nom")), surnom=e(c.get("surnom")), id=e(cid), cycle=e(c.get("cycle")),
         famille="Épice" if c.get("type") == "epice" else "Culture vivrière",
         maj=e(maj), confiance=e(confiance), classe_confiance=classe,
-        description=e(description), credit=credit,
+        description=e(description), credit=credit, photo_entete=photo_entete,
         sommaire="".join(sommaire), sections="\n".join(sections),
         tutoriel=tutoriel, sources="".join(sources), limites=e(c.get("limites")),
         suggestions=suggestions(cid, c.get("nom") or cid),
