@@ -14,16 +14,56 @@
   /* ---------- menu mobile ---------- */
   var toggle = document.getElementById("navToggle");
   var mobile = document.getElementById("navMobile");
+
+  function menuOuvert() {
+    return !!(mobile && mobile.classList.contains("open"));
+  }
+
+  function basculerMenu(ouvrir) {
+    if (!toggle || !mobile) return;
+    mobile.classList.toggle("open", ouvrir);
+    toggle.setAttribute("aria-expanded", ouvrir ? "true" : "false");
+    toggle.setAttribute("aria-label", ouvrir ? "Fermer le menu" : "Ouvrir le menu");
+    document.documentElement.classList.toggle("menu-ouvert", ouvrir);
+    if (ouvrir) {
+      var premier = mobile.querySelector("a, button");
+      if (premier) premier.focus({ preventScroll: true });
+    }
+  }
+
   if (toggle && mobile) {
-    toggle.addEventListener("click", function () {
-      var open = mobile.classList.toggle("open");
-      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    toggle.addEventListener("click", function (e) {
+      e.stopPropagation();
+      basculerMenu(!menuOuvert());
     });
-    mobile.addEventListener("click", function (e) {
-      if (e.target.tagName === "A") {
-        mobile.classList.remove("open");
-        toggle.setAttribute("aria-expanded", "false");
+
+    // Échap ferme et rend le focus au bouton
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && menuOuvert()) {
+        basculerMenu(false);
+        toggle.focus();
       }
+      // le focus reste dans le panneau tant qu'il est ouvert
+      if (e.key === "Tab" && menuOuvert()) {
+        var liens = mobile.querySelectorAll("a, button");
+        if (!liens.length) return;
+        var premier = liens[0];
+        var dernier = liens[liens.length - 1];
+        if (!e.shiftKey && document.activeElement === dernier) { e.preventDefault(); premier.focus(); }
+        else if (e.shiftKey && document.activeElement === premier) { e.preventDefault(); dernier.focus(); }
+      }
+    });
+
+    // un clic à l'extérieur ferme
+    document.addEventListener("click", function (e) {
+      if (!menuOuvert()) return;
+      if (mobile.contains(e.target) || toggle.contains(e.target)) return;
+      basculerMenu(false);
+    });
+
+    // un lien ou une bascule d'onglet referme le panneau
+    mobile.addEventListener("click", function (e) {
+      if (e.target.closest && e.target.closest("a, button")) basculerMenu(false);
     });
   }
 

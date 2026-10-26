@@ -9,7 +9,6 @@
   var pointeurFin = window.matchMedia && window.matchMedia("(pointer: fine)").matches;
   var barre = document.getElementById("progress");
   var entete = document.getElementById("siteHeader");
-  var barreOnglets = document.querySelector(".tabbar-wrap");
 
   /* ------------------------------------------------------------ défilement : progression, en-tête, barre d'onglets */
   function surDefilement() {
@@ -17,7 +16,6 @@
     var total = h.scrollHeight - window.innerHeight;
     if (barre) barre.style.transform = "scaleX(" + (total > 0 ? Math.min(1, window.scrollY / total) : 0) + ")";
     if (entete) entete.classList.toggle("stuck", window.scrollY > 8);
-    if (barreOnglets) barreOnglets.classList.toggle("colle", window.scrollY > 40);
   }
   var enAttente = false;
   window.addEventListener("scroll", function () {
@@ -115,36 +113,27 @@
     }
   }
 
-  /* ------------------------------------------------------------ indicateur coulissant des onglets */
-  function mesurerOnglet() {
-    var tabbar = document.querySelector(".tabbar");
-    if (!tabbar) return;
-    var actif = tabbar.querySelector('.tab[aria-selected="true"]') || tabbar.querySelector(".tab.active");
-    if (!actif) return;
-    tabbar.style.setProperty("--tw", actif.offsetWidth + "px");
-    tabbar.style.setProperty("--tx", actif.offsetLeft + "px");
-    // La classe n'est posée qu'une fois : la reposer à chaque mutation relancerait
-    // l'observateur en boucle (classList.add réécrit l'attribut même si la classe existe).
-    if (!tabbar.classList.contains("a-mesure")) tabbar.classList.add("a-mesure");
-  }
-  var mesurePrevue = false;
-  function planifierMesure() {
-    if (mesurePrevue) return;
-    mesurePrevue = true;
-    requestAnimationFrame(function () { mesurePrevue = false; mesurerOnglet(); });
-  }
-  mesurerOnglet();
-  window.addEventListener("resize", planifierMesure, { passive: true });
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(planifierMesure).catch(function () {});
-  setTimeout(planifierMesure, 500);
-  setTimeout(planifierMesure, 1600);
-  var tabbarEl = document.querySelector(".tabbar");
-  if (tabbarEl && "MutationObserver" in window) {
-    // ui.js change aria-selected / .active : on recale le fond à chaque bascule,
-    // y compris au clavier (flèches) ou au changement de hash.
-    new MutationObserver(planifierMesure).observe(tabbarEl, {
-      subtree: true, attributes: true, attributeFilter: ["aria-selected", "class"]
-    });
+  /* ------------------------------------------------------------ repérage de la section Tarifs */
+  // Un seul indicateur d'état à la fois : quand la section Tarifs occupe l'écran,
+  // elle prend la marque active et les onglets la perdent.
+  var lienTarifs = document.querySelector('.nav a[href="#tarifs"]');
+  var sectionTarifs = document.getElementById("tarifs");
+  if (lienTarifs && sectionTarifs && "IntersectionObserver" in window) {
+    new IntersectionObserver(function (entrees) {
+      entrees.forEach(function (e) {
+        var dedans = e.isIntersecting && e.intersectionRatio > 0.3;
+        lienTarifs.classList.toggle("actif", dedans);
+        if (dedans) {
+          document.querySelectorAll(".navlink.actif").forEach(function (b) {
+            b.classList.remove("actif");
+            b.removeAttribute("aria-current");
+          });
+          lienTarifs.setAttribute("aria-current", "true");
+        } else {
+          lienTarifs.removeAttribute("aria-current");
+        }
+      });
+    }, { threshold: [0, 0.3, 0.6], rootMargin: "-70px 0px -45% 0px" }).observe(sectionTarifs);
   }
 
   /* ------------------------------------------------------------ reflet des boutons */

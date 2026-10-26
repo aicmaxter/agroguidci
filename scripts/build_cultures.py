@@ -45,7 +45,7 @@ GABARIT = """<!DOCTYPE html>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap">
-  <link rel="stylesheet" href="../assets/site.css?v=15">
+  <link rel="stylesheet" href="../assets/site.css?v=19">
   <link rel="stylesheet" href="../assets/fiche.css?v=4">
 </head>
 <body class="fiche-page">
@@ -53,13 +53,14 @@ GABARIT = """<!DOCTYPE html>
 <header class="site-header">
   <div class="wrap">
     <a class="brand" href="../" aria-label="AGROGUIDCI, accueil">
-      <span class="brand-mark" aria-hidden="true">🌱</span>
+      <span class="brand-mark"><svg class="logo-agro" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path class="logo-tige" d="M16 27.4V14.2" stroke="currentColor" stroke-width="2.9" stroke-linecap="round"/><path class="logo-feuille logo-feuille-h" d="M16 15c0-5.2 3.6-8.9 8.5-8.9 0 5.2-3.6 8.9-8.5 8.9Z" fill="currentColor"/><path class="logo-feuille logo-feuille-b" d="M16.2 19.2c0-4-2.9-7-6.9-7 0 4 2.9 7 6.9 7Z" fill="currentColor" fill-opacity=".62"/><circle class="logo-soleil" cx="17.4" cy="3.9" r="2.2" fill="#e8a33d"/></svg></span>
       <span class="brand-text">AGROGUIDCI</span>
     </a>
     <nav class="nav" aria-label="Navigation principale">
-      <a class="navlink" href="../#cultures">Cultures</a>
+      <a class="navlink" href="../#cultures">Cultures &amp; épices</a>
       <a class="navlink" href="../#prix">Prix du kilo</a>
       <a class="navlink" href="../#actus">Actualités</a>
+      <a class="navlink" href="../#tarifs">Tarifs</a>
       <a class="navlink" href="../confidentialite.html">Confidentialité</a>
     </nav>
     <a class="btn btn-primary header-cta" href="../#conseil">Conseil gratuit</a>

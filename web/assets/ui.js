@@ -19,32 +19,52 @@
   }
   function fcfa(n) { return Number(n).toLocaleString("fr-FR"); }
 
-  /* ------------------------------------------------------------------ onglets */
+  /* ------------------------------------------------------------------ navigation */
+  // Une seule navigation : l'en-tête. Les quatre premiers liens ouvrent un panneau,
+  // « Tarifs » et « Confidentialité » mènent à leur section ou à leur page.
   var panneaux = ["conseil", "cultures", "prix", "actus"];
+
+  function surlignerLien(nom) {
+    // Une seule navigation est visible à la fois (.nav sur desktop, .nav-mobile
+    // sur petit écran) : l'état actif est posé sur les deux jeux de liens, mais
+    // aria-current n'est annoncé que par la navigation réellement affichée.
+    var navDesktop = document.querySelector(".nav");
+    var desktopVisible = navDesktop && getComputedStyle(navDesktop).display !== "none";
+
+    document.querySelectorAll(".navlink").forEach(function (b) {
+      var cible = b.getAttribute("data-tab");
+      var actif = cible === nom;
+      b.classList.toggle("actif", actif);
+      if (!cible) return;
+      var dansDesktop = !!b.closest(".nav-mobile") === false;
+      var annonce = actif && (dansDesktop ? desktopVisible : !desktopVisible);
+      if (annonce) b.setAttribute("aria-current", "page");
+      else b.removeAttribute("aria-current");
+    });
+    // un lien d'ancre ne reste jamais actif en même temps qu'un onglet
+    document.querySelectorAll('.nav a[href^="#"], .nav-mobile a[href^="#"]').forEach(function (a) {
+      a.classList.remove("actif");
+      a.removeAttribute("aria-current");
+    });
+  }
 
   function activerOnglet(nom, defiler) {
     if (panneaux.indexOf(nom) < 0) nom = "conseil";
     panneaux.forEach(function (p) {
       var panneau = document.getElementById("panel-" + p);
-      var onglet = document.getElementById("tab-" + p);
-      var actif = p === nom;
       if (panneau) {
+        var actif = p === nom;
         panneau.hidden = !actif;
         panneau.classList.toggle("active", actif);
       }
-      if (onglet) {
-        onglet.classList.toggle("active", actif);
-        onglet.setAttribute("aria-selected", actif ? "true" : "false");
-        onglet.setAttribute("tabindex", actif ? "0" : "-1");
+    });
+    surlignerLien(nom);
+    if (defiler) {
+      var cible = document.getElementById("panel-" + nom);
+      if (cible) {
+        var y = cible.getBoundingClientRect().top + window.scrollY - 74;
+        window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
       }
-    });
-    document.querySelectorAll(".navlink").forEach(function (b) {
-      b.classList.toggle("actif", b.getAttribute("data-tab") === nom);
-    });
-    var barre = document.querySelector(".tabbar-wrap");
-    if (defiler && barre) {
-      var y = barre.getBoundingClientRect().top + window.scrollY - 78;
-      window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
     }
     if (history.replaceState) history.replaceState(null, "", "#" + nom);
     if (nom === "cultures") revelerFiches();
@@ -54,25 +74,9 @@
     var cible = e.target.closest ? e.target.closest("[data-tab]") : null;
     if (!cible) return;
     var nom = cible.getAttribute("data-tab");
-    if (!nom) return;
+    if (!nom || panneaux.indexOf(nom) < 0) return;
     if (cible.tagName === "A") e.preventDefault();
-    var menu = document.getElementById("navMobile");
-    if (menu) menu.classList.remove("open");
     activerOnglet(nom, true);
-  });
-
-  document.querySelectorAll('[role="tab"]').forEach(function (onglet) {
-    onglet.addEventListener("keydown", function (e) {
-      var i = panneaux.indexOf(onglet.getAttribute("data-tab"));
-      if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
-        e.preventDefault();
-        var pas = e.key === "ArrowRight" ? 1 : -1;
-        var suivant = panneaux[(i + pas + panneaux.length) % panneaux.length];
-        activerOnglet(suivant, false);
-        var cible = document.getElementById("tab-" + suivant);
-        if (cible) cible.focus();
-      }
-    });
   });
 
   var depart = (location.hash || "").replace("#", "");
@@ -109,8 +113,8 @@
         span.textContent = valeurs[b.getAttribute("data-filtre")];
       }
     });
-    var onglet = document.querySelector('[data-tab="cultures"] .tab-count');
-    if (onglet) onglet.textContent = total;
+    var compteur = document.getElementById("compteurCultures");
+    if (compteur) compteur.textContent = total;
   }
 
   document.querySelectorAll("[data-filtre]").forEach(function (bouton) {

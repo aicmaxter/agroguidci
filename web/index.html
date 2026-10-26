@@ -9,12 +9,12 @@
 <meta property="og:title" content="AGROGUIDCI — conseil, cultures, épices et prix du marché">
 <meta property="og:description" content="Conseil agricole, fiches cultures et épices, prix au kilo, actualités de campagne. Gratuit chaque jour.">
 <meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%230B3A22'/%3E%3Cstop offset='1' stop-color='%237BB661'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='24' height='24' rx='7' fill='url(%23g)'/%3E%3Cpath d='M12 21v-7' stroke='%23fff' stroke-width='1.7' fill='none' stroke-linecap='round'/%3E%3Cpath d='M12 14c0-3.4 2.4-5.8 5.8-5.8 0 3.4-2.4 5.8-5.8 5.8Z' stroke='%23fff' stroke-width='1.7' fill='none'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23062b1d'/%3E%3Cpath d='M16 26.5V14.6' stroke='%23c9f36b' stroke-width='2.1' stroke-linecap='round'/%3E%3Cpath d='M16 15.4c0-4.9 3.4-8.4 8-8.4 0 4.9-3.4 8.4-8 8.4Z' fill='%23c9f36b'/%3E%3Cpath d='M16.2 18.6c0-3.8-2.7-6.6-6.4-6.6 0 3.8 2.7 6.6 6.4 6.6Z' fill='%238cc79b'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="assets/hero.webp" type="image/webp" fetchpriority="high">
-<link rel="stylesheet" href="assets/site.css?v=16">
+<link rel="stylesheet" href="assets/site.css?v=19">
 </head>
 <body>
 <a class="skip" href="#app">Aller au contenu</a>
@@ -24,14 +24,14 @@
   <div class="wrap">
     <a class="brand" href="./" aria-label="AGROGUIDCI — accueil">
       <span class="brand-mark">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21v-7"/><path d="M12 14c0-3.4 2.4-5.8 5.8-5.8 0 3.4-2.4 5.8-5.8 5.8Z"/><path d="M12 14c0-2.6-1.9-4.5-4.7-4.5 0 2.6 1.9 4.5 4.7 4.5Z"/></svg>
+        <svg class="logo-agro" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path class="logo-tige" d="M16 27.4V14.2" stroke="currentColor" stroke-width="2.9" stroke-linecap="round"/><path class="logo-feuille logo-feuille-h" d="M16 15c0-5.2 3.6-8.9 8.5-8.9 0 5.2-3.6 8.9-8.5 8.9Z" fill="currentColor"/><path class="logo-feuille logo-feuille-b" d="M16.2 19.2c0-4-2.9-7-6.9-7 0 4 2.9 7 6.9 7Z" fill="currentColor" fill-opacity=".62"/><circle class="logo-soleil" cx="17.4" cy="3.9" r="2.2" fill="#e8a33d"/></svg>
       </span>
       <span class="brand-text">AGROGUID<span class="ci">CI</span></span>
     </a>
     <nav class="nav" aria-label="Navigation principale">
       <button class="navlink" data-tab="conseil" type="button">Conseil</button>
-      <button class="navlink" data-tab="cultures" type="button">Cultures</button>
-      <button class="navlink" data-tab="prix" type="button">Prix</button>
+      <button class="navlink" data-tab="cultures" type="button">Cultures &amp; épices</button>
+      <button class="navlink" data-tab="prix" type="button">Prix du kilo</button>
       <button class="navlink" data-tab="actus" type="button">Actualités</button>
       <a href="#tarifs">Tarifs</a>
       <a href="confidentialite.html">Confidentialité</a>
@@ -106,32 +106,6 @@
     </div>
   </section>
 
-  <div class="tabbar-wrap">
-    <div class="wrap">
-      <div class="tabbar" role="tablist" aria-label="Sections de l'application">
-        <span class="tab-fond" aria-hidden="true"></span>
-        <button role="tab" id="tab-conseil" aria-controls="panel-conseil" aria-selected="true" data-tab="conseil" class="tab active">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
-          Conseil
-        </button>
-        <button role="tab" id="tab-cultures" aria-controls="panel-cultures" aria-selected="false" data-tab="cultures" class="tab">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21v-7"/><path d="M12 14c0-3.4 2.4-5.8 5.8-5.8 0 3.4-2.4 5.8-5.8 5.8Z"/><path d="M12 14c0-2.6-1.9-4.5-4.7-4.5 0 2.6 1.9 4.5 4.7 4.5Z"/></svg>
-          Cultures &amp; épices
-          <span class="tab-count">11</span>
-        </button>
-        <button role="tab" id="tab-prix" aria-controls="panel-prix" aria-selected="false" data-tab="prix" class="tab">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 5-6"/></svg>
-          Prix du kilo
-        </button>
-        <button role="tab" id="tab-actus" aria-controls="panel-actus" aria-selected="false" data-tab="actus" class="tab">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
-          Actualités
-          <span class="tab-dot" aria-label="nouveautés"></span>
-        </button>
-      </div>
-    </div>
-  </div>
-
   <!-- ===================== ONGLET CONSEIL ===================== -->
   <section class="panel active" id="panel-conseil" role="tabpanel" aria-labelledby="tab-conseil">
     <div class="wrap">
@@ -202,6 +176,7 @@
     <div class="wrap">
       <div class="panel-intro">
         <span class="eyebrow">Cultures &amp; épices</span>
+        <p class="compte-fiches"><strong id="compteurCultures">11</strong> fiches disponibles</p>
         <h2>Cultures et épices à fort potentiel, photos et repères réels.</h2>
         <p>Vivrières peu plantées et épices : peu d'intrants, meilleure valeur au kilo. Filtrez par famille, puis ouvrez une fiche pour le cycle, les atouts et le débouché.</p>
       </div>
@@ -676,7 +651,7 @@
       <div>
         <a class="brand" href="./" aria-label="AGROGUIDCI — accueil">
           <span class="brand-mark">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21v-7"/><path d="M12 14c0-3.4 2.4-5.8 5.8-5.8 0 3.4-2.4 5.8-5.8 5.8Z"/><path d="M12 14c0-2.6-1.9-4.5-4.7-4.5 0 2.6 1.9 4.5 4.7 4.5Z"/></svg>
+            <svg class="logo-agro" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path class="logo-tige" d="M16 27.4V14.2" stroke="currentColor" stroke-width="2.9" stroke-linecap="round"/><path class="logo-feuille logo-feuille-h" d="M16 15c0-5.2 3.6-8.9 8.5-8.9 0 5.2-3.6 8.9-8.5 8.9Z" fill="currentColor"/><path class="logo-feuille logo-feuille-b" d="M16.2 19.2c0-4-2.9-7-6.9-7 0 4 2.9 7 6.9 7Z" fill="currentColor" fill-opacity=".62"/><circle class="logo-soleil" cx="17.4" cy="3.9" r="2.2" fill="#e8a33d"/></svg>
           </span>
           <span class="brand-text">AGROGUID<span class="ci">CI</span></span>
         </a>
@@ -716,9 +691,9 @@
 </footer>
 
 <script src="assets/geo.js?v=13"></script>
-<script src="assets/motion.js?v=13"></script>
-<script src="assets/ui.js?v=14"></script>
-<script src="assets/app.js?v=13"></script>
+<script src="assets/motion.js?v=14"></script>
+<script src="assets/ui.js?v=16"></script>
+<script src="assets/app.js?v=14"></script>
 <script src="assets/chat.js?v=21"></script>
 </body>
 </html>

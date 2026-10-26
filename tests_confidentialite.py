@@ -135,7 +135,14 @@ verifie("accueil : photos réelles référencées",
 verifie("accueil : crédits photo Wikimedia", accueil.count('class="crop-credit"') == len(_cultures) and "Wikimedia" in accueil,
         accueil.count('class="crop-credit"'))
 verifie("accueil : bandeau temps réel", 'id="prixTicker"' in accueil and "chargerMeteo" in (ROOT / "web" / "assets" / "ui.js").read_text(encoding="utf-8"))
-verifie("accueil : application à onglets", accueil.count('role="tab"') == 4 and accueil.count('role="tabpanel"') == 4)
+verifie("accueil : panneaux sans barre d'onglets",
+        accueil.count('role="tab"') == 0 and accueil.count('role="tabpanel"') == 4
+        and "tabbar" not in accueil)
+verifie("accueil : une seule navigation",
+        accueil.count('aria-label="Navigation principale"') == 1)
+verifie("accueil : libellés harmonisés",
+        all(l in accueil for l in ("Cultures & épices", "Prix du kilo", "Actualités", "Tarifs", "Confidentialité")))
+verifie("accueil : marque animée", "logo-agro" in accueil and accueil.count('class="logo-agro"') == 2)
 verifie("accueil : hero nuit de forêt", ".app-hero {" in css and "--forest" in css and "#062b1d" in css)
 verifie("photos présentes sur le disque",
         all((ROOT / "web" / "assets" / "cultures" / f"{c['id']}.jpg").exists() for c in _cultures),
