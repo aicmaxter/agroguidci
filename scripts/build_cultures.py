@@ -42,10 +42,17 @@ GABARIT = """<!DOCTYPE html>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{nom} — fiche technique | AGROGUIDCI</title>
   <meta name="description" content="{description}">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap">
-  <link rel="stylesheet" href="../assets/site.css?v=24">
+  <link rel="canonical" href="https://agroguidci.vercel.app/cultures/{slug}">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="fr_CI">
+  <meta property="og:site_name" content="AGROGUIDCI">
+  <meta property="og:title" content="{nom} — fiche technique | AGROGUIDCI">
+  <meta property="og:description" content="{description}">
+  <meta property="og:url" content="https://agroguidci.vercel.app/cultures/{slug}">
+  <meta property="og:image" content="https://agroguidci.vercel.app/assets/cultures/{slug}.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{{"@type":"ListItem","position":1,"name":"Accueil","item":"https://agroguidci.vercel.app/"}},{{"@type":"ListItem","position":2,"name":"Cultures","item":"https://agroguidci.vercel.app/#cultures"}},{{"@type":"ListItem","position":3,"name":"{nom}","item":"https://agroguidci.vercel.app/cultures/{slug}"}}]}}</script>
+  <link rel="stylesheet" href="../assets/site.css?v=29">
   <link rel="stylesheet" href="../assets/fiche.css?v=4">
 </head>
 <body class="fiche-page">
@@ -57,12 +64,11 @@ GABARIT = """<!DOCTYPE html>
       <span class="brand-text">AGROGUIDCI</span>
     </a>
     <nav class="nav" aria-label="Navigation principale">
-      <a class="navlink" href="../#cultures">Cultures &amp; épices</a>
-      <a class="navlink" href="../#horssol">Hors sol</a>
-      <a class="navlink" href="../#prix">Prix du kilo</a>
-      <a class="navlink" href="../#actus">Actualités</a>
-      <a class="navlink" href="../#tarifs">Tarifs</a>
-      <a class="navlink" href="../confidentialite.html">Confidentialité</a>
+      <a class="navlink" href="../#cultures">Cultures</a>
+      <a class="navlink" href="../#elevage">Élevage</a>
+      <a class="navlink" href="../#marches">Marchés</a>
+      <a class="navlink" href="../#conseil">Conseil</a>
+      <a class="navlink" href="../#tarifs">Abonnements</a>
     </nav>
     <a class="btn btn-primary header-cta" href="../#conseil">Conseil gratuit</a>
   </div>
@@ -379,8 +385,8 @@ def page(cid: str, c: dict, photos: dict, maj: str) -> str:
     description = (c.get("presentation") or c.get("surnom") or c.get("nom") or "")[:180]
 
     return GABARIT.format(
-        nom=e(c.get("nom")), surnom=e(c.get("surnom")), id=e(cid), cycle=e(c.get("cycle")),
-        famille={"epice": "Épice", "legume": "Légume", "fruit": "Fruit"}.get(
+        nom=e(c.get("nom")), surnom=e(c.get("surnom")), id=e(cid), slug=e(cid), cycle=e(c.get("cycle")),
+        famille={"epice": "Épice", "legume": "Légume", "fruit": "Fruit", "rente": "Culture de rente"}.get(
             c.get("type"), "Culture vivrière"),
         maj=e(maj), confiance=e(confiance), classe_confiance=classe,
         description=e(description), credit=credit, photo_entete=photo_entete,

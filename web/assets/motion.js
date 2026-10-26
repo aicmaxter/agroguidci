@@ -1,21 +1,30 @@
-/* AGROGUIDCI — moteur d'animation de la vitrine (motion.js v13)
-   Aucune dépendance. Tout est neutralisé si l'utilisateur préfère moins de mouvement,
-   et chaque effet piloté par IntersectionObserver possède un filet de sécurité
-   synchrone : rien ne doit rester invisible ou bloqué à « 0 ». */
+/* AGROGUIDCI — motion.js v14
+   Sobriété d'abord : pas de parallaxe, pas d'élément qui suit la souris, pas de
+   boucle d'animation, pas d'animation pendant le défilement. Seulement :
+   - la barre de progression et l'en-tête réduit au défilement ;
+   - une apparition unique au défilement (6 éléments max, 60 ms de décalage) ;
+   - le repérage des ancres (Accueil, Abonnements) pour l'indicateur actif ;
+   - le défilement vers les ancres avec la marge réelle de l'en-tête.
+   Tout est neutralisé si l'utilisateur préfère moins de mouvement. */
 (function () {
   "use strict";
 
   var reduit = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var pointeurFin = window.matchMedia && window.matchMedia("(pointer: fine)").matches;
   var barre = document.getElementById("progress");
   var entete = document.getElementById("siteHeader");
 
-  /* ------------------------------------------------------------ défilement : progression, en-tête, sections */
+  /* ------------------------------------------------------------ défilement : progression et en-tête */
   function surDefilement() {
     var h = document.documentElement;
     var total = h.scrollHeight - window.innerHeight;
-    if (barre) barre.style.transform = "scaleX(" + (total > 0 ? Math.min(1, window.scrollY / total) : 0) + ")";
+    if (barre) {
+      barre.style.transform = "scaleX(" + (total > 0 ? Math.min(1, window.scrollY / total) : 0) + ")";
+    }
     if (entete) entete.classList.toggle("stuck", window.scrollY > 8);
+    // retour en haut de page : Accueil reprend la marque active
+    if (window.scrollY < 60 && lienAccueil && !lienAccueil.classList.contains("actif")) {
+      activerAncre(lienAccueil);
+    }
   }
   var enAttente = false;
   window.addEventListener("scroll", function () {
@@ -25,7 +34,7 @@
   }, { passive: true });
   surDefilement();
 
-  /* ------------------------------------------------------------ révélation à l'arrivée */
+  /* ------------------------------------------------------------ apparition au défilement */
   var aReveler = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
   if ("IntersectionObserver" in window && !reduit) {
     var obs = new IntersectionObserver(function (entrees) {
@@ -33,154 +42,96 @@
         if (!e.isIntersecting) return;
         var el = e.target;
         var parent = el.parentElement;
-        var freres = parent ? Array.prototype.slice.call(parent.children).filter(function (c) { return c.classList.contains("reveal"); }) : [];
-        var rang = Math.max(0, freres.indexOf(el));
-        el.style.transitionDelay = Math.min(rang * 70, 420) + "ms";
+        var freres = parent
+          ? Array.prototype.slice.call(parent.children).filter(function (c) { return c.classList.contains("reveal"); })
+          : [];
+        var rang = Math.min(5, Math.max(0, freres.indexOf(el)));
+        el.style.transitionDelay = rang * 60 + "ms";
         el.classList.add("in");
         obs.unobserve(el);
       });
-    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
+    }, { rootMargin: "0px 0px -6% 0px", threshold: 0.1 });
     aReveler.forEach(function (el) { obs.observe(el); });
+    // filet de sécurité : rien ne doit rester invisible si l'observateur ne répond pas
+    setTimeout(function () {
+      aReveler.forEach(function (el) {
+        if (el.classList.contains("in")) return;
+        var r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight * 1.1 && r.bottom > -50) el.classList.add("in");
+      });
+    }, 1800);
+    window.addEventListener("pagehide", function () { obs.disconnect(); });
   } else {
     aReveler.forEach(function (el) { el.classList.add("in"); });
   }
 
-  // Filet de sécurité : si l'observateur ne se déclenche pas (navigateur ancien,
-  // onglet non rendu, capture sans rendu), ce qui est déjà à l'écran ne doit
-  // jamais rester invisible.
-  setTimeout(function () {
-    aReveler.forEach(function (el) {
-      if (el.classList.contains("in")) return;
-      var r = el.getBoundingClientRect();
-      if (r.top < window.innerHeight * 1.1 && r.bottom > -50) el.classList.add("in");
-    });
-  }, 2200);
-
-  /* ------------------------------------------------------------ compteurs */
-  var compteurs = Array.prototype.slice.call(document.querySelectorAll("[data-count]"));
-  function animerCompteur(el) {
+  /* ------------------------------------------------------------ compteurs fixes */
+  // Volontairement sans animation : la valeur est écrite une fois, à l'arrivée.
+  Array.prototype.slice.call(document.querySelectorAll("[data-count]")).forEach(function (el) {
     var cible = parseInt(el.getAttribute("data-count"), 10);
-    if (!cible || reduit) return;
-    var debut = null, duree = 1100;
-    // Filet : même si requestAnimationFrame est suspendu (onglet en arrière-plan),
-    // la valeur finale doit être affichée — jamais un « 0 » qui reste à l'écran.
-    setTimeout(function () {
-      if ((el.textContent || "").replace(/\D/g, "") !== String(cible)) {
-        el.textContent = cible.toLocaleString("fr-FR");
-      }
-    }, duree + 600);
-    el.textContent = "0";
-    function pas(ts) {
-      if (debut === null) debut = ts;
-      var p = Math.min(1, (ts - debut) / duree);
-      var val = Math.round(cible * (1 - Math.pow(1 - p, 3)));
-      el.textContent = val.toLocaleString("fr-FR");
-      if (p < 1) requestAnimationFrame(pas);
-      else el.textContent = cible.toLocaleString("fr-FR");
-    }
-    requestAnimationFrame(pas);
-  }
-  if ("IntersectionObserver" in window && !reduit) {
-    var obsCompteur = new IntersectionObserver(function (entrees) {
-      entrees.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        animerCompteur(e.target);
-        obsCompteur.unobserve(e.target);
-      });
-    }, { threshold: 0.6 });
-    compteurs.forEach(function (el) { obsCompteur.observe(el); });
-  }
+    if (!isNaN(cible)) el.textContent = cible.toLocaleString("fr-FR");
+  });
 
-  /* ------------------------------------------------------------ parallaxe douce au pointeur */
-  var blobs = Array.prototype.slice.call(document.querySelectorAll("[data-parallax]"));
-  if (blobs.length && !reduit && pointeurFin) {
-    var cibleX = 0, cibleY = 0, x = 0, y = 0, actif = false;
-    window.addEventListener("pointermove", function (e) {
-      cibleX = (e.clientX / window.innerWidth - 0.5) * 40;
-      cibleY = (e.clientY / window.innerHeight - 0.5) * 40;
-      if (!actif) { actif = true; requestAnimationFrame(boucle); }
-    }, { passive: true });
-
-    function boucle() {
-      x += (cibleX - x) * 0.08;
-      y += (cibleY - y) * 0.08;
-      blobs.forEach(function (b) {
-        var f = parseFloat(b.getAttribute("data-parallax")) || 0.05;
-        b.style.transform = "translate3d(" + (x * f * 10).toFixed(2) + "px," + (y * f * 10).toFixed(2) + "px,0)";
-      });
-      if (Math.abs(cibleX - x) > 0.3 || Math.abs(cibleY - y) > 0.3) requestAnimationFrame(boucle);
-      else actif = false;
-    }
-  }
-
-  /* ------------------------------------------------------------ repérage de la section Tarifs */
-  // Un seul indicateur d'état à la fois : quand la section Tarifs occupe l'écran,
-  // elle prend la marque active et les onglets la perdent.
-  var lienTarifs = document.querySelector('.nav a[href="#tarifs"]');
+  /* ------------------------------------------------------------ indicateur actif des ancres */
+  var lienAbonnements = document.querySelector('.nav a[href="#tarifs"]');
+  var lienAccueil = document.querySelector(".nav a[data-accueil]");
   var sectionTarifs = document.getElementById("tarifs");
-  if (lienTarifs && sectionTarifs && "IntersectionObserver" in window) {
-    new IntersectionObserver(function (entrees) {
-      entrees.forEach(function (e) {
-        var dedans = e.isIntersecting && e.intersectionRatio > 0.3;
-        lienTarifs.classList.toggle("actif", dedans);
-        if (dedans) {
-          document.querySelectorAll(".navlink.actif").forEach(function (b) {
-            b.classList.remove("actif");
-            b.removeAttribute("aria-current");
-          });
-          lienTarifs.setAttribute("aria-current", "true");
-        } else {
-          lienTarifs.removeAttribute("aria-current");
-        }
-      });
-    }, { threshold: [0, 0.3, 0.6], rootMargin: "-70px 0px -45% 0px" }).observe(sectionTarifs);
+  var sectionAccueil = document.getElementById("accueil");
+
+  function activerAncre(lien) {
+    Array.prototype.slice.call(document.querySelectorAll(".navlink.actif")).forEach(function (b) {
+      if (b === lien) return;
+      b.classList.remove("actif");
+      b.removeAttribute("aria-current");
+    });
+    if (lien) {
+      lien.classList.add("actif");
+      lien.setAttribute("aria-current", "page");
+    }
   }
 
-  /* ------------------------------------------------------------ reflet des boutons */
-  if (!reduit && pointeurFin) {
-    document.addEventListener("pointermove", function (e) {
-      var btn = e.target.closest ? e.target.closest(".btn") : null;
-      if (!btn) return;
-      var r = btn.getBoundingClientRect();
-      btn.style.setProperty("--mx", ((e.clientX - r.left) / r.width * 100).toFixed(1) + "%");
-      btn.style.setProperty("--my", ((e.clientY - r.top) / r.height * 100).toFixed(1) + "%");
-    }, { passive: true });
+  if ("IntersectionObserver" in window) {
+    if (sectionTarifs && lienAbonnements) {
+      new IntersectionObserver(function (entrees) {
+        entrees.forEach(function (e) {
+          if (e.isIntersecting && e.intersectionRatio > 0.35) activerAncre(lienAbonnements);
+          else if (!e.isIntersecting && lienAbonnements.classList.contains("actif")) {
+            lienAbonnements.classList.remove("actif");
+            lienAbonnements.removeAttribute("aria-current");
+          }
+        });
+      }, { threshold: [0, 0.35, 0.6], rootMargin: "-70px 0px -45% 0px" }).observe(sectionTarifs);
+    }
+    if (sectionAccueil && lienAccueil) {
+      // Accueil ne reprend la marque active que si l'on est réellement revenu en haut
+      new IntersectionObserver(function (entrees) {
+        entrees.forEach(function (e) {
+          if (e.isIntersecting && e.intersectionRatio > 0.4 && window.scrollY < 120) {
+            activerAncre(lienAccueil);
+          }
+        });
+      }, { threshold: [0.4, 0.7], rootMargin: "-70px 0px 0px 0px" }).observe(sectionAccueil);
+    }
   }
 
   /* ------------------------------------------------------------ défilement avec marge d'en-tête */
   document.addEventListener("click", function (e) {
     var a = e.target.closest ? e.target.closest('a[href^="#"]') : null;
-    if (!a) return;
+    if (!a || a.hasAttribute("data-tab")) return;
     var id = a.getAttribute("href");
     if (!id || id === "#" || id.length < 2) return;
     var cible = document.querySelector(id);
     if (!cible) return;
     e.preventDefault();
-    var marge = 78;
+    var marge = (entete ? entete.getBoundingClientRect().height : 68) + 10;
     var y = cible.getBoundingClientRect().top + window.scrollY - marge;
-    window.scrollTo({ top: y, behavior: reduit ? "auto" : "smooth" });
+    window.scrollTo({ top: Math.max(0, y), behavior: reduit ? "auto" : "smooth" });
     if (history.replaceState) history.replaceState(null, "", id);
+    cible.setAttribute("tabindex", "-1");
+    cible.focus({ preventScroll: true });
   });
 
-  /* ------------------------------------------------------------ survol 3D léger (cartes cultures) */
-  if (!reduit && pointeurFin) {
-    var cartes = Array.prototype.slice.call(document.querySelectorAll(".crop"));
-    cartes.forEach(function (carte) {
-      carte.addEventListener("pointermove", function (e) {
-        var r = carte.getBoundingClientRect();
-        var px = (e.clientX - r.left) / r.width - 0.5;
-        var py = (e.clientY - r.top) / r.height - 0.5;
-        carte.style.setProperty("--rx", (-py * 2.2).toFixed(2) + "deg");
-        carte.style.setProperty("--ry", (px * 2.6).toFixed(2) + "deg");
-      });
-      carte.addEventListener("pointerleave", function () {
-        carte.style.removeProperty("--rx");
-        carte.style.removeProperty("--ry");
-      });
-    });
-  }
-
-  /* ------------------------------------------------------------ bascule mensuel / annuel (offres) */
+  /* ------------------------------------------------------------ bascule des offres */
   var bascules = Array.prototype.slice.call(document.querySelectorAll("[data-billing]"));
   function formater(n) { return Number(n).toLocaleString("fr-FR"); }
 
@@ -191,19 +142,8 @@
       b.setAttribute("aria-pressed", actif ? "true" : "false");
     });
     Array.prototype.slice.call(document.querySelectorAll("[data-price-" + periode + "]")).forEach(function (el) {
-      var valeur = el.getAttribute("data-price-" + periode);
-      var nombre = parseInt(valeur, 10);
-      if (isNaN(nombre) || nombre === 0) { el.textContent = formater(nombre || 0); return; }
-      if (reduit) { el.textContent = formater(nombre); return; }
-      var depart = parseInt((el.textContent || "0").replace(/[^\d]/g, ""), 10) || 0;
-      var t0 = null;
-      function pas(ts) {
-        if (t0 === null) t0 = ts;
-        var p = Math.min(1, (ts - t0) / 420);
-        el.textContent = formater(Math.round(depart + (nombre - depart) * (1 - Math.pow(1 - p, 3))));
-        if (p < 1) requestAnimationFrame(pas);
-      }
-      requestAnimationFrame(pas);
+      var nombre = parseInt(el.getAttribute("data-price-" + periode), 10);
+      el.textContent = formater(isNaN(nombre) ? 0 : nombre);
     });
     Array.prototype.slice.call(document.querySelectorAll("[data-per-" + periode + "]")).forEach(function (el) {
       el.textContent = el.getAttribute("data-per-" + periode);

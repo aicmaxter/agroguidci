@@ -237,7 +237,10 @@ class TestMessages(Base):
         self.assertEqual(api.culture_detectee("Quand planter l'igname à Bouaké ?"), "igname")
         self.assertEqual(api.culture_detectee("le kilo de gingembre se vend combien"), "gingembre")
         self.assertEqual(api.culture_detectee("rotation avec du pois bambara"), "voandzou")
-        self.assertIsNone(api.culture_detectee("Quel engrais pour le maïs ?"))
+        # le maïs a désormais sa fiche : la culture est reconnue
+        self.assertEqual(api.culture_detectee("Quel engrais pour le maïs ?"), "mais")
+        # une culture sans fiche reste non reconnue
+        self.assertIsNone(api.culture_detectee("Quel engrais pour le sorgho ?"))
         self.assertIsNone(api.culture_detectee(""))
 
     def test_permissions_mots_entiers(self):

@@ -22,7 +22,7 @@
   /* ------------------------------------------------------------------ navigation */
   // Une seule navigation : l'en-tête. Les quatre premiers liens ouvrent un panneau,
   // « Tarifs » et « Confidentialité » mènent à leur section ou à leur page.
-  var panneaux = ["conseil", "cultures", "horssol", "prix", "actus"];
+  var panneaux = ["conseil", "cultures", "elevage", "marches", "actus", "horssol"];
 
   function surlignerLien(nom) {
     // Une seule navigation est visible à la fois (.nav sur desktop, .nav-mobile
@@ -86,6 +86,74 @@
     if (panneaux.indexOf(h) >= 0) activerOnglet(h, true);
   });
 
+
+  /* ------------------------------------------------------------------ élevage */
+  var liensEspece = Array.prototype.slice.call(document.querySelectorAll("[data-espece]"));
+  var blocsEspece = Array.prototype.slice.call(document.querySelectorAll(".espece"));
+
+  function afficherEspece(id, defiler) {
+    if (!blocsEspece.length) return;
+    blocsEspece.forEach(function (b) { b.hidden = b.id !== "esp-" + id; });
+    liensEspece.forEach(function (a) {
+      var actif = a.getAttribute("data-espece") === id;
+      if (a.classList.contains("espece-lien")) {
+        a.classList.toggle("actif", actif);
+        a.setAttribute("aria-selected", actif ? "true" : "false");
+        a.setAttribute("tabindex", actif ? "0" : "-1");
+      }
+    });
+    if (defiler) {
+      var cible = document.getElementById("esp-" + id);
+      if (cible) {
+        var y = cible.getBoundingClientRect().top + window.scrollY - 84;
+        window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+      }
+    }
+  }
+
+  if (blocsEspece.length) {
+    // sans JavaScript, tous les blocs restent visibles (repli assumé) :
+    // c'est ici qu'on masque ceux qui ne sont pas sélectionnés.
+    var premier = blocsEspece.filter(function (b) { return !b.hidden; })[0] || blocsEspece[0];
+    afficherEspece(premier.id.replace("esp-", ""), false);
+
+    liensEspece.forEach(function (a) {
+      a.addEventListener("click", function (e) {
+        var id = a.getAttribute("data-espece");
+        if (!a.classList.contains("espece-lien")) return;   // lien d'accès depuis le héros
+        e.preventDefault();
+        afficherEspece(id, false);
+        if (history.replaceState) history.replaceState(null, "", "#elevage-" + id);
+      });
+    });
+  }
+
+  document.addEventListener("click", function (e) {
+    var lien = e.target.closest ? e.target.closest("[data-tab][data-espece]") : null;
+    if (lien) {
+      var id = lien.getAttribute("data-espece");
+      setTimeout(function () { afficherEspece(id, false); }, 0);
+    }
+  });
+
+  /* ------------------------------------------------------------------ zone agroécologique */
+  var zoneSelect = document.getElementById("zoneSelect");
+  var zoneNote = document.getElementById("zoneNote");
+  if (zoneSelect) {
+    zoneSelect.addEventListener("change", function () {
+      filtrer();
+      if (zoneNote) {
+        var zone = zoneSelect.value;
+        var n = Array.prototype.slice.call(document.querySelectorAll("#grilleCultures .crop")).filter(function (c) {
+          return c.style.display !== "none";
+        }).length;
+        zoneNote.textContent = zone
+          ? n + " fiche(s) documentée(s) pour cette zone. Les cultures absentes ne sont pas déconseillées : elles ne sont pas documentées zone par zone ici."
+          : "Les zones viennent du découpage agroécologique de la base de connaissances.";
+      }
+    });
+  }
+
   /* ------------------------------------------------------------------ fiches cultures */
   var grille = document.getElementById("grilleCultures");
   function revelerFiches() {
@@ -130,6 +198,8 @@
 
   function filtrer() {
     if (!grille) return;
+    var selZone = document.getElementById("zoneSelect");
+    var zone = selZone ? selZone.value : "";
     var actif = document.querySelector("[data-filtre].actif");
     var famille = actif ? actif.getAttribute("data-filtre") : "tous";
     var q = (champRecherche && champRecherche.value || "").toLowerCase().trim();
@@ -138,7 +208,8 @@
       var okFamille = famille === "tous" || c.getAttribute("data-type") === famille;
       var okTexte = !q || (c.getAttribute("data-nom") || "").indexOf(q) >= 0 ||
         c.textContent.toLowerCase().indexOf(q) >= 0;
-      var visible = okFamille && okTexte;
+      var okZone = !zone || (c.getAttribute("data-zones") || "").split(" ").indexOf(zone) >= 0;
+      var visible = okFamille && okTexte && okZone;
       c.style.display = visible ? "" : "none";
       if (visible) visibles++;
     });
@@ -232,7 +303,7 @@
     var piste = document.getElementById("prixTicker");
     if (!piste) return;
     var items = [];
-    items.push('<span class="ticker-item live"><span class="pastille"></span> Temps réel · ' +
+    items.push('<span class="ticker-item live"><span class="pastille"></span> Relevés du jour · ' +
       new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) + "</span>");
     meteo.forEach(function (m) {
       items.push('<span class="ticker-item">' + echapper(m.nom) + ' <b>' +

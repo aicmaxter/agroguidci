@@ -99,7 +99,7 @@ verifie("journal : sauvegarde créée", bool(list(purge.OUT.glob("journal-expert
 accueil = html.unescape((ROOT / "web" / "index.html").read_text(encoding="utf-8"))
 css = (ROOT / "web" / "assets" / "site.css").read_text(encoding="utf-8")
 verifie("accueil : onglet actualités", 'id="panel-actus"' in accueil and 'class="actu reveal' in accueil)
-verifie("accueil : onglet prix au kilo", 'id="panel-prix"' in accueil and "prixBody" in accueil)
+verifie("accueil : section Marchés", 'id="panel-marches"' in accueil and "prixBody" in accueil)
 verifie("accueil : onglet cultures", 'id="panel-cultures"' in accueil and "Voandzou" in accueil)
 verifie("accueil : deux packs + crédits gratuits, sans suivi",
         all(x in accueil for x in ("Pack Découverte", "Pack Avancé", "15 crédits gratuits"))
@@ -136,12 +136,14 @@ verifie("accueil : crédits photo Wikimedia", accueil.count('class="crop-credit"
         accueil.count('class="crop-credit"'))
 verifie("accueil : bandeau temps réel", 'id="prixTicker"' in accueil and "chargerMeteo" in (ROOT / "web" / "assets" / "ui.js").read_text(encoding="utf-8"))
 verifie("accueil : panneaux sans barre d'onglets",
-        accueil.count('role="tab"') == 0 and accueil.count('role="tabpanel"') == 5
+        "tabbar" not in accueil
+        and accueil.count('class="panel') and accueil.count('role="tabpanel"') >= 6
+        and accueil.count('role="tab"') == accueil.count('class="espece-lien')
         and "tabbar" not in accueil)
 verifie("accueil : une seule navigation",
         accueil.count('aria-label="Navigation principale"') == 1)
 verifie("accueil : libellés harmonisés",
-        all(l in accueil for l in ("Cultures & épices", "Prix du kilo", "Actualités", "Tarifs", "Confidentialité")))
+        all(l in accueil for l in ("Accueil", "Cultures", "Élevage", "Marchés", "Conseil", "Abonnements")))
 verifie("accueil : marque animée", "logo-agro" in accueil and accueil.count('class="logo-agro"') == 2)
 verifie("hors sol : panneau présent et accessible",
         'id="panel-horssol"' in accueil and 'aria-label="Hors sol"' in accueil
@@ -153,7 +155,7 @@ verifie("hors sol : aucun dosage de solution inventé",
         and "sans mesure, pas de mélange" in accueil.lower())
 verifie("hors sol : les limites sont annoncées",
         "Limites assumées" in accueil and "ne remplacent pas une visite" in accueil)
-verifie("accueil : hero nuit de forêt", ".app-hero {" in css and "--forest" in css and "#062b1d" in css)
+verifie("accueil : héros clair sur jetons de marque", ".hero {" in css and "--forest" in css and "--amber-ink" in css)
 verifie("photos présentes sur le disque",
         all((ROOT / "web" / "assets" / "cultures" / f"{c['id']}.jpg").exists() for c in _cultures),
         [c["id"] for c in _cultures if not (ROOT / "web" / "assets" / "cultures" / f"{c['id']}.jpg").exists()])

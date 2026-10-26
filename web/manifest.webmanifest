@@ -1,0 +1,19 @@
+{
+  "name": "AGROGUIDCI — conseil agricole et élevage",
+  "short_name": "AGROGUIDCI",
+  "description": "Fiches cultures et élevage, prix du marché, météo et conseil agricole pour la Côte d'Ivoire.",
+  "lang": "fr-CI",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#faf7ef",
+  "theme_color": "#0b3a22",
+  "icons": [
+    {
+      "src": "/assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

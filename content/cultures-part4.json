@@ -1,0 +1,192 @@
+{
+  "_note": "Cultures de rente et céréales : cacao et maïs, contenu prudent issu de la base de connaissances interne.",
+  "_maj": "2026-10-26",
+  "cultures": {
+    "cacao": {
+      "nom": "Cacao",
+      "surnom": "Theobroma cacao — la fève d'export des zones forestières",
+      "type": "rente",
+      "cycle": "3 à 4 ans avant la première récolte significative, verger productif pendant 20 à 30 ans",
+      "confiance": "partiel",
+      "presentation": "Culture de rente majeure du Sud forestier ivoirien, conduite sous ombrage. La qualité de la fermentation et du séchage décide du prix obtenu autant que le rendement. Les vergers vieillissants et la réhabilitation sont le principal enjeu de la filière.",
+      "conditions": "Sols profonds, bien drainés, ferrallitiques, riches en matière organique ; pluviométrie de l'ordre de 1 400 à 2 000 mm bien répartie ; ombrage favorable en jeune âge comme à maturité (lumière tamisée). Éviter les bas-fonds engorgés et les pentes érodées sans couverture.",
+      "varietes": "Le matériel végétal disponible varie selon les pépinières et les projets : demander la liste des variétés et clones diffusés dans la zone auprès d'un service de vulgarisation ou d'un centre de recherche. Ne pas introduire de plants d'origine inconnue, surtout en zone touchée par le swollen shoot.",
+      "calendrier": "Récolte principale d'octobre à mars, récolte intermédiaire de mai à août selon les zones. Pépinière ou semis direct, plantation en début de saison des pluies. Production étalée sur l'année.",
+      "preparation": "Défrichement sélectif en conservant les arbres d'ombrage utiles, sous-solage ou trouaison large, amendement organique au trou. Prévoir l'ombrage provisoire (bananier, légumineuses) puis l'ombrage permanent.",
+      "semis": "Pépinière en sachets à l'ombre, semis de fèves fraîches, ou greffage sur porte-greffe selon le matériel disponible. Plantation dès que les plants ont la taille et le système racinaire suffisants, en début de pluies.",
+      "entretien": "Désherbage maîtrisé (couverture plutôt que sol nu), taille de formation puis d'entretien, élimination des gourmands, gestion de l'ombrage, apports organiques réguliers. Surveillance des mirides et des pourritures de cabosses.",
+      "sante": "Le cacao swollen shoot virus impose l'éradication réglementaire des arbres atteints : signaler tout symptôme (rougeur, marbrures, renflement des rameaux) et ne pas déplacer de matériel végétal. La pourriture brune des cabosses se limite par l'hygiène (retrait des cabosses malades) et le drainage. Les mirides se surveillent et se traitent selon les recommandations officielles.",
+      "recolte": "Récolte manuelle des cabosses mûres, écabossage, fermentation en tas ou en caisses pendant plusieurs jours, séchage lent à l'ombre puis au soleil. Étaler et retourner régulièrement pour éviter les moisissures.",
+      "conservation": "Fèves sèches stockées dans des sacs propres, sur palettes, à l'abri de l'humidité et des odeurs. Contrôler l'humidité avant stockage long.",
+      "economie": "La marge dépend du prix bord champ, du rendement du verger et du coût de la réhabilitation. Le prix officiel est fixé par campagne : vérifier le barème en vigueur auprès des sources officielles avant tout calcul.",
+      "limites": "Aucun rendement, aucun prix et aucun itinéraire ne sont garantis : les chiffres varient avec l'âge du verger, la zone, l'ombrage et la qualité de la fermentation. La réhabilitation d'un verger est un investissement de plusieurs années.",
+      "tutoriel": [
+        {
+          "icone": "parcelle",
+          "titre": "Choisir la parcelle",
+          "simple": "Sol profond et drainé, à l'abri du vent, avec de l'ombre disponible ou plantée en même temps. Un bas-fond qui garde l'eau tue les racines."
+        },
+        {
+          "icone": "preparation",
+          "titre": "Préparer le terrain et l'ombre",
+          "simple": "Trouaison large, matière organique au fond, ombrage provisoire par bananiers ou légumineuses avant de planter."
+        },
+        {
+          "icone": "semis",
+          "titre": "Planter au bon moment",
+          "simple": "Planter en début de saison des pluies, collet au niveau du sol, tuteurer si nécessaire, ombrager les jeunes plants."
+        },
+        {
+          "icone": "sante",
+          "titre": "Surveiller le swollen shoot",
+          "simple": "Observer les marbrures et rougissements des jeunes feuilles. Un arbre suspect ne se déplace pas : appeler le service technique."
+        },
+        {
+          "icone": "recolte",
+          "titre": "Récolter et fermenter",
+          "simple": "Cabosses mûres récoltées, fermentation plusieurs jours puis séchage lent : c'est là que se joue la qualité de la fève."
+        }
+      ],
+      "fertilisation": {
+        "principe": "Le cacaoyer répond à la matière organique et à l'ombrage avant tout. Un sol nu s'appauvrit vite : couvrir et recycler les coques.",
+        "note": "Doses indicatives par hectare, à ajuster après analyse de sol et selon l'âge du verger.",
+        "apports": [
+          {
+            "produit": "Compost ou fumier bien décomposé",
+            "dose": "5 à 10 t/ha",
+            "moment": "Début de saison des pluies",
+            "methode": "En couronne autour du tronc, sans contact",
+            "type": "organique"
+          },
+          {
+            "produit": "Cendres ou coques de cacao compostées",
+            "dose": "retour au sol de la récolte",
+            "moment": "Après écabossage",
+            "methode": "Compostage puis épandage",
+            "type": "organique"
+          },
+          {
+            "produit": "Engrais potassique et phosphoré (selon analyse)",
+            "dose": "à définir avec l'analyse de sol",
+            "moment": "Saison des pluies",
+            "methode": "En couronne, enfoui légèrement",
+            "type": "mineral"
+          }
+        ],
+        "sources": [
+          {
+            "organisme": "Base de connaissances AGROGUIDCI",
+            "titre": "knowledge/agronomie.md, fiches zones et cultures de rente",
+            "url": ""
+          }
+        ]
+      },
+      "sources": [
+        {
+          "organisme": "Base de connaissances AGROGUIDCI",
+          "titre": "knowledge/agronomie.md — zones agroécologiques, cultures de rente",
+          "consulte_le": "2026-10-26"
+        },
+        {
+          "organisme": "ANADER",
+          "titre": "Appui-conseil aux producteurs",
+          "url": "https://www.anader.ci/",
+          "consulte_le": "2026-10-26"
+        }
+      ]
+    },
+    "mais": {
+      "nom": "Maïs",
+      "surnom": "Zea mays — la céréale de soudure",
+      "type": "vivriere",
+      "cycle": "75 à 110 jours selon la précocité de la variété et la zone",
+      "confiance": "partiel",
+      "presentation": "Céréale de base cultivée dans toutes les zones du pays, du Sud forestier au Nord savane. Elle sert à l'alimentation familiale, à la vente et à l'alimentation animale. Sa sensibilité au stress hydrique à la floraison en fait une culture exigeante sur le calendrier.",
+      "conditions": "Sols bien drainés et riches ; besoin de l'ordre de 600 à 900 mm bien répartis. Sensible au stress hydrique à la floraison. Toutes zones, avec le Nord et le Centre-Ouest fortement concernés.",
+      "varietes": "Choisir une variété à cycle adapté à la longueur de la saison des pluies de la zone. Les variétés disponibles varient selon les semenciers : demander la liste à un service de vulgarisation plutôt que d'acheter des semences non identifiées.",
+      "calendrier": "Semis dès l'installation des pluies : mars-avril au Sud, avril-mai ou juin au Nord. Cycle de 75 à 110 jours. Un second cycle court est possible en zone forestière.",
+      "preparation": "Labour ou travail minimum selon le sol, planches si drainage insuffisant, enfouissement de la matière organique, semis en lignes pour faciliter l'entretien.",
+      "semis": "Semis en poquets ou en lignes, profondeur régulière, densité adaptée à la variété. Ressemer les manquants dans les dix jours pour garder une parcelle homogène.",
+      "entretien": "Sarclage précoce, démariage, apport d'engrais fractionné, surveillance de la chenille légionnaire d'automne et des foreurs de tige. L'association avec une légumineuse limite l'épuisement du sol.",
+      "sante": "Surveiller la striure du maïs (virus transmis par une cicadelle), la rouille, l'helminthosporiose, le charbon et surtout la chenille légionnaire d'automne. Un traitement n'est justifié qu'après identification du ravageur : aucun produit n'est recommandé ici.",
+      "recolte": "Récolte à maturité physiologique, séchage des épis avant stockage, égrenage après séchage. Éviter de récolter sous la pluie.",
+      "conservation": "Séchage jusqu'à une humidité faible, stockage en sacs sur palettes, local sec et ventilé, lutte contre les rongeurs et les charançons. Contrôler régulièrement.",
+      "economie": "La marge dépend du rendement obtenu, du prix au kilo à la récolte et du coût des intrants. Le maïs se vend souvent juste après récolte quand le prix est bas : le stockage bien fait peut lisser la vente, à condition d'avoir un local sain.",
+      "limites": "Aucun rendement n'est garanti : les ordres de grandeur varient fortement avec la pluie, le sol et l'entretien. Les dates de semis doivent être ajustées à la zone et à l'arrivée réelle des pluies.",
+      "tutoriel": [
+        {
+          "icone": "parcelle",
+          "titre": "Choisir la parcelle",
+          "simple": "Sol drainé, plat ou légèrement incliné, proche de la maison pour la surveillance. Éviter les bas-fonds qui s'engorgent."
+        },
+        {
+          "icone": "preparation",
+          "titre": "Préparer et semer",
+          "simple": "Travailler le sol, enfouir la matière organique, semer en lignes dès que la pluie est installée."
+        },
+        {
+          "icone": "entretien",
+          "titre": "Entretenir tôt",
+          "simple": "Sarcler avant que les mauvaises herbes ne prennent le dessus, démarier, apporter l'engrais en deux fois."
+        },
+        {
+          "icone": "sante",
+          "titre": "Surveiller la légionnaire",
+          "simple": "Regarder le cœur des jeunes plants : larves et feuilles trouées. Identifier avant tout traitement."
+        },
+        {
+          "icone": "recolte",
+          "titre": "Sécher avant de stocker",
+          "simple": "Épis récoltés à maturité, séchés complètement, stockés sur palettes dans un local sec."
+        }
+      ],
+      "fertilisation": {
+        "principe": "Le maïs répond à l'azote, mais un sol pauvre en matière organique ne retient pas les apports : compost d'abord, engrais ensuite, en fractionnant.",
+        "note": "Doses indicatives par hectare, à ajuster après analyse de sol et selon le rendement visé.",
+        "apports": [
+          {
+            "produit": "Compost ou fumier bien décomposé",
+            "dose": "5 à 10 t/ha",
+            "moment": "Avant le semis, enfoui",
+            "methode": "Épandage puis incorporation",
+            "type": "organique"
+          },
+          {
+            "produit": "Azote (N)",
+            "dose": "60 à 100 kg/ha",
+            "moment": "1/3 au semis, 2/3 au stade 6-8 feuilles",
+            "methode": "En bande près du rang, puis buttage",
+            "type": "mineral"
+          },
+          {
+            "produit": "Phosphore et potassium (selon analyse)",
+            "dose": "à définir avec l'analyse de sol",
+            "moment": "Au semis",
+            "methode": "Localisé au poquet",
+            "type": "mineral"
+          }
+        ],
+        "sources": [
+          {
+            "organisme": "Base de connaissances AGROGUIDCI",
+            "titre": "knowledge/agronomie.md, cultures vivrières",
+            "url": ""
+          }
+        ]
+      },
+      "sources": [
+        {
+          "organisme": "Base de connaissances AGROGUIDCI",
+          "titre": "knowledge/agronomie.md — maïs, zones agroécologiques",
+          "consulte_le": "2026-10-26"
+        },
+        {
+          "organisme": "ANADER",
+          "titre": "Appui-conseil aux producteurs",
+          "url": "https://www.anader.ci/",
+          "consulte_le": "2026-10-26"
+        }
+      ]
+    }
+  }
+}

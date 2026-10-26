@@ -279,5 +279,19 @@
     "page": "https://commons.wikimedia.org/wiki/File:Pile_of_Onions_at_Barkin_Dogo_Market,_Kaduna_North_03.jpg",
     "fichier": "assets/cultures/oignon.jpg",
     "choix": "Pile of Onions at Barkin Dogo Market, Kaduna North 03.jpg"
+  },
+  "cacao": {
+    "auteur": "shankar s. from Dubai, united arab emirates",
+    "licence": "CC BY 2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:A_closer_look_at_the_cocoa_pods_(28529576476).jpg",
+    "fichier": "assets/cultures/cacao.jpg",
+    "choix": "A closer look at the cocoa pods (28529576476).jpg"
+  },
+  "mais": {
+    "auteur": "LightPens",
+    "licence": "CC BY-SA 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Corn_Farm_plant.jpg",
+    "fichier": "assets/cultures/mais.jpg",
+    "choix": "Corn Farm plant.jpg"
   }
 }

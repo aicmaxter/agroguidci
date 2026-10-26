@@ -62,11 +62,12 @@ class TestOffresEtAppels(unittest.TestCase):
     """§3 et §6 : un seul appel à la question, deux packs, pas de suivi."""
 
     def test_un_seul_appel_dans_le_hero(self):
-        hero = INDEX.split('<section class="app-hero">')[1].split("</section>")[0]
+        hero = INDEX.split('<section class="hero" id="accueil">')[1].split("</section>")[0]
         self.assertEqual(hero.count('data-chat="ouvrir"'), 1,
                          "un seul bouton de question dans le bloc d'accueil")
-        self.assertEqual(hero.count("<button"), 2,
-                         "hero : la question + la navigation vers les cultures, rien d'autre")
+        self.assertEqual(hero.count("<button"), 1,
+                         "héros : un seul bouton (obtenir un conseil), le reste est un lien")
+        self.assertIn('href="#piliers"', hero, "héros : le second appel mène aux piliers")
 
     def test_pas_de_bouton_de_question_dans_l_entete(self):
         entete = INDEX.split('<header class="site-header"')[1].split("</header>")[0]

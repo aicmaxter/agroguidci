@@ -13,7 +13,8 @@
       "desc": "Légumineuse très rustique : elle fixe l'azote, supporte la sécheresse et se conserve longtemps sans traitement. Utile en rotation avant une céréale.",
       "cycle": "90 à 120 jours",
       "atouts": "peu d'intrants, résiste au sec, enrichit le sol",
-      "debouche": "graines, farine, bouillie ; demande urbaine stable"
+      "debouche": "graines, farine, bouillie ; demande urbaine stable",
+      "zones": []
     },
     {
       "id": "fonio",
@@ -26,7 +27,8 @@
       "desc": "Pousse sur des sols pauvres et sableux, mûrit vite et demande peu d'eau — un recours quand la saison est courte.",
       "cycle": "60 à 90 jours",
       "atouts": "rustique, très précoce, bon prix au kilo",
-      "debouche": "restauration, farines, marchés urbains et export"
+      "debouche": "restauration, farines, marchés urbains et export",
+      "zones": []
     },
     {
       "id": "sesame",
@@ -39,7 +41,10 @@
       "desc": "Le point critique n'est pas la production mais la récolte : choisir des variétés à capsules qui ne s'ouvrent pas, récolter dès maturité, sécher sur bâche.",
       "cycle": "90 à 110 jours",
       "atouts": "peu d'eau, demande à l'export, prix au kilo élevé",
-      "debouche": "huile, pâtisserie, export (qualité et propreté du lot)"
+      "debouche": "huile, pâtisserie, export (qualité et propreté du lot)",
+      "zones": [
+        "nord"
+      ]
     },
     {
       "id": "patatedouce",
@@ -52,7 +57,8 @@
       "desc": "Rendement rapide sur sol léger, riche en bêta-carotène. Deux marchés : le frais et la transformation en farine ou purée.",
       "cycle": "90 à 120 jours",
       "atouts": "couvre le sol, peu d'intrants, bonne valeur nutritionnelle",
-      "debouche": "frais, farine, programmes nutrition, écoles"
+      "debouche": "frais, farine, programmes nutrition, écoles",
+      "zones": []
     },
     {
       "id": "soja",
@@ -67,7 +73,8 @@
       "atouts": "fixe l'azote, débouché industriel, prix de contrat possible",
       "debouche": "huileries, provende, semence certifiée",
       "source": "FIRCA (filière soja) ; USDA FAS - Oilseeds Annual 2025",
-      "source_url": "https://firca.ci/filieres-agricoles/legumes/"
+      "source_url": "https://firca.ci/filieres-agricoles/legumes/",
+      "zones": []
     },
     {
       "id": "igname",
@@ -82,7 +89,14 @@
       "atouts": "forte valeur marchande, demande urbaine constante",
       "debouche": "marchés urbains, cossettes, transformation en farine",
       "source": "PNIA (Programme national d'investissement agricole)",
-      "source_url": "https://www.partenariat.gouv.ci/uploads/document/PNIA.pdf?download=1"
+      "source_url": "https://www.partenariat.gouv.ci/uploads/document/PNIA.pdf?download=1",
+      "zones": [
+        "sud",
+        "centre-ouest",
+        "nord",
+        "est",
+        "ouest"
+      ]
     },
     {
       "id": "plantain",
@@ -97,7 +111,12 @@
       "atouts": "récolte étalée, bon rendement à l'hectare",
       "debouche": "frais, alloco, chips, marchés urbains",
       "source": "PNIA (Programme national d'investissement agricole)",
-      "source_url": "https://www.partenariat.gouv.ci/uploads/document/PNIA.pdf?download=1"
+      "source_url": "https://www.partenariat.gouv.ci/uploads/document/PNIA.pdf?download=1",
+      "zones": [
+        "sud",
+        "ouest",
+        "littoral"
+      ]
     },
     {
       "id": "poivre",
@@ -110,7 +129,8 @@
       "desc": "Liane tropicale conduite sur tuteur, à l'ombre légère. Baies vertes séchées = poivre noir ; baies dépulpées = poivre blanc. Production ivoirienne encore marginale : valider le débouché avant de planter.",
       "cycle": "entrée en production 3 à 4 ans",
       "atouts": "prix au kilo très élevé, valorise l'ombrage",
-      "debouche": "épiceries fines, restauration, export"
+      "debouche": "épiceries fines, restauration, export",
+      "zones": []
     },
     {
       "id": "gingembre",
@@ -123,7 +143,8 @@
       "desc": "Rhizome cultivé sur sol meuble et humide, récolté à maturité des tiges. Forte demande locale pour les jus et boissons, et bonne valeur une fois séché et broyé.",
       "cycle": "8 à 10 mois",
       "atouts": "demande locale forte, transformation simple",
-      "debouche": "marchés urbains, jus et boissons, cosmétique"
+      "debouche": "marchés urbains, jus et boissons, cosmétique",
+      "zones": []
     },
     {
       "id": "curcuma",
@@ -136,7 +157,8 @@
       "desc": "Proche du gingembre, rhizome orangé séché puis broyé : épice, colorant, usage cosmétique. Transformation possible avec un simple séchoir et un moulin.",
       "cycle": "8 à 9 mois",
       "atouts": "transformation simple, demande croissante",
-      "debouche": "poudre, épiceries, cosmétique"
+      "debouche": "poudre, épiceries, cosmétique",
+      "zones": []
     },
     {
       "id": "piment",
@@ -149,7 +171,10 @@
       "desc": "Arbuste à récolte étalée : le séchage permet de lisser les ventes et d'éviter de brader au pic de production. Choisir une variété dont le piquant correspond au marché local.",
       "cycle": "4 à 6 mois, récolte étalée",
       "atouts": "cycle court, demande urbaine constante",
-      "debouche": "frais, séché, transformation"
+      "debouche": "frais, séché, transformation",
+      "zones": [
+        "sud"
+      ]
     },
     {
       "id": "tomate",
@@ -162,7 +187,11 @@
       "debouche": "Culture à forte valeur mais à risque élevé : le coût des traitements et des tuteurs pèse lourd.",
       "cycle": "90 à 120 jours en saison des pluies, 100 à 130 jours en contre-saison",
       "epice": false,
-      "nouveau": true
+      "nouveau": true,
+      "zones": [
+        "sud",
+        "centre-ouest"
+      ]
     },
     {
       "id": "oignon",
@@ -175,7 +204,10 @@
       "debouche": "La valeur vient du stockage : vendre 1 à 3 mois après récolte paye souvent mieux que la vente immédiate, à condition d'avoir un local sec.",
       "cycle": "90 à 150 jours selon variété et saison",
       "epice": false,
-      "nouveau": true
+      "nouveau": true,
+      "zones": [
+        "nord"
+      ]
     },
     {
       "id": "gombo",
@@ -188,7 +220,11 @@
       "debouche": "Bon revenu à l'hectare grâce à la récolte étalée ; le séchage permet de lisser les ventes et d'éviter de brader au pic.",
       "cycle": "60 à 90 jours pour les premières récoltes, production étalée sur 2 à 3 mois",
       "epice": false,
-      "nouveau": true
+      "nouveau": true,
+      "zones": [
+        "sud",
+        "centre-ouest"
+      ]
     },
     {
       "id": "aubergine",
@@ -201,7 +237,11 @@
       "debouche": "Débouché local solide, y compris auprès des restaurants de rue. Calculer la marge avec le prix du marché de gros de la semaine.",
       "cycle": "90 à 120 jours, récolte étalée",
       "epice": false,
-      "nouveau": true
+      "nouveau": true,
+      "zones": [
+        "sud",
+        "centre-ouest"
+      ]
     },
     {
       "id": "chou",
@@ -214,7 +254,11 @@
       "debouche": "Prix sensible à l'offre : éviter d'arriver en même temps que tout le monde sur le marché, échelonner les repiquages.",
       "cycle": "75 à 100 jours après repiquage",
       "epice": false,
-      "nouveau": true
+      "nouveau": true,
+      "zones": [
+        "sud",
+        "centre-ouest"
+      ]
     },
     {
       "id": "pasteque",
@@ -227,7 +271,8 @@
       "debouche": "Bonne valeur en pleine saison chaude ; attention au transport (fruits lourds, chargement soigné).",
       "cycle": "75 à 100 jours",
       "epice": false,
-      "nouveau": true
+      "nouveau": true,
+      "zones": []
     },
     {
       "id": "papaye",
@@ -240,7 +285,8 @@
       "debouche": "Production régulière mais prix bas en pleine saison : la transformation (papaye verte râpée, séchée) améliore la valeur.",
       "cycle": "8 à 12 mois jusqu'à la première récolte, production ensuite continue",
       "epice": false,
-      "nouveau": true
+      "nouveau": true,
+      "zones": []
     },
     {
       "id": "ananas",
@@ -253,7 +299,11 @@
       "debouche": "Filière d'export exigeante en qualité et en volume ; pour le marché local, la vente en morceaux prêts à consommer valorise mieux le fruit.",
       "cycle": "12 à 18 mois selon le matériel de plantation",
       "epice": false,
-      "nouveau": true
+      "nouveau": true,
+      "zones": [
+        "sud",
+        "littoral"
+      ]
     },
     {
       "id": "manguier",
@@ -266,7 +316,44 @@
       "debouche": "Rentabilité à long terme : la première production arrive après 3 à 5 ans. Prévoir l'entretien des jeunes arbres sans revenu immédiat.",
       "cycle": "3 à 5 ans avant la première production, puis arbre pérenne",
       "epice": false,
-      "nouveau": true
+      "nouveau": true,
+      "zones": []
+    },
+    {
+      "id": "cacao",
+      "nom": "Cacao",
+      "type": "rente",
+      "badge": "Culture de rente",
+      "surnom": "Theobroma cacao — la fève d'export des zones forestières",
+      "desc": "Culture de rente majeure du Sud forestier, conduite sous ombrage : la fermentation et le séchage décident du prix autant que le rendement.",
+      "atouts": "Filière structurée, production étalée sur l'année",
+      "debouche": "Prix bord champ fixé par campagne : vérifier le barème officiel en vigueur.",
+      "cycle": "3 à 4 ans avant la première récolte, verger productif 20 à 30 ans",
+      "epice": false,
+      "nouveau": true,
+      "zones": [
+        "sud",
+        "est",
+        "ouest"
+      ]
+    },
+    {
+      "id": "mais",
+      "nom": "Maïs",
+      "type": "vivriere",
+      "badge": "Nouvelle fiche",
+      "surnom": "Zea mays — la céréale de soudure",
+      "desc": "Céréale de base cultivée dans toutes les zones, de l'alimentation familiale à la vente et à l'aliment du bétail.",
+      "atouts": "Toutes zones, cycle court, association possible avec une légumineuse",
+      "debouche": "Vente après récolte ou stockage bien conduit pour lisser le prix.",
+      "cycle": "75 à 110 jours selon la variété",
+      "epice": false,
+      "nouveau": true,
+      "zones": [
+        "centre-ouest",
+        "nord",
+        "est"
+      ]
     }
   ]
 }

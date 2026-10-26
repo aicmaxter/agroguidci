@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="AGROGUIDCI">
+<rect width="512" height="512" rx="112" fill="#c9f36b"/>
+<path d="M256 424V232" stroke="#062b1d" stroke-width="34" stroke-linecap="round"/>
+<path d="M256 240c0-78 54-134 128-134 0 78-54 134-128 134Z" fill="#062b1d"/>
+<path d="M259 302c0-60-42-105-100-105 0 60 42 105 100 105Z" fill="#1f5c3b"/>
+<circle cx="278" cy="62" r="34" fill="#9a4a06"/>
+</svg>

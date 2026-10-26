@@ -63,7 +63,8 @@ def carte(c: dict, photo: dict | None) -> str:
         image = (f'<img src="{jpg}" alt="{e(c["nom"])} — photographie réelle" '
                  'width="1200" height="750" loading="lazy" decoding="async">')
 
-    return f'''          <article class="{classes}" data-type="{e(c['type'])}" data-nom="{e(c['nom'].lower())}">
+    zones = " ".join(c.get("zones") or [])
+    return f'''          <article class="{classes}" data-type="{e(c['type'])}" data-nom="{e(c['nom'].lower())}" data-zones="{e(zones)}">
             <figure class="crop-img">
               <a class="crop-lien-img" href="cultures/{e(c['id'])}" aria-label="Lire la fiche {e(c['nom'])}">
                 {image}
