@@ -24,7 +24,7 @@
  {"@type":"WebSite","@id":"https://agroguidci.vercel.app/#site","url":"https://agroguidci.vercel.app/","name":"AGROGUIDCI","inLanguage":"fr-CI","publisher":{"@id":"https://agroguidci.vercel.app/#org"}}
 ]}
 </script>
-<link rel="stylesheet" href="assets/site.css?v=31">
+<link rel="stylesheet" href="assets/site.css?v=33">
 <noscript><style>
   /* sans JavaScript : tous les panneaux et toutes les espèces restent lisibles */
   .panel[hidden], .espece[hidden] { display: block !important; }
@@ -93,16 +93,11 @@
       </div>
 
       <div class="hero-side">
-        <figure class="hero-figure" aria-label="Scène 3D : cabosse de cacao, épi de maïs, tubercule d'igname et feuille">
-          <picture class="hero-repli">
-            <source type="image/webp" srcset="assets/hero.webp">
-            <img src="assets/hero.jpg" alt="Paysage agricole ivoirien : cultures et couvert végétal au lever du jour" width="1600" height="912" fetchpriority="high" decoding="async">
+        <figure class="hero-figure">
+          <picture>
+            <source type="image/webp" srcset="assets/hero-ile.webp">
+            <img src="assets/hero-ile.jpg" alt="Illustration : île de cultures flottante réunissant cacaoyer, bananier, manioc, bassin de poissons et un bovin" width="588" height="513" fetchpriority="high" decoding="async">
           </picture>
-          <canvas id="scene3d" aria-hidden="true" aria-label="Scène 3D low-poly : une cabosse de cacao, un épi de maïs, un tubercule d'igname et une feuille"></canvas>
-          <figcaption class="scene-note">
-            <span class="scene-badge">Vue 3D</span>
-            <span class="scene-legende">Cabosse, maïs, igname, feuille — glissez pour tourner</span>
-          </figcaption>
         </figure>
         <ul class="filieres" aria-label="Filières documentées">
           <li><a href="cultures/cacao"><strong>Cacao</strong><span>Fiche culture · zones forestières</span></a></li>
@@ -1600,7 +1595,6 @@
 
 <script src="assets/geo.js?v=13"></script>
 <script src="assets/motion.js?v=17"></script>
-<script src="assets/scene3d.js?v=8" defer></script>
 <script src="assets/ui.js?v=23"></script>
 <script src="assets/app.js?v=14"></script>
 <script src="assets/chat.js?v=21"></script>

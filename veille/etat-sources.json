@@ -13,7 +13,7 @@
       "Recevez régulièrement nos dernières nouvelles. Abonnez-vous à la newsletter",
       "Développement des Filières"
     ],
-    "vu_le": "2026-10-21T15:38:37"
+    "vu_le": "2026-10-26T15:57:05"
   },
   "https://firca.ci/filieres-agricoles/legumes/": {
     "nom": "FIRCA — légumes et soja",
@@ -28,12 +28,12 @@
       "Recevez régulièrement nos dernières nouvelles. Abonnez-vous à la newsletter",
       "Développement des Filières"
     ],
-    "vu_le": "2026-10-21T15:38:42"
+    "vu_le": "2026-10-26T15:57:08"
   },
   "https://www.anader.ci/": {
     "nom": "ANADER",
-    "empreinte": "eb9a50602ab3a70f",
-    "items": 38,
+    "empreinte": "e4e665ac724a926a",
+    "items": 37,
     "titres": [
       "Directeur Général",
       "Des experts à votre écoute et à vos côtés",
@@ -52,6 +52,8 @@
       "Suivi-évaluation et étude d'impact de projet",
       "Santé communautaire et lutte contre les pandémies en milieu rural",
       "Genre et développement",
+      "DEVELOPPEMENT LOCAL: L&#8217;ANADER PRESENTE SES SERVICES AUX COLLECTIVITES TERRITORIALES",
+      "OCTOBRE ROSE : LA DR EST DE L&#8217;ANADER SENSIBILISE SUR LE DÉPISTAGE ET LA PRÉVENTION DES CANCERS DU SEIN ET DU COL DE L’UTÉRUS",
       "LES AGENTS DE LA DRSO CÉLÈBRENT LE BIEN-ÊTRE AU CŒUR DE LEUR ENGAGEMENT PROFESSIONNEL",
       "DR CENTRE-OUEST",
       "LA DR CENTRE-OUEST DE L’ANADER FAIT LE BILAN DU TROISIEME TRIMESTRE DE SON PTBA",
@@ -63,9 +65,6 @@
       "REVUE À MI-PARCOURS DU 2PAI NORD : L&#8217;ANADER PRÉSENTE L&#8217;AVANCEMENT DU PROJET AUX PARTENAIRES",
       "L’ANADER RENFORCE LES CAPACITÉS DES DIRIGEANTS DES AVEC DU PRECCINOV",
       "SINEMATIALI CONFIE SON DEVELOPPEMENT À L&#8217;ANADER",
-      "SIÈGE , Uncategorized",
-      "L’ANADER DRESSE LE BILAN DE SES OUTILS DE SENSIBILISATION EN MATIERE DE GENRE ET DE DEVELOPPEMENT",
-      "ÉVALUATION DES PROGRAMMES DU CONSEIL DU CAFÉ-CACAO : LA ZONE ANADER DE SOUBRÉ APPUIE LA MISSION DE COLLECTE DE DONNÉES",
       "Consulter le communiqué du conseil des ministres du 23 septembre 2026",
       "Agents sur toute l'étendue du territoire Ivoirien",
       "Représentations à l'échelle nationale",
@@ -74,14 +73,14 @@
       "Dispositif de conseil agricole par voie électronique",
       "𝗔𝗩𝗜𝗦 𝗗'𝗔𝗚𝗥𝗘𝗠𝗘𝗡𝗧𝗦 𝗔𝗨𝗫 𝗙𝗢𝗨𝗥𝗡𝗜𝗦𝗦𝗘𝗨𝗥𝗦 𝟮𝟬𝟮𝟲 - 𝟮𝟬𝟮𝟳"
     ],
-    "vu_le": "2026-10-21T15:38:50"
+    "vu_le": "2026-10-26T15:57:25"
   },
   "https://www.agriculture.gouv.ci/": {
     "nom": "Ministère de l'Agriculture",
     "empreinte": "e3b0c44298fc1c14",
     "items": 0,
     "titres": [],
-    "vu_le": "2026-10-21T15:38:57"
+    "vu_le": "2026-10-26T15:57:27"
   },
   "https://www.pamdagro.ci/index.php/en/produits-vivriers/ocpv": {
     "nom": "PAM Agro — prix OCPV",
@@ -93,6 +92,13 @@
       "Office d'Aide à la Commercialisation des Produits Vivriers",
       "Filières Agricoles"
     ],
-    "vu_le": "2026-10-21T15:38:59"
+    "vu_le": "2026-10-26T15:57:32"
+  },
+  "https://www.gouv.ci/": {
+    "nom": "Portail officiel — publications",
+    "empreinte": "e3b0c44298fc1c14",
+    "items": 0,
+    "titres": [],
+    "vu_le": "2026-10-26T15:57:36"
   }
 }
