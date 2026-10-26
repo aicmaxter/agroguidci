@@ -225,11 +225,15 @@
     var corps = document.getElementById("prixBody");
     if (!corps || !d || !d.produits) return;
     corps.innerHTML = "";
+    var dateReleve = d.releve || d.semaine || "";
     d.produits.forEach(function (p) {
       var tr = document.createElement("tr");
+      // type de prix et date : « non précisé » plutôt qu'une valeur inventée
       tr.innerHTML = '<td class="produit">' + echapper(p.nom) + "</td>" +
         '<td class="prix">' + fcfa(p.prix) + ' <span class="unite">FCFA/' + echapper(p.unite) + "</span></td>" +
-        '<td class="marche">' + echapper(p.marche || "—") + "</td>";
+        '<td class="type-prix">' + echapper(p.type_prix || "non précisé") + "</td>" +
+        '<td class="marche">' + echapper(p.marche || "—") + "</td>" +
+        '<td class="releve">' + echapper(p.date || dateReleve || "—") + "</td>";
       corps.appendChild(tr);
     });
     var semaine = document.getElementById("prixSemaine");
@@ -308,16 +312,19 @@
     meteo.forEach(function (m) {
       items.push('<span class="ticker-item">' + echapper(m.nom) + ' <b>' +
         (m.t == null ? "—" : Math.round(m.t)) + "°C</b> <span>" +
-        echapper(LIBELLES[m.code] || "") + "</span></span>");
+        echapper(LIBELLES[m.code] || "") + (m.heure ? " · obs. " + echapper(m.heure) : "") + "</span></span>");
     });
     if (prixCharge && prixCharge.produits) {
+      // chaque prix affiché porte son marché, son type et sa date de relevé (jamais « temps réel »)
+      var releve = prixCharge.releve || prixCharge.semaine || "";
       prixCharge.produits.forEach(function (p) {
+        var detail = [p.marche, p.type_prix, releve].filter(Boolean).join(" · ");
         items.push('<span class="ticker-item">' + echapper(p.nom) + ' <span class="val">' +
-          fcfa(p.prix) + " FCFA/" + echapper(p.unite) + "</span></span>");
+          fcfa(p.prix) + " FCFA/" + echapper(p.unite) + "</span>" +
+          (detail ? ' <span>' + echapper(detail) + "</span>" : "") + "</span>");
       });
     }
-    var contenu = items.join("");
-    piste.innerHTML = contenu + contenu;   // doublé pour un défilement continu
+    piste.innerHTML = items.join("");   // pas de duplication : le bandeau ne défile plus
   }
 
   fetch("assets/prix.json", { cache: "no-cache" })
