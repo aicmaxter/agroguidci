@@ -101,12 +101,12 @@
   function majCompteurs() {
     var cartes = document.querySelectorAll("#grilleCultures .crop");
     var total = cartes.length;
-    var vivrieres = 0, epices = 0;
+    // comptage par famille réellement présente dans la grille
+    var valeurs = { tous: total };
     cartes.forEach(function (c) {
-      var type = c.getAttribute("data-type");
-      if (type === "epice") epices++; else vivrieres++;
+      var type = c.getAttribute("data-type") || "autre";
+      valeurs[type] = (valeurs[type] || 0) + 1;
     });
-    var valeurs = { tous: total, vivriere: vivrieres, epice: epices };
     document.querySelectorAll("[data-filtre]").forEach(function (b) {
       var span = b.querySelector("span");
       if (span && valeurs[b.getAttribute("data-filtre")] !== undefined) {

@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="assets/hero.webp" type="image/webp" fetchpriority="high">
-<link rel="stylesheet" href="assets/site.css?v=22">
+<link rel="stylesheet" href="assets/site.css?v=24">
 </head>
 <body>
 <a class="skip" href="#app">Aller au contenu</a>
@@ -78,7 +78,7 @@
           <button class="btn btn-ghost btn-lg" type="button" data-tab="cultures">Voir les cultures</button>
         </div>
         <div class="hero-mesures">
-          <div><strong data-count="11">11</strong><span>fiches cultures</span></div>
+          <div><strong data-count="20">20</strong><span>fiches cultures</span></div>
           <div><strong data-count="4">4</strong><span>sections, z&eacute;ro compte</span></div>
           <div><strong data-count="7">7</strong><span>agents experts</span></div>
         </div>
@@ -176,15 +176,17 @@
     <div class="wrap">
       <div class="panel-intro">
         <span class="eyebrow">Cultures &amp; épices</span>
-        <p class="compte-fiches"><strong id="compteurCultures">11</strong> fiches disponibles</p>
+        <p class="compte-fiches"><strong id="compteurCultures">20</strong> fiches disponibles</p>
         <h2>Cultures et épices à fort potentiel, photos et repères réels.</h2>
-        <p>Vivrières peu plantées et épices : peu d'intrants, meilleure valeur au kilo. Filtrez par famille, puis ouvrez une fiche pour le cycle, les atouts et le débouché.</p>
+        <p>Vivrières peu plantées, épices, légumes et fruits : peu d'intrants, meilleure valeur au kilo. Filtrez par famille, puis ouvrez une fiche pour le cycle, les atouts et le débouché.</p>
       </div>
 
       <div class="filtres" role="group" aria-label="Filtrer les cultures">
-        <button class="filtre actif" type="button" data-filtre="tous">Toutes <span>11</span></button>
+        <button class="filtre actif" type="button" data-filtre="tous">Toutes <span>20</span></button>
         <button class="filtre" type="button" data-filtre="vivriere">Vivrières <span>7</span></button>
         <button class="filtre" type="button" data-filtre="epice">Épices <span>4</span></button>
+        <button class="filtre" type="button" data-filtre="legume">Légumes <span>5</span></button>
+        <button class="filtre" type="button" data-filtre="fruit">Fruits <span>4</span></button>
         <label class="recherche"><span class="sr-only">Rechercher une culture</span>
           <input type="search" id="rechercheCulture" placeholder="Rechercher : poivre, fonio…" autocomplete="off">
         </label>
@@ -423,6 +425,195 @@
               <p class="crop-credit">Photo : Prenn · CC BY-SA 3.0 · <a href="https://commons.wikimedia.org/wiki/File:Capsicum_frutescens_(3).jpg" target="_blank" rel="noreferrer">Wikimedia</a></p>
             </div>
           </article>
+          <article class="crop reveal" data-type="legume" data-nom="tomate">
+            <figure class="crop-img">
+              <a class="crop-lien-img" href="cultures/tomate" aria-label="Lire la fiche Tomate">
+                <picture><source type="image/webp" srcset="assets/cultures/480/tomate.webp 480w, assets/cultures/960/tomate.webp 960w" sizes="(max-width: 560px) 92vw, (max-width: 760px) 46vw, (max-width: 1180px) 31vw, 280px"><img src="assets/cultures/tomate.jpg" alt="Tomate — photographie réelle" width="1200" height="750" loading="lazy" decoding="async"></picture>
+              </a>
+              <span class="crop-badge nou">Nouvelle fiche</span>
+            </figure>
+            <div class="crop-body">
+              <h3><a class="crop-lien-titre" href="cultures/tomate">Tomate</a></h3>
+              <p class="surnom">Solanum lycopersicum — culture de rente maraîchère</p>
+              <p class="desc">Premier légume-fruit de rente en Côte d&#x27;Ivoire : marché urbain constant, transformation possible (concentré, séchage).</p>
+              <dl>
+                <dt>Cycle</dt><dd>90 à 120 jours en saison des pluies, 100 à 130 jours en contre-saison</dd>
+                <dt>Atouts</dt><dd>Récolte étalée, marché urbain constant, transformation possible</dd>
+                <dt>Débouché</dt><dd>Culture à forte valeur mais à risque élevé : le coût des traitements et des tuteurs pèse lourd.</dd>
+              </dl>
+              <p class="crop-plus"><a href="cultures/tomate">Fiche complète : climat, itinéraire, récolte, budget →</a></p>
+              
+              <p class="crop-credit">Photo : domdomegg · CC BY 4.0 · <a href="https://commons.wikimedia.org/wiki/File:Grape_tomatoes_on_the_vine_at_Ljubljana_Central_Market.JPG" target="_blank" rel="noreferrer">Wikimedia</a></p>
+            </div>
+          </article>
+          <article class="crop reveal" data-type="legume" data-nom="oignon">
+            <figure class="crop-img">
+              <a class="crop-lien-img" href="cultures/oignon" aria-label="Lire la fiche Oignon">
+                <picture><source type="image/webp" srcset="assets/cultures/480/oignon.webp 480w, assets/cultures/960/oignon.webp 960w" sizes="(max-width: 560px) 92vw, (max-width: 760px) 46vw, (max-width: 1180px) 31vw, 280px"><img src="assets/cultures/oignon.jpg" alt="Oignon — photographie réelle" width="1200" height="750" loading="lazy" decoding="async"></picture>
+              </a>
+              <span class="crop-badge nou">Nouvelle fiche</span>
+            </figure>
+            <div class="crop-body">
+              <h3><a class="crop-lien-titre" href="cultures/oignon">Oignon</a></h3>
+              <p class="surnom">Allium cepa — bulbe de conservation</p>
+              <p class="desc">Bulbe qui se conserve plusieurs mois : il permet de vendre après la récolte, quand les prix montent. Demande une terre fine, un repiquage soigné et un séchage rigoureux.</p>
+              <dl>
+                <dt>Cycle</dt><dd>90 à 150 jours selon variété et saison</dd>
+                <dt>Atouts</dt><dd>Se conserve plusieurs mois : on vend quand le prix monte</dd>
+                <dt>Débouché</dt><dd>La valeur vient du stockage : vendre 1 à 3 mois après récolte paye souvent mieux que la vente immédiate, à condition d&#x27;avoir un local sec.</dd>
+              </dl>
+              <p class="crop-plus"><a href="cultures/oignon">Fiche complète : climat, itinéraire, récolte, budget →</a></p>
+              
+              <p class="crop-credit">Photo : Samsule2 · CC BY-SA 4.0 · <a href="https://commons.wikimedia.org/wiki/File:Pile_of_Onions_at_Barkin_Dogo_Market,_Kaduna_North_03.jpg" target="_blank" rel="noreferrer">Wikimedia</a></p>
+            </div>
+          </article>
+          <article class="crop reveal" data-type="legume" data-nom="gombo">
+            <figure class="crop-img">
+              <a class="crop-lien-img" href="cultures/gombo" aria-label="Lire la fiche Gombo">
+                <picture><source type="image/webp" srcset="assets/cultures/480/gombo.webp 480w, assets/cultures/960/gombo.webp 960w" sizes="(max-width: 560px) 92vw, (max-width: 760px) 46vw, (max-width: 1180px) 31vw, 280px"><img src="assets/cultures/gombo.jpg" alt="Gombo — photographie réelle" width="1200" height="750" loading="lazy" decoding="async"></picture>
+              </a>
+              <span class="crop-badge nou">Nouvelle fiche</span>
+            </figure>
+            <div class="crop-body">
+              <h3><a class="crop-lien-titre" href="cultures/gombo">Gombo</a></h3>
+              <p class="surnom">Abelmoschus esculentus — le légume-fruit du quotidien</p>
+              <p class="desc">Culture robuste et rentable en petites surfaces : la récolte commence tôt et se répète toutes les semaines. Très demandé sur les marchés urbains, frais ou séché.</p>
+              <dl>
+                <dt>Cycle</dt><dd>60 à 90 jours pour les premières récoltes, production étalée sur 2 à 3 mois</dd>
+                <dt>Atouts</dt><dd>Récolte hebdomadaire dès 60 jours, frais ou séché</dd>
+                <dt>Débouché</dt><dd>Bon revenu à l&#x27;hectare grâce à la récolte étalée ; le séchage permet de lisser les ventes et d&#x27;éviter de brader au pic.</dd>
+              </dl>
+              <p class="crop-plus"><a href="cultures/gombo">Fiche complète : climat, itinéraire, récolte, budget →</a></p>
+              
+              <p class="crop-credit">Photo : Yercaud-elango · CC BY-SA 4.0 · <a href="https://commons.wikimedia.org/wiki/File:Abelmoschus_esculentus-1-yercaud-salem-India.JPG" target="_blank" rel="noreferrer">Wikimedia</a></p>
+            </div>
+          </article>
+          <article class="crop reveal" data-type="legume" data-nom="aubergine africaine">
+            <figure class="crop-img">
+              <a class="crop-lien-img" href="cultures/aubergine" aria-label="Lire la fiche Aubergine africaine">
+                <picture><source type="image/webp" srcset="assets/cultures/480/aubergine.webp 480w, assets/cultures/960/aubergine.webp 960w" sizes="(max-width: 560px) 92vw, (max-width: 760px) 46vw, (max-width: 1180px) 31vw, 280px"><img src="assets/cultures/aubergine.jpg" alt="Aubergine africaine — photographie réelle" width="1200" height="750" loading="lazy" decoding="async"></picture>
+              </a>
+              <span class="crop-badge nou">Nouvelle fiche</span>
+            </figure>
+            <div class="crop-body">
+              <h3><a class="crop-lien-titre" href="cultures/aubergine">Aubergine africaine</a></h3>
+              <p class="surnom">Solanum aethiopicum / S. melongena — le « gboma » des sauces</p>
+              <p class="desc">Légume-fruit de base des sauces ivoiriennes : les variétés locales africaines (amères ou douces) sont très demandées. Rustique, productive, moins exigeante que la tomate.</p>
+              <dl>
+                <dt>Cycle</dt><dd>90 à 120 jours, récolte étalée</dd>
+                <dt>Atouts</dt><dd>Rustique et productive, base des sauces ivoiriennes</dd>
+                <dt>Débouché</dt><dd>Débouché local solide, y compris auprès des restaurants de rue. Calculer la marge avec le prix du marché de gros de la semaine.</dd>
+              </dl>
+              <p class="crop-plus"><a href="cultures/aubergine">Fiche complète : climat, itinéraire, récolte, budget →</a></p>
+              
+              <p class="crop-credit">Photo : John Atherton · CC BY-SA 2.0 · <a href="https://commons.wikimedia.org/wiki/File:%22African_Eggplant%22_at_the_market_in_Kedougou,_Senegal_(West_Africa)_(535274253).jpg" target="_blank" rel="noreferrer">Wikimedia</a></p>
+            </div>
+          </article>
+          <article class="crop reveal" data-type="legume" data-nom="chou">
+            <figure class="crop-img">
+              <a class="crop-lien-img" href="cultures/chou" aria-label="Lire la fiche Chou">
+                <picture><source type="image/webp" srcset="assets/cultures/480/chou.webp 480w, assets/cultures/960/chou.webp 960w" sizes="(max-width: 560px) 92vw, (max-width: 760px) 46vw, (max-width: 1180px) 31vw, 280px"><img src="assets/cultures/chou.jpg" alt="Chou — photographie réelle" width="1200" height="750" loading="lazy" decoding="async"></picture>
+              </a>
+              <span class="crop-badge nou">Nouvelle fiche</span>
+            </figure>
+            <div class="crop-body">
+              <h3><a class="crop-lien-titre" href="cultures/chou">Chou</a></h3>
+              <p class="surnom">Brassica oleracea — pomme de saison fraîche</p>
+              <p class="desc">Légume-feuille très demandé en saison fraîche et en zone d&#x27;altitude. Culture exigeante en eau et en azote, sensible aux chenilles.</p>
+              <dl>
+                <dt>Cycle</dt><dd>75 à 100 jours après repiquage</dd>
+                <dt>Atouts</dt><dd>Demandé en saison fraîche et en altitude, cycle court</dd>
+                <dt>Débouché</dt><dd>Prix sensible à l&#x27;offre : éviter d&#x27;arriver en même temps que tout le monde sur le marché, échelonner les repiquages.</dd>
+              </dl>
+              <p class="crop-plus"><a href="cultures/chou">Fiche complète : climat, itinéraire, récolte, budget →</a></p>
+              
+              <p class="crop-credit">Photo : cogdogblog · CC BY 2.0 · <a href="https://commons.wikimedia.org/wiki/File:2013-365-219_New_Garden_Harvest_(9464324056).jpg" target="_blank" rel="noreferrer">Wikimedia</a></p>
+            </div>
+          </article>
+          <article class="crop reveal" data-type="fruit" data-nom="pastèque">
+            <figure class="crop-img">
+              <a class="crop-lien-img" href="cultures/pasteque" aria-label="Lire la fiche Pastèque">
+                <picture><source type="image/webp" srcset="assets/cultures/480/pasteque.webp 480w, assets/cultures/960/pasteque.webp 960w" sizes="(max-width: 560px) 92vw, (max-width: 760px) 46vw, (max-width: 1180px) 31vw, 280px"><img src="assets/cultures/pasteque.jpg" alt="Pastèque — photographie réelle" width="1200" height="750" loading="lazy" decoding="async"></picture>
+              </a>
+              <span class="crop-badge nou">Nouvelle fiche</span>
+            </figure>
+            <div class="crop-body">
+              <h3><a class="crop-lien-titre" href="cultures/pasteque">Pastèque</a></h3>
+              <p class="surnom">Citrullus lanatus — culture de saison sèche</p>
+              <p class="desc">Fruit très demandé en saison chaude, adapté aux sols sableux et à l&#x27;irrigation localisée. Une culture de trésorerie quand l&#x27;eau est maîtrisée.</p>
+              <dl>
+                <dt>Cycle</dt><dd>75 à 100 jours</dd>
+                <dt>Atouts</dt><dd>Saison chaude, sols sableux, forte demande</dd>
+                <dt>Débouché</dt><dd>Bonne valeur en pleine saison chaude ; attention au transport (fruits lourds, chargement soigné).</dd>
+              </dl>
+              <p class="crop-plus"><a href="cultures/pasteque">Fiche complète : climat, itinéraire, récolte, budget →</a></p>
+              
+              <p class="crop-credit">Photo : PAULIX04 · CC BY-SA 4.0 · <a href="https://commons.wikimedia.org/wiki/File:Fresh_Watermelons_Stacked.jpg" target="_blank" rel="noreferrer">Wikimedia</a></p>
+            </div>
+          </article>
+          <article class="crop reveal" data-type="fruit" data-nom="papaye">
+            <figure class="crop-img">
+              <a class="crop-lien-img" href="cultures/papaye" aria-label="Lire la fiche Papaye">
+                <picture><source type="image/webp" srcset="assets/cultures/480/papaye.webp 480w, assets/cultures/960/papaye.webp 960w" sizes="(max-width: 560px) 92vw, (max-width: 760px) 46vw, (max-width: 1180px) 31vw, 280px"><img src="assets/cultures/papaye.jpg" alt="Papaye — photographie réelle" width="1200" height="750" loading="lazy" decoding="async"></picture>
+              </a>
+              <span class="crop-badge nou">Nouvelle fiche</span>
+            </figure>
+            <div class="crop-body">
+              <h3><a class="crop-lien-titre" href="cultures/papaye">Papaye</a></h3>
+              <p class="surnom">Carica papaya — fruit toute l&#x27;année</p>
+              <p class="desc">Fruit qui produit toute l&#x27;année après la première floraison : intéressant pour la trésorerie régulière. Deux marchés : fruit mûr et papaye verte (légume, transformation).</p>
+              <dl>
+                <dt>Cycle</dt><dd>8 à 12 mois jusqu&#x27;à la première récolte, production ensuite continue</dd>
+                <dt>Atouts</dt><dd>Fruit toute l&#x27;année après la première floraison</dd>
+                <dt>Débouché</dt><dd>Production régulière mais prix bas en pleine saison : la transformation (papaye verte râpée, séchée) améliore la valeur.</dd>
+              </dl>
+              <p class="crop-plus"><a href="cultures/papaye">Fiche complète : climat, itinéraire, récolte, budget →</a></p>
+              
+              <p class="crop-credit">Photo : Joydeep · CC BY-SA 3.0 · <a href="https://commons.wikimedia.org/wiki/File:Carica_papaya_22_08_2012.JPG" target="_blank" rel="noreferrer">Wikimedia</a></p>
+            </div>
+          </article>
+          <article class="crop reveal" data-type="fruit" data-nom="ananas">
+            <figure class="crop-img">
+              <a class="crop-lien-img" href="cultures/ananas" aria-label="Lire la fiche Ananas">
+                <picture><source type="image/webp" srcset="assets/cultures/480/ananas.webp 480w, assets/cultures/960/ananas.webp 960w" sizes="(max-width: 560px) 92vw, (max-width: 760px) 46vw, (max-width: 1180px) 31vw, 280px"><img src="assets/cultures/ananas.jpg" alt="Ananas — photographie réelle" width="1200" height="750" loading="lazy" decoding="async"></picture>
+              </a>
+              <span class="crop-badge nou">Nouvelle fiche</span>
+            </figure>
+            <div class="crop-body">
+              <h3><a class="crop-lien-titre" href="cultures/ananas">Ananas</a></h3>
+              <p class="surnom">Ananas comosus — fruit d&#x27;export et de marché local</p>
+              <p class="desc">Fruit emblématique de la Côte d&#x27;Ivoire, avec un marché local solide et une filière d&#x27;export structurée. Culture de longue durée : elle immobilise la parcelle plus d&#x27;un an.</p>
+              <dl>
+                <dt>Cycle</dt><dd>12 à 18 mois selon le matériel de plantation</dd>
+                <dt>Atouts</dt><dd>Marché local solide et filière d&#x27;export structurée</dd>
+                <dt>Débouché</dt><dd>Filière d&#x27;export exigeante en qualité et en volume ; pour le marché local, la vente en morceaux prêts à consommer valorise mieux le fruit.</dd>
+              </dl>
+              <p class="crop-plus"><a href="cultures/ananas">Fiche complète : climat, itinéraire, récolte, budget →</a></p>
+              
+              <p class="crop-credit">Photo : Rasheed hamis · CC BY-SA 4.0 · <a href="https://commons.wikimedia.org/wiki/File:Local_market_in_tanzania.jpg" target="_blank" rel="noreferrer">Wikimedia</a></p>
+            </div>
+          </article>
+          <article class="crop reveal" data-type="fruit" data-nom="manguier">
+            <figure class="crop-img">
+              <a class="crop-lien-img" href="cultures/manguier" aria-label="Lire la fiche Manguier">
+                <picture><source type="image/webp" srcset="assets/cultures/480/manguier.webp 480w, assets/cultures/960/manguier.webp 960w" sizes="(max-width: 560px) 92vw, (max-width: 760px) 46vw, (max-width: 1180px) 31vw, 280px"><img src="assets/cultures/manguier.jpg" alt="Manguier — photographie réelle" width="1200" height="750" loading="lazy" decoding="async"></picture>
+              </a>
+              <span class="crop-badge nou">Nouvelle fiche</span>
+            </figure>
+            <div class="crop-body">
+              <h3><a class="crop-lien-titre" href="cultures/manguier">Manguier</a></h3>
+              <p class="surnom">Mangifera indica — l&#x27;arbre de la saison sèche</p>
+              <p class="desc">Arbre fruitier pérenne : un investissement long mais qui produit pendant des décennies. La mangue ivoirienne a un marché local, régional et export (campagne de contre-saison).</p>
+              <dl>
+                <dt>Cycle</dt><dd>3 à 5 ans avant la première production, puis arbre pérenne</dd>
+                <dt>Atouts</dt><dd>Arbre pérenne, production pendant des décennies</dd>
+                <dt>Débouché</dt><dd>Rentabilité à long terme : la première production arrive après 3 à 5 ans. Prévoir l&#x27;entretien des jeunes arbres sans revenu immédiat.</dd>
+              </dl>
+              <p class="crop-plus"><a href="cultures/manguier">Fiche complète : climat, itinéraire, récolte, budget →</a></p>
+              
+              <p class="crop-credit">Photo : daSupremo · CC BY-SA 4.0 · <a href="https://commons.wikimedia.org/wiki/File:Mango_fruits_on_a_tree_01.jpg" target="_blank" rel="noreferrer">Wikimedia</a></p>
+            </div>
+          </article>
 <!-- FICHES:FIN -->
       </div>
       <p class="pricing-note">Prix des épices : aucun relevé officiel ivoirien n'est publié régulièrement. Nous ne donnons donc aucun prix au kilo pour ces cultures — demandez un devis à un acheteur ou renseignez-vous auprès de l'ANADER avant de planter.</p>
@@ -588,7 +779,7 @@
         </details>
         <details>
           <summary>Les épices font-elles partie des cultures ?</summary>
-          <p>Oui, elles sont dans la même section « Cultures &amp; épices », avec un filtre dédié. Quatre vivrières peu plantées (voandzou, fonio, sésame, patate douce orange) et quatre épices (poivre, gingembre, curcuma, piment).</p>
+          <p>Oui, dans la même section, avec un filtre par famille : sept vivrières peu plantées (voandzou, fonio, sésame, patate douce orange…), quatre épices (poivre, gingembre, curcuma, piment), cinq légumes (tomate, oignon, gombo, aubergine, chou) et quatre fruits (pastèque, papaye, ananas, manguier).</p>
         </details>
         <details>
           <summary>D'où viennent les infos affichées en continu ?</summary>
@@ -692,7 +883,7 @@
 
 <script src="assets/geo.js?v=13"></script>
 <script src="assets/motion.js?v=14"></script>
-<script src="assets/ui.js?v=16"></script>
+<script src="assets/ui.js?v=17"></script>
 <script src="assets/app.js?v=14"></script>
 <script src="assets/chat.js?v=21"></script>
 </body>

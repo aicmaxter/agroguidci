@@ -38,12 +38,31 @@ RECHERCHES = {
 LICENCES_OK = re.compile(r"(cc[ -]?by|cc0|public domain|domaine public)", re.I)
 
 
+def _reessayer(fn, tentatives=4, pause=3.0):
+    """Wikimedia réinitialise parfois la connexion : on retente avec un délai croissant."""
+    import time
+    derniere = None
+    for i in range(tentatives):
+        try:
+            return fn()
+        except Exception as exc:  # réseau, TLS, coupure
+            derniere = exc
+            if i == tentatives - 1:
+                raise
+            time.sleep(pause * (i + 1))
+    raise derniere
+
+
 def api(params: dict) -> dict:
     params = dict(params, format="json")
     url = API + "?" + urllib.parse.urlencode(params)
-    req = urllib.request.Request(url, headers={"User-Agent": UA})
-    with urllib.request.urlopen(req, timeout=30) as r:
-        return json.loads(r.read().decode("utf-8"))
+
+    def appel():
+        req = urllib.request.Request(url, headers={"User-Agent": UA})
+        with urllib.request.urlopen(req, timeout=40) as r:
+            return json.loads(r.read().decode("utf-8"))
+
+    return _reessayer(appel)
 
 
 def candidats(terme: str, limite: int = 6) -> list[dict]:
@@ -74,9 +93,12 @@ def candidats(terme: str, limite: int = 6) -> list[dict]:
 
 
 def telecharger(url: str, dest: Path) -> int:
-    req = urllib.request.Request(url, headers={"User-Agent": UA})
-    with urllib.request.urlopen(req, timeout=60) as r:
-        data = r.read()
+    def descente():
+        req = urllib.request.Request(url, headers={"User-Agent": UA})
+        with urllib.request.urlopen(req, timeout=60) as r:
+            return r.read()
+
+    data = _reessayer(descente)
     dest.write_bytes(data)
     return len(data)
 

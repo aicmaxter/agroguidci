@@ -216,5 +216,68 @@
         "page": "https://commons.wikimedia.org/wiki/File:Soybean_Pods_Ready_for_Harvest_(10138538485).jpg"
       }
     }
+  },
+  "gombo": {
+    "auteur": "Yercaud-elango",
+    "licence": "CC BY-SA 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Abelmoschus_esculentus-1-yercaud-salem-India.JPG",
+    "fichier": "assets/cultures/gombo.jpg",
+    "choix": "Abelmoschus esculentus-1-yercaud-salem-India.JPG"
+  },
+  "aubergine": {
+    "auteur": "John Atherton",
+    "licence": "CC BY-SA 2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:%22African_Eggplant%22_at_the_market_in_Kedougou,_Senegal_(West_Africa)_(535274253).jpg",
+    "fichier": "assets/cultures/aubergine.jpg",
+    "choix": "\"African Eggplant\" at the market in Kedougou, Senegal (West Africa) (535274253).jpg"
+  },
+  "chou": {
+    "auteur": "cogdogblog",
+    "licence": "CC BY 2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:2013-365-219_New_Garden_Harvest_(9464324056).jpg",
+    "fichier": "assets/cultures/chou.jpg",
+    "choix": "2013-365-219 New Garden Harvest (9464324056).jpg"
+  },
+  "pasteque": {
+    "auteur": "PAULIX04",
+    "licence": "CC BY-SA 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Fresh_Watermelons_Stacked.jpg",
+    "fichier": "assets/cultures/pasteque.jpg",
+    "choix": "Fresh Watermelons Stacked.jpg"
+  },
+  "papaye": {
+    "auteur": "Joydeep",
+    "licence": "CC BY-SA 3.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Carica_papaya_22_08_2012.JPG",
+    "fichier": "assets/cultures/papaye.jpg",
+    "choix": "Carica papaya 22 08 2012.JPG"
+  },
+  "ananas": {
+    "auteur": "Rasheed hamis",
+    "licence": "CC BY-SA 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Local_market_in_tanzania.jpg",
+    "fichier": "assets/cultures/ananas.jpg",
+    "choix": "Local market in tanzania.jpg"
+  },
+  "manguier": {
+    "auteur": "daSupremo",
+    "licence": "CC BY-SA 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Mango_fruits_on_a_tree_01.jpg",
+    "fichier": "assets/cultures/manguier.jpg",
+    "choix": "Mango fruits on a tree 01.jpg"
+  },
+  "tomate": {
+    "auteur": "domdomegg",
+    "licence": "CC BY 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Grape_tomatoes_on_the_vine_at_Ljubljana_Central_Market.JPG",
+    "fichier": "assets/cultures/tomate.jpg",
+    "choix": "Grape tomatoes on the vine at Ljubljana Central Market.JPG"
+  },
+  "oignon": {
+    "auteur": "Samsule2",
+    "licence": "CC BY-SA 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Pile_of_Onions_at_Barkin_Dogo_Market,_Kaduna_North_03.jpg",
+    "fichier": "assets/cultures/oignon.jpg",
+    "choix": "Pile of Onions at Barkin Dogo Market, Kaduna North 03.jpg"
   }
 }

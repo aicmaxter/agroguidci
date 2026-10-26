@@ -743,6 +743,11 @@ html.menu-ouvert, html.menu-ouvert body { overflow: hidden; }
 }
 .panel-intro p { color: var(--muted); max-width: 66ch; font-size: 1rem; }
 
+/* cartes de hauteur égale : le lien de fiche reste en bas de carte */
+.crop { display: flex; flex-direction: column; }
+.crop .crop-body { display: flex; flex-direction: column; flex: 1; }
+.crop .crop-plus { margin-top: auto; }
+
 /* révélation au défilement (pilotée par motion.js) */
 .reveal {
   opacity: 0;

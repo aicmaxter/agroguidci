@@ -91,9 +91,10 @@ def construire() -> tuple[str, int, int, int]:
     photos = json.loads(PHOTOS.read_text(encoding="utf-8")) if PHOTOS.exists() else {}
     cultures = donnees["cultures"]
     cartes = "\n".join(carte(c, photos.get(c["id"])) for c in cultures)
-    vivrieres = sum(1 for c in cultures if c["type"] == "vivriere")
-    epices = sum(1 for c in cultures if c["type"] == "epice")
-    return cartes, len(cultures), vivrieres, epices
+    familles = {}
+    for c in cultures:
+        familles[c["type"]] = familles.get(c["type"], 0) + 1
+    return cartes, len(cultures), familles
 
 
 def main() -> int:
@@ -101,7 +102,7 @@ def main() -> int:
     p.add_argument("--verifier", action="store_true", help="ne rien écrire, signaler un écart")
     a = p.parse_args()
 
-    cartes, total, vivrieres, epices = construire()
+    cartes, total, familles = construire()
     page = INDEX.read_text(encoding="utf-8")
     if DEBUT not in page or FIN not in page:
         print(f"ERREUR : marqueurs absents de {INDEX}")
@@ -113,12 +114,13 @@ def main() -> int:
     # compteurs des filtres et de l'onglet
     nouvelle = re.sub(r'(<button class="filtre[^"]*" type="button" data-filtre="tous">Toutes\s*<span>)\d+(</span>)',
                       rf"\g<1>{total}\g<2>", nouvelle)
-    nouvelle = re.sub(r'(data-filtre="vivriere">Vivrières\s*<span>)\d+(</span>)', rf"\g<1>{vivrieres}\g<2>", nouvelle)
-    nouvelle = re.sub(r'(data-filtre="epice">Épices\s*<span>)\d+(</span>)', rf"\g<1>{epices}\g<2>", nouvelle)
-    nouvelle = re.sub(r'(<span class="tab-count">)\d+(</span>)', rf"\g<1>{total}\g<2>", nouvelle)
+    for famille, nombre in familles.items():
+        nouvelle = re.sub(rf'(data-filtre="{famille}">[^<]*<span>)\d+(</span>)',
+                          rf"\g<1>{nombre}\g<2>", nouvelle, count=1)
 
     ecart = avant.strip() != cartes.strip()
-    print(f"fiches : {total} (vivrières {vivrieres}, épices {epices}) · écart avec index.html : {'oui' if ecart else 'non'}")
+    detail = ", ".join(f"{k} {v}" for k, v in sorted(familles.items()))
+    print(f"fiches : {total} ({detail}) · écart avec index.html : {'oui' if ecart else 'non'}")
     if a.verifier:
         return 1 if ecart else 0
     INDEX.write_text(nouvelle, encoding="utf-8")

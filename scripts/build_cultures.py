@@ -45,7 +45,7 @@ GABARIT = """<!DOCTYPE html>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap">
-  <link rel="stylesheet" href="../assets/site.css?v=22">
+  <link rel="stylesheet" href="../assets/site.css?v=24">
   <link rel="stylesheet" href="../assets/fiche.css?v=4">
 </head>
 <body class="fiche-page">
@@ -379,7 +379,8 @@ def page(cid: str, c: dict, photos: dict, maj: str) -> str:
 
     return GABARIT.format(
         nom=e(c.get("nom")), surnom=e(c.get("surnom")), id=e(cid), cycle=e(c.get("cycle")),
-        famille="Épice" if c.get("type") == "epice" else "Culture vivrière",
+        famille={"epice": "Épice", "legume": "Légume", "fruit": "Fruit"}.get(
+            c.get("type"), "Culture vivrière"),
         maj=e(maj), confiance=e(confiance), classe_confiance=classe,
         description=e(description), credit=credit, photo_entete=photo_entete,
         sommaire="".join(sommaire), sections="\n".join(sections),
