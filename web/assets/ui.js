@@ -332,7 +332,9 @@
           (detail ? ' <span>' + echapper(detail) + "</span>" : "") + "</span>");
       });
     }
-    piste.innerHTML = items.join("");   // pas de duplication : le bandeau ne défile plus
+    var contenu = items.join("");
+    // contenu doublé pour un défilement continu sans saut visible
+    piste.innerHTML = contenu + contenu;
   }
 
   fetch("assets/prix.json", { cache: "no-cache" })

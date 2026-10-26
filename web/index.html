@@ -24,7 +24,7 @@
  {"@type":"WebSite","@id":"https://agroguidci.vercel.app/#site","url":"https://agroguidci.vercel.app/","name":"AGROGUIDCI","inLanguage":"fr-CI","publisher":{"@id":"https://agroguidci.vercel.app/#org"}}
 ]}
 </script>
-<link rel="stylesheet" href="assets/site.css?v=33">
+<link rel="stylesheet" href="assets/site.css?v=42">
 <noscript><style>
   /* sans JavaScript : tous les panneaux et toutes les espèces restent lisibles */
   .panel[hidden], .espece[hidden] { display: block !important; }
@@ -150,6 +150,15 @@
   <!-- ===================== ONGLET CONSEIL ===================== -->
   <section class="panel active" id="panel-conseil" role="tabpanel" aria-label="Conseil agricole">
     <div class="wrap">
+      <figure class="bande-conseil" aria-label="Illustration : un producteur dans son champ">
+        <div class="bande-conseil-texte">
+          <span class="mention-illustration">Illustration</span>
+          <span class="eyebrow">Sur la parcelle</span>
+          <h2>Un conseil utile se vérifie dans le champ, pas dans un slogan.</h2>
+          <p>Décrivez votre situation : culture ou animal, localité, stade, symptômes. La réponse est générée automatiquement, avec ses sources, ses hypothèses et ses limites — et elle n'est jamais présentée comme validée par un agronome.</p>
+        </div>
+      </figure>
+
       <div class="panel-intro">
         <span class="eyebrow">Conseil</span>
         <h2>Décrivez votre situation, on s'occupe du reste.</h2>
@@ -221,6 +230,19 @@
         <h2>Cultures et épices à fort potentiel, photos et repères réels.</h2>
         <p>Vivrières peu plantées, épices, légumes et fruits : peu d'intrants, meilleure valeur au kilo. Filtrez par famille, puis ouvrez une fiche pour le cycle, les atouts et le débouché.</p>
       </div>
+
+      <figure class="bande-foret reveal">
+        <picture>
+          <source type="image/webp" srcset="assets/foret-tai.webp">
+          <img src="assets/foret-tai.jpg" alt="Canopée de la forêt de Taï dans la brume, Côte d'Ivoire" width="1000" height="667" loading="lazy" decoding="async">
+        </picture>
+        <figcaption>
+          <span class="eyebrow">Forêt ivoirienne</span>
+          <h3>L'ombre de la forêt fait pousser le cacao</h3>
+          <p>Cacaoyer, caféier, poivrier : les cultures d'ombre viennent de la forêt dense humide, du Taï au Banco. Garder des arbres au-dessus des cultures limite l'érosion, garde l'humidité et abrite les auxiliaires — c'est aussi ce qui protège la parcelle en saison sèche.</p>
+          <p class="bande-foret-credit">Photos : canopée du parc national de Taï, Yakovlev Alexey · CC BY-SA 2.0 · Wikimedia — lisière de la forêt du Banco · CC BY-SA 4.0 · Wikimedia.</p>
+        </figcaption>
+      </figure>
 
       <div class="zone-bar">
         <label for="zoneSelect">Zone agroécologique</label>
@@ -740,6 +762,31 @@
           <li><strong>Ce qu'il exige</strong> de l'eau propre et régulière, une solution nutritive suivie, du matériel désinfecté et un capital de départ.</li>
           <li><strong>Ce qu'il ne fait pas</strong> il n'écarte pas les ravageurs, il ne pardonne pas un mauvais drainage, et il ne rend pas rentable une culture sans marché.</li>
         </ul>
+      </div>
+
+      <div class="hs-affiches">
+        <figure class="hs-affiche hs-affiche-grande">
+          <picture>
+            <source type="image/webp" srcset="assets/hors-sol-serre.webp">
+            <img src="assets/hors-sol-serre.jpg" alt="Producteur récoltant des tomates sous abri, culture protégée" width="1200" height="714" loading="lazy" decoding="async">
+          </picture>
+          <figcaption>
+            <span class="mention-illustration">Illustration</span>
+            <strong>Produire sous abri</strong>
+            <span>La serre protège de la pluie et d'une partie des ravageurs. C'est la forme de hors sol la plus productive quand l'eau et la ventilation sont maîtrisées.</span>
+          </figcaption>
+        </figure>
+        <figure class="hs-affiche hs-affiche-petite">
+          <picture>
+            <source type="image/webp" srcset="assets/hors-sol-sacs.webp">
+            <img src="assets/hors-sol-sacs.jpg" alt="Plants de tomate cultivés en sacs de substrat" width="200" height="200" loading="lazy" decoding="async">
+          </picture>
+          <figcaption>
+            <span class="mention-illustration">Illustration</span>
+            <strong>Démarrer en sacs</strong>
+            <span>Un sac, du substrat, un point d'eau : le hors sol commence là, sans électricité.</span>
+          </figcaption>
+        </figure>
       </div>
 
       <div class="hs-alertes" role="region" aria-label="Points de vigilance hors sol">
@@ -1375,6 +1422,19 @@
         </div>
       </div>
 
+      <figure class="bande-foret bande-foret--inverse reveal">
+        <picture>
+          <source type="image/webp" srcset="assets/foret-banco.webp">
+          <img src="assets/foret-banco.jpg" alt="Lisière de la forêt du Banco au bord de la lagune, Abidjan, Côte d'Ivoire" width="1000" height="562" loading="lazy" decoding="async">
+        </picture>
+        <figcaption>
+          <span class="eyebrow">Forêt classée du Banco</span>
+          <h3>Le poumon vert d'Abidjan, à 20 minutes du marché</h3>
+          <p>La forêt du Banco borde Abidjan : elle abrite des essences qui ombragent les cultures pérennes et une réserve qui alimente la nappe. Ce qui se joue en lisière — défrichement, feu, prélèvement de bois — se paie plus tard en érosion et en eau pour les parcelles voisines.</p>
+          <p class="bande-foret-credit">Photo : lisière de la forêt du Banco, Côte d'Ivoire · CC BY-SA 4.0 · Wikimedia.</p>
+        </figcaption>
+      </figure>
+
       <div class="panel-intro">
         <span class="eyebrow">Actualités &amp; nouveautés</span>
         <h2>Ce qui bouge dans les filières.</h2>
@@ -1595,7 +1655,7 @@
 
 <script src="assets/geo.js?v=13"></script>
 <script src="assets/motion.js?v=17"></script>
-<script src="assets/ui.js?v=23"></script>
+<script src="assets/ui.js?v=24"></script>
 <script src="assets/app.js?v=14"></script>
 <script src="assets/chat.js?v=21"></script>
 </body>

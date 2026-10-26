@@ -293,5 +293,19 @@
     "page": "https://commons.wikimedia.org/wiki/File:Corn_Farm_plant.jpg",
     "fichier": "assets/cultures/mais.jpg",
     "choix": "Corn Farm plant.jpg"
+  },
+  "foret-banco": {
+    "auteur": "Emmanuel Grebo",
+    "licence": "CC BY-SA 4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:For%C3%AAt_du_banco_(_C%C3%B4te_d%27Ivoire_).jpg",
+    "fichier": "assets/foret-banco.jpg",
+    "choix": "Forêt du banco ( Côte d'Ivoire ).jpg"
+  },
+  "foret-tai": {
+    "auteur": "yakovlev.alexey from Moscow, Russia",
+    "licence": "CC BY-SA 2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Ta%C3%AF_National_Park_(24148248710).jpg",
+    "fichier": "assets/foret-tai.jpg",
+    "choix": "Taï National Park (24148248710).jpg"
   }
 }

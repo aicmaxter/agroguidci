@@ -312,10 +312,16 @@ html {
 body {
   margin: 0;
   background-color: var(--paper);
+  /* fond photographique très voilé : présent, jamais au détriment du texte */
   background-image:
+    linear-gradient(rgba(250, 247, 239, .86), rgba(250, 247, 239, .86)),
+    url("fond-agriculteur.webp"),
     radial-gradient(900px 500px at 88% -8%, rgba(201, 243, 107, .18), transparent 70%),
     radial-gradient(700px 460px at 4% 22%, rgba(123, 182, 97, .1), transparent 70%);
   background-repeat: no-repeat;
+  background-size: 100% 100%, cover, auto, auto;
+  background-position: center, center 34%, center, center;
+  background-attachment: scroll, fixed, scroll, scroll;
   color: var(--ink);
   font-family: var(--font-sans);
   font-size: 16px;
@@ -511,6 +517,7 @@ p:last-child { margin-bottom: 0; }
 .ticker {
   position: relative;
   display: flex; align-items: center;
+  overflow: hidden;
   background: var(--forest-deep);
   color: rgba(250, 247, 239, .86);
   font-size: .78rem;
@@ -520,11 +527,12 @@ p:last-child { margin-bottom: 0; }
 .ticker-track {
   display: flex; align-items: center;
   white-space: nowrap;
-  overflow-x: auto;
-  width: 100%;
-  scrollbar-width: thin;
-  scroll-snap-type: x proximity;
+  width: max-content;
+  animation: defile 52s linear infinite;
 }
+.ticker:hover .ticker-track,
+.ticker:focus-within .ticker-track { animation-play-state: paused; }
+@keyframes defile { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 .ticker-track::-webkit-scrollbar { height: 4px; }
 .ticker-track::-webkit-scrollbar-thumb { background: rgba(201, 243, 107, .35); border-radius: 4px; }
 @keyframes pulseDot { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
@@ -607,8 +615,14 @@ p:last-child { margin-bottom: 0; }
 .hero-arrow svg { width: 18px; height: 18px; }
 
 /* ------------------------------------------------------------------ piliers */
-.piliers-bande { position: relative; z-index: 2; margin-top: -2.2rem; scroll-margin-top: var(--h-header); }
+.piliers-bande {
+  position: relative; z-index: 2;
+  margin-top: -1.6rem;
+  padding-block: clamp(1.8rem, 4vw, 3rem);
+  scroll-margin-top: var(--h-header);
+}
 .piliers {
+  position: relative;
   display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
   margin: 0; padding: clamp(.9rem, 2vw, 1.5rem); list-style: none;
   background: var(--card); border: 1px solid var(--line);
@@ -789,7 +803,7 @@ html.menu-ouvert, html.menu-ouvert body { overflow: hidden; }
 .panel {
   display: block;
   padding-block: clamp(2.2rem, 5vw, 4rem);
-  background: transparent;
+  background: rgba(252, 250, 244, .9);
   border: 0;
   box-shadow: none;
 }
@@ -2082,3 +2096,99 @@ html { scroll-behavior: smooth; }
   border-radius: 999px; font-size: .62rem; font-weight: 800; letter-spacing: .04em;
   text-transform: uppercase; background: var(--paper-2); color: var(--ink-2);
 }
+
+
+/* ------------------------------------------------------------------ affiches hors sol */
+.hs-affiches {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, .85fr);
+  gap: 1rem;
+  margin: 1.4rem 0 0;
+}
+.hs-affiche {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--line);
+  background: var(--card);
+  box-shadow: var(--shadow-sm);
+}
+.hs-affiche picture { display: block; }
+.hs-affiche img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.hs-affiche-grande img { aspect-ratio: 1200 / 714; }
+.hs-affiche-petite img { aspect-ratio: 1 / 1; }
+.hs-affiche figcaption { padding: .85rem 1rem 1rem; }
+.hs-affiche strong { display: block; margin-bottom: .2rem; font-size: .95rem; color: var(--ink); }
+.hs-affiche figcaption > span:last-child { display: block; font-size: .82rem; line-height: 1.5; color: var(--muted); }
+.mention-illustration {
+  display: inline-block; margin-bottom: .4rem; padding: .12rem .45rem;
+  border-radius: 999px; background: var(--paper-2); color: var(--ink-2);
+  font-size: .62rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
+}
+
+/* ------------------------------------------------------------------ bandeau forêt */
+.bande-foret {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 0;
+  margin: 0 0 1.6rem;
+  overflow: hidden;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--line);
+  background: var(--card);
+}
+.bande-foret picture { display: block; min-height: 100%; }
+.bande-foret img { display: block; width: 100%; height: 100%; object-fit: cover; min-height: 260px; }
+.bande-foret figcaption { padding: 1.4rem 1.5rem; }
+.bande-foret h3 { margin: .35rem 0 .5rem; font-size: clamp(1.05rem, 1.9vw, 1.35rem); color: var(--ink); }
+.bande-foret p { margin: 0 0 .6rem; font-size: .86rem; line-height: 1.6; color: var(--ink-2); }
+.bande-foret-credit { font-size: .7rem !important; color: var(--muted) !important; }
+
+@media (max-width: 860px) {
+  .hs-affiches { grid-template-columns: minmax(0, 1fr); }
+  .bande-foret { grid-template-columns: minmax(0, 1fr); }
+  .bande-foret img { min-height: 200px; max-height: 260px; }
+}
+
+/* ------------------------------------------------------------------ lisibilité des petits textes */
+.crop-credit, .sources-fiche, .bande-foret-credit, .zone-note, .chat-aide { font-size: .78rem; line-height: 1.45; }
+.hs-meta li, .crop-badge, .mention-illustration { letter-spacing: .05em; }
+.prix-foot, .actu-source, .crop-source { font-size: .8rem; }
+
+
+/* ------------------------------------------------------------------ bandeau « agriculteur » (Conseil) */
+.bande-conseil {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 260px;
+  margin: 0 0 1.6rem;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  overflow: hidden;
+  border-radius: var(--r-lg);
+  background-image: linear-gradient(90deg, rgba(4, 33, 26, .90) 0%, rgba(4, 33, 26, .70) 38%, rgba(4, 33, 26, .18) 72%),
+                    url("bandeau-agriculteur.webp");
+  background-size: cover, cover;
+  background-position: center, 50% 30%;
+  background-repeat: no-repeat;
+}
+.bande-conseil-texte { position: relative; max-width: 46ch; color: #fff; }
+.bande-conseil-texte .eyebrow { color: var(--lime); }
+.bande-conseil-texte h2 {
+  margin: .35rem 0 .5rem;
+  font-size: clamp(1.25rem, 2.6vw, 1.9rem);
+  line-height: 1.2;
+  color: #fff;
+}
+.bande-conseil-texte p { margin: 0; font-size: .9rem; line-height: 1.55; color: rgba(255, 255, 255, .92); }
+.bande-conseil .mention-illustration { background: rgba(255, 255, 255, .16); color: #fff; }
+
+@media (max-width: 700px) {
+  .bande-conseil { min-height: 220px; align-items: flex-end; }
+}
+
+.bande-foret--inverse { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); }
+.bande-foret--inverse picture { order: 2; }
+.bande-foret--inverse figcaption { order: 1; }
+@media (max-width: 860px) { .bande-foret--inverse picture { order: 0; } .bande-foret--inverse figcaption { order: 1; } }
