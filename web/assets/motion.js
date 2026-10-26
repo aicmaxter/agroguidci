@@ -21,8 +21,11 @@
       barre.style.transform = "scaleX(" + (total > 0 ? Math.min(1, window.scrollY / total) : 0) + ")";
     }
     if (entete) entete.classList.toggle("stuck", window.scrollY > 8);
-    // retour en haut de page : Accueil reprend la marque active
-    if (window.scrollY < 60 && lienAccueil && !lienAccueil.classList.contains("actif")) {
+    // retour en haut de page : Accueil reprend la marque active, mais jamais
+    // au détriment d'un onglet déjà actif (un seul indicateur à la fois)
+    if (window.scrollY < 60 && lienAccueil &&
+        !lienAccueil.classList.contains("actif") &&
+        !document.querySelector(".nav .navlink[data-tab].actif")) {
       activerAncre(lienAccueil);
     }
   }
