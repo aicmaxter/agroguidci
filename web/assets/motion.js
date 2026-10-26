@@ -20,7 +20,9 @@
     if (barre) {
       barre.style.transform = "scaleX(" + (total > 0 ? Math.min(1, window.scrollY / total) : 0) + ")";
     }
-    if (entete) entete.classList.toggle("stuck", window.scrollY > 8);
+    // seuil haut : évite l'oscillation entre en-tête haut et bas pendant un
+    // défilement doux vers une ancre proche du sommet
+    if (entete) entete.classList.toggle("stuck", window.scrollY > 90);
     // retour en haut de page : Accueil reprend la marque active, mais jamais
     // au détriment d'un onglet déjà actif (un seul indicateur à la fois)
     if (window.scrollY < 60 && lienAccueil &&
@@ -126,12 +128,17 @@
     var cible = document.querySelector(id);
     if (!cible) return;
     e.preventDefault();
+    // Accueil ramène au sommet réel : le fil d'informations reste visible
+    var haut = id === "#accueil";
+    if (haut) activerAncre(lienAccueil);
     var marge = (entete ? entete.getBoundingClientRect().height : 68) + 10;
-    var y = cible.getBoundingClientRect().top + window.scrollY - marge;
+    var y = haut ? 0 : cible.getBoundingClientRect().top + window.scrollY - marge;
     window.scrollTo({ top: Math.max(0, y), behavior: reduit ? "auto" : "smooth" });
     if (history.replaceState) history.replaceState(null, "", id);
-    cible.setAttribute("tabindex", "-1");
-    cible.focus({ preventScroll: true });
+    if (!haut) {
+      cible.setAttribute("tabindex", "-1");
+      cible.focus({ preventScroll: true });
+    }
   });
 
   /* ------------------------------------------------------------ bascule des offres */

@@ -30,15 +30,15 @@
   --clay: #c0602b;
 
   /* papier & encre */
-  --paper: #faf7ef;
-  --paper-2: #f2ecdd;
-  --card: #fffdf8;
-  --cream: #faf7ef;
+  --paper: #eef5e9;
+  --paper-2: #e0edd9;
+  --card: #f8fbf4;
+  --cream: #eef5e9;
   --ink: #111d15;
   --ink-2: #2b3a2d;
   --muted: #5d6a56;
-  --line: #e3dbc9;
-  --line-strong: #cfc6ae;
+  --line: #cfe0c7;
+  --line-strong: #b6cbaa;
   --white: #fff;
 
   /* dégradés */
@@ -314,7 +314,7 @@ body {
   background-color: var(--paper);
   /* fond photographique très voilé : présent, jamais au détriment du texte */
   background-image:
-    linear-gradient(rgba(250, 247, 239, .86), rgba(250, 247, 239, .86)),
+    linear-gradient(rgba(238, 245, 233, .87), rgba(238, 245, 233, .87)),
     url("fond-agriculteur.webp"),
     radial-gradient(900px 500px at 88% -8%, rgba(201, 243, 107, .18), transparent 70%),
     radial-gradient(700px 460px at 4% 22%, rgba(123, 182, 97, .1), transparent 70%);
@@ -426,10 +426,11 @@ p:last-child { margin-bottom: 0; }
 /* ------------------------------------------------------------------ en-tête */
 .site-header {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(250, 247, 239, .78);
+  background: rgba(6, 43, 29, .94);
+  color: var(--paper);
   -webkit-backdrop-filter: blur(20px) saturate(150%);
   backdrop-filter: blur(20px) saturate(150%);
-  border-bottom: 1px solid transparent;
+  border-bottom: 1px solid rgba(201, 243, 107, .12);
   transition: background .4s var(--ease), border-color .4s var(--ease),
               box-shadow .4s var(--ease), height .3s var(--ease);
 }
@@ -439,15 +440,12 @@ p:last-child { margin-bottom: 0; }
   transition: height .3s var(--ease);
 }
 .site-header.stuck {
-  background: rgba(250, 247, 239, .92);
-  border-bottom-color: var(--line);
-  box-shadow: 0 10px 30px -24px rgba(6, 43, 29, .5);
+  background: rgba(4, 33, 26, .98);
+  border-bottom-color: rgba(201, 243, 107, .16);
+  box-shadow: 0 16px 34px -28px rgba(0, 0, 0, .85);
 }
 .site-header.stuck .wrap { height: 58px; }
 
-/* en-tête clair, commun à toutes les pages */
-.site-header.stuck { background: rgba(250, 247, 239, .96); box-shadow: 0 10px 30px -28px rgba(6, 43, 29, .6); }
-.site-header:not(.stuck) { background: rgba(250, 247, 239, .9); }
 
 /* ------------------------------------------------------------------ boutons */
 .btn {
@@ -518,10 +516,11 @@ p:last-child { margin-bottom: 0; }
   position: relative;
   display: flex; align-items: center;
   overflow: hidden;
-  background: var(--forest-deep);
-  color: rgba(250, 247, 239, .86);
-  font-size: .78rem;
-  border-bottom: 1px solid rgba(201, 243, 107, .16);
+  min-height: 50px;
+  background: linear-gradient(180deg, #fbeed6 0%, #f6e2c2 100%);
+  color: var(--ink);
+  font-size: .82rem;
+  border-bottom: 1px solid rgba(154, 74, 6, .22);
   z-index: 60;
 }
 .ticker-track {
@@ -538,15 +537,15 @@ p:last-child { margin-bottom: 0; }
 @keyframes pulseDot { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
 .ticker-item {
   display: inline-flex; align-items: center; gap: .45rem;
-  padding: 0 1.15rem;
-  border-right: 1px solid rgba(250, 247, 239, .09);
+  padding: .7rem 1.35rem;
+  border-right: 1px solid rgba(154, 74, 6, .2);
 }
-.ticker-item b, .ticker-item .val { color: var(--lime); font-weight: 800; }
-.ticker-item span { color: rgba(250, 247, 239, .58); }
-.ticker-item.live { color: #fff; font-weight: 700; letter-spacing: .02em; }
+.ticker-item b, .ticker-item .val { color: #8f4305; font-weight: 800; }
+.ticker-item span { color: rgba(17, 29, 21, .72); }
+.ticker-item.live { color: var(--forest); font-weight: 800; letter-spacing: .02em; }
 .pastille {
-  width: 6px; height: 6px; border-radius: 50%; background: var(--lime);
-  box-shadow: 0 0 0 3px rgba(201, 243, 107, .2);
+  width: 7px; height: 7px; border-radius: 50%; background: #c2571a;
+  box-shadow: 0 0 0 3px rgba(194, 87, 26, .18);
 }
 @keyframes pulseDot {
   0%, 100% { opacity: 1; box-shadow: 0 0 0 3px rgba(201, 243, 107, .18); }
@@ -556,7 +555,7 @@ p:last-child { margin-bottom: 0; }
 /* ------------------------------------------------------------------ héros */
 .hero {
   position: relative;
-  background: linear-gradient(180deg, #f6f2e6 0%, var(--paper) 55%);
+  background: linear-gradient(180deg, #e7f1e0 0%, var(--paper) 58%);
   padding: clamp(1.6rem, 4vw, 3rem) 0 clamp(3.6rem, 7vw, 5.6rem);
   scroll-margin-top: var(--h-header);
 }
@@ -659,7 +658,7 @@ p:last-child { margin-bottom: 0; }
 .brand {
   display: inline-flex; align-items: center; gap: .6rem;
   font-weight: 800; letter-spacing: -.02em;
-  text-decoration: none; color: var(--ink);
+  text-decoration: none; color: var(--paper);
 }
 .brand-mark {
   position: relative; overflow: visible;
@@ -672,13 +671,38 @@ p:last-child { margin-bottom: 0; }
   transition: transform var(--dur-240) var(--ease-out), box-shadow var(--dur-240) var(--ease-out);
 }
 .brand:hover .brand-mark { transform: rotate(0deg) scale(1.04); }
-.brand-text { font-family: var(--font-display); font-size: 1.12rem; letter-spacing: -.01em; }
-.brand-text .ci { color: var(--green-600); }
+.brand:focus-visible { outline-offset: 4px; }
+/* le nom s'anime une fois à l'arrivée, puis se souligne au survol — aucune boucle */
+.brand-text {
+  display: inline-flex;
+  font-family: var(--font-display); font-size: 1.12rem; letter-spacing: -.01em;
+  color: var(--paper);
+  position: relative;
+}
+.brand-text .lettre {
+  display: inline-block;
+  animation: lettreArrive .55s var(--ease-out) both;
+  animation-delay: calc(var(--i) * 45ms);
+}
+.brand:hover .brand-text .lettre { color: var(--lime); }
+.brand-text .ci { color: var(--lime); }
+.brand-text::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--lime), transparent);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform var(--dur-400) var(--ease-out);
+}
+.brand:hover .brand-text::after, .brand:focus-visible .brand-text::after { transform: scaleX(1); }
+@keyframes lettreArrive {
+  from { opacity: 0; transform: translateY(7px) rotate(-4deg); }
+  to { opacity: 1; transform: none; }
+}
+.brand-text .ci { color: var(--lime); }
 .brand-sous-titre { display: block; font-family: var(--font-sans); font-size: .68rem; font-weight: 600; color: var(--muted); letter-spacing: 0; }
 
 .nav {
   display: flex; align-items: center; gap: .1rem;
-  margin-left: auto; color: var(--ink-2);
+  margin-left: auto; color: rgba(238, 245, 233, .82);
 }
 .nav a, .nav .navlink,
 .nav-mobile a, .nav-mobile .navlink {
@@ -693,21 +717,21 @@ p:last-child { margin-bottom: 0; }
 }
 .nav a::after, .nav .navlink::after {
   content: ""; position: absolute; left: .62rem; right: .62rem; bottom: .18rem;
-  height: 2px; border-radius: 2px; background: var(--green-700);
+  height: 2px; border-radius: 2px; background: var(--lime);
   transform: scaleX(0); transform-origin: left;
   transition: transform var(--dur-160) var(--ease-out);
 }
-.nav a:hover, .nav .navlink:hover { color: var(--ink); }
+.nav a:hover, .nav .navlink:hover { color: #fff; }
 .nav a:hover::after, .nav .navlink:hover::after { transform: scaleX(1); }
-.navlink.actif, .nav a.actif { color: var(--ink); font-weight: 800; }
+.navlink.actif, .nav a.actif { color: #fff; font-weight: 800; }
 .navlink.actif::after, .nav a.actif::after { transform: scaleX(1); }
 
 .nav-toggle {
   display: none; margin-left: auto;
   width: 40px; height: 40px; padding: 0;
   align-items: center; justify-content: center;
-  border: 1px solid var(--line); border-radius: 10px;
-  background: var(--card); color: var(--ink); cursor: pointer;
+  border: 1px solid rgba(201, 243, 107, .35); border-radius: 10px;
+  background: rgba(201, 243, 107, .12); color: var(--paper); cursor: pointer;
 }
 .nav-toggle svg { width: 20px; height: 20px; }
 
@@ -715,7 +739,7 @@ p:last-child { margin-bottom: 0; }
   display: none; flex-direction: column; gap: .15rem;
   padding: .4rem 1.25rem 1rem;
   border-top: 1px solid var(--line);
-  background: rgba(250, 247, 239, .98);
+  background: rgba(238, 245, 233, .99);
   color: var(--ink);
 }
 .nav-mobile.open { display: flex; }
@@ -803,7 +827,7 @@ html.menu-ouvert, html.menu-ouvert body { overflow: hidden; }
 .panel {
   display: block;
   padding-block: clamp(2.2rem, 5vw, 4rem);
-  background: rgba(252, 250, 244, .9);
+  background: rgba(240, 247, 235, .92);
   border: 0;
   box-shadow: none;
 }
@@ -1970,7 +1994,7 @@ button[disabled],
   border-radius: 6px;
 }
 html { scroll-behavior: smooth; }
-.panel, .section, #tarifs, #piliers, #accueil { scroll-margin-top: calc(var(--h-header) + 12px); }
+.panel, .section, #tarifs, #piliers, #accueil { scroll-margin-top: 0; }
 
 /* ------------------------------------------------------------------ élevage */
 .especes-barre {
