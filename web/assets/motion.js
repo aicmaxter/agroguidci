@@ -10,7 +10,7 @@
   var barre = document.getElementById("progress");
   var entete = document.getElementById("siteHeader");
 
-  /* ------------------------------------------------------------ défilement : progression, en-tête, barre d'onglets */
+  /* ------------------------------------------------------------ défilement : progression, en-tête, sections */
   function surDefilement() {
     var h = document.documentElement;
     var total = h.scrollHeight - window.innerHeight;

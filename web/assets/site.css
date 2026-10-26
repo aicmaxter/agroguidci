@@ -250,7 +250,7 @@ body:has(.app-hero) .site-header:not(.stuck) {
 body:has(.app-hero) .site-header:not(.stuck) .brand-text .ci { color: var(--lime); }
 body:has(.app-hero) .site-header:not(.stuck) .nav { color: rgba(250, 247, 239, .78); }
 body:has(.app-hero) .site-header:not(.stuck) .nav a:hover,
-body:has(.app-hero) .site-header:not(.stuck) .navlink.actif { color: #fff; }
+body:has(.app-hero) .site-header:not(.stuck) .nav .navlink.actif { color: #fff; }
 body:has(.app-hero) .site-header:not(.stuck) .nav-toggle {
   background: rgba(255, 255, 255, .08); border-color: rgba(255, 255, 255, .2); color: var(--paper);
 }
@@ -313,7 +313,11 @@ body:has(.app-hero) .site-header:not(.stuck) .header-cta:hover {
   padding: .4rem 1.25rem 1rem;
   border-top: 1px solid var(--line);
   background: rgba(250, 247, 239, .98);
+  /* le panneau est posé sur du papier clair : le texte reprend l'encre,
+     quel que soit l'état de l'en-tête transparent au-dessus du hero */
+  color: var(--ink);
 }
+.nav-mobile a, .nav-mobile .navlink { color: var(--ink); }
 .nav-mobile.open { display: flex; animation: monte .32s var(--ease) both; }
 /* le défilement de la page est bloqué tant que le panneau est ouvert */
 html.menu-ouvert, html.menu-ouvert body { overflow: hidden; }

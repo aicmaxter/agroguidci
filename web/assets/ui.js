@@ -1,4 +1,4 @@
-/* AGROGUIDCI — application : onglets, filtres, quota quotidien, bandeau temps réel.
+/* AGROGUIDCI — application : navigation par sections, filtres, quota quotidien, bandeau temps réel.
    Aucune dépendance. Le quota gratuit est tenu côté navigateur ; il sera doublé
    d'un contrôle serveur quand les comptes utilisateurs existeront. */
 (function () {
