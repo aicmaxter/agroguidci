@@ -226,6 +226,13 @@
     if (!corps || !d || !d.produits) return;
     corps.innerHTML = "";
     var dateReleve = d.releve || d.semaine || "";
+    function etat(date) {
+      if (!date) return "indisponible";
+      var t = Date.parse(date);
+      if (isNaN(t)) return "non daté";
+      var jours = (Date.now() - t) / 86400000;
+      return jours > 45 ? "ancien" : "actuel";
+    }
     d.produits.forEach(function (p) {
       var tr = document.createElement("tr");
       // type de prix et date : « non précisé » plutôt qu'une valeur inventée
@@ -233,7 +240,8 @@
         '<td class="prix">' + fcfa(p.prix) + ' <span class="unite">FCFA/' + echapper(p.unite) + "</span></td>" +
         '<td class="type-prix">' + echapper(p.type_prix || "non précisé") + "</td>" +
         '<td class="marche">' + echapper(p.marche || "—") + "</td>" +
-        '<td class="releve">' + echapper(p.date || dateReleve || "—") + "</td>";
+        '<td class="releve">' + echapper(p.date || dateReleve || "—") +
+        (p.date || dateReleve ? ' <span class="etat-prix">' + etat(p.date || dateReleve) + "</span>" : "") + "</td>";
       corps.appendChild(tr);
     });
     var semaine = document.getElementById("prixSemaine");

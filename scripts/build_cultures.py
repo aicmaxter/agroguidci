@@ -52,7 +52,7 @@ GABARIT = """<!DOCTYPE html>
   <meta property="og:image" content="https://agroguidci.vercel.app/assets/cultures/{slug}.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <script type="application/ld+json">{{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{{"@type":"ListItem","position":1,"name":"Accueil","item":"https://agroguidci.vercel.app/"}},{{"@type":"ListItem","position":2,"name":"Cultures","item":"https://agroguidci.vercel.app/#cultures"}},{{"@type":"ListItem","position":3,"name":"{nom}","item":"https://agroguidci.vercel.app/cultures/{slug}"}}]}}</script>
-  <link rel="stylesheet" href="../assets/site.css?v=29">
+  <link rel="stylesheet" href="../assets/site.css?v=30">
   <link rel="stylesheet" href="../assets/fiche.css?v=4">
 </head>
 <body class="fiche-page">

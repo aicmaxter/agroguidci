@@ -9,7 +9,7 @@ nécessaires, **coordonne** le travail des experts et rend une réponse **unique
 prudente et traçable**.
 
 > Le site Vercel (`agroguidci.vercel.app`) est la vitrine : il présente le système et
-> publie sa spécification. Son formulaire « Conseil IA » interroge le moteur hébergé
+> publie sa spécification. Son formulaire « Conseil » interroge le moteur hébergé
 > (`agroguidci-saas.vercel.app`, `POST /api/demande`). Le runtime complet — orchestrateurs,
 > sept agents, supervision, validations humaines — tourne sur un poste, pas dans
 > l'environnement serverless : voir « Déploiement » en fin de document.
@@ -323,7 +323,7 @@ Aucune modification du moteur (coordinateur, boucle d'agent) n'est nécessaire.
 | **Vercel** — https://agroguidci-saas.vercel.app | le **moteur en ligne** : `POST /api/demande` (agents hébergés) | déployé, `READY` |
 
 La vitrine est un site statique (aucun build) : `web/index.html` + `web/assets/`. Son
-formulaire « Conseil IA » n'appelle pas un faux service — il poste sur `/api/demande`,
+formulaire « Conseil » n'appelle pas un faux service — il poste sur `/api/demande`,
 que `vercel.json` réécrit vers `agroguidci-saas.vercel.app/api/demande`. Sans réponse du
 moteur, la page affiche l'échec tel quel et n'invente aucun conseil.
 
