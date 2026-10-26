@@ -58,6 +58,7 @@ GABARIT = """<!DOCTYPE html>
     </a>
     <nav class="nav" aria-label="Navigation principale">
       <a class="navlink" href="../#cultures">Cultures &amp; épices</a>
+      <a class="navlink" href="../#horssol">Hors sol</a>
       <a class="navlink" href="../#prix">Prix du kilo</a>
       <a class="navlink" href="../#actus">Actualités</a>
       <a class="navlink" href="../#tarifs">Tarifs</a>

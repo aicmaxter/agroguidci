@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="assets/hero.webp" type="image/webp" fetchpriority="high">
-<link rel="stylesheet" href="assets/site.css?v=24">
+<link rel="stylesheet" href="assets/site.css?v=26">
 </head>
 <body>
 <a class="skip" href="#app">Aller au contenu</a>
@@ -31,7 +31,8 @@
     <nav class="nav" aria-label="Navigation principale">
       <button class="navlink" data-tab="conseil" type="button">Conseil</button>
       <button class="navlink" data-tab="cultures" type="button">Cultures &amp; épices</button>
-      <button class="navlink" data-tab="prix" type="button">Prix du kilo</button>
+      <button class="navlink" data-tab="horssol" type="button">Hors sol</button>
+    <button class="navlink" data-tab="prix" type="button">Prix du kilo</button>
       <button class="navlink" data-tab="actus" type="button">Actualités</button>
       <a href="#tarifs">Tarifs</a>
       <a href="confidentialite.html">Confidentialité</a>
@@ -43,6 +44,7 @@
   <div class="nav-mobile" id="navMobile">
     <button class="navlink" data-tab="conseil" type="button">Conseil</button>
     <button class="navlink" data-tab="cultures" type="button">Cultures &amp; épices</button>
+    <button class="navlink" data-tab="horssol" type="button">Hors sol</button>
     <button class="navlink" data-tab="prix" type="button">Prix du kilo</button>
     <button class="navlink" data-tab="actus" type="button">Actualités</button>
     <a href="#tarifs">Tarifs</a>
@@ -107,7 +109,7 @@
   </section>
 
   <!-- ===================== ONGLET CONSEIL ===================== -->
-  <section class="panel active" id="panel-conseil" role="tabpanel" aria-labelledby="tab-conseil">
+  <section class="panel active" id="panel-conseil" role="tabpanel" aria-label="Conseil agricole">
     <div class="wrap">
       <div class="panel-intro">
         <span class="eyebrow">Conseil</span>
@@ -172,7 +174,7 @@
   </section>
 
   <!-- ===================== ONGLET CULTURES ===================== -->
-  <section class="panel" id="panel-cultures" role="tabpanel" aria-labelledby="tab-cultures" hidden>
+  <section class="panel" id="panel-cultures" role="tabpanel" aria-label="Cultures & épices" hidden>
     <div class="wrap">
       <div class="panel-intro">
         <span class="eyebrow">Cultures &amp; épices</span>
@@ -621,7 +623,265 @@
   </section>
 
   <!-- ===================== ONGLET PRIX ===================== -->
-  <section class="panel" id="panel-prix" role="tabpanel" aria-labelledby="tab-prix" hidden>
+  <!-- ===================== HORS SOL ===================== -->
+  <section class="panel" id="panel-horssol" role="tabpanel" aria-label="Hors sol" hidden>
+    <div class="wrap">
+      <div class="panel-intro">
+        <span class="eyebrow">Hors sol</span>
+        <h2>Cultiver sans terre, avec une eau maîtrisée.</h2>
+        <p>
+          Le hors sol remplace le sol par un substrat ou par une solution nutritive. Il sert quand la
+          terre manque (cour, ville, sol pauvre ou fatigué), quand l'eau doit être comptée au litre,
+          ou pour produire en continu. Il ne supprime ni le travail ni le suivi : il déplace
+          l'attention vers l'eau, la nutrition et l'hygiène du matériel.
+        </p>
+        <ul class="hs-bilan">
+          <li><strong>Ce qu'il apporte</strong> une production au m² plus élevée, des cycles courts, peu de mauvaises herbes, et la possibilité de cultiver en ville.</li>
+          <li><strong>Ce qu'il exige</strong> de l'eau propre et régulière, une solution nutritive suivie, du matériel désinfecté et un capital de départ.</li>
+          <li><strong>Ce qu'il ne fait pas</strong> il n'écarte pas les ravageurs, il ne pardonne pas un mauvais drainage, et il ne rend pas rentable une culture sans marché.</li>
+        </ul>
+      </div>
+
+      <div class="hs-alertes" role="region" aria-label="Points de vigilance hors sol">
+        <p class="hs-alertes-titre"><span class="hs-voyant" aria-hidden="true"></span> À savoir avant de dépenser un franc</p>
+        <ul>
+          <li><strong>Dose de solution nutritive</strong> ne jamais dépasser la dose inscrite sur l'étiquette du fabricant, et verser toujours le produit dans l'eau, jamais l'inverse.</li>
+          <li><strong>Sans mesure, pas de mélange</strong> si vous n'avez pas de bandelettes EC/pH, restez à la dose de l'étiquette et ne composez pas votre propre recette.</li>
+          <li><strong>Une coupure d'eau ou de pompe</strong> asphyxie les racines en quelques heures en pleine chaleur : prévoyez une réserve et un arrosage de secours.</li>
+          <li><strong>Solution tiède</strong> au-dessus d'environ 30 °C, l'eau tient moins d'oxygène : ombragez le réservoir, ne le laissez pas au soleil.</li>
+          <li><strong>Hygiène du matériel</strong> désinfectez bacs et réservoir entre deux cycles et n'utilisez pas le substrat d'un cycle malade.</li>
+        </ul>
+      </div>
+
+      <h3 class="hs-soustitre">Les systèmes possibles en Afrique de l'Ouest</h3>
+      <div class="hs-grille">
+
+        <article class="hs-carte reveal" data-niveau="1">
+          <span class="hs-picto" aria-hidden="true">
+            <svg viewBox="0 0 64 48" fill="none">
+              <path class="hs-sol" d="M14 18h36l-4 24H18z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path class="hs-plante" d="M32 18c0-7 4-11 9-11 0 7-4 11-9 11Z" fill="currentColor" fill-opacity=".65"/>
+              <path class="hs-plante hs-plante-2" d="M32 18c0-5-3-9-7-9 0 5 3 9 7 9Z" fill="currentColor" fill-opacity=".4"/>
+              <path class="hs-goutte" d="M32 6v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <h4>Culture en sacs de substrat</h4>
+          <p class="hs-principe">Des sacs de 40 à 50 kg remplis de substrat local, percés sur le côté pour l'évacuation de l'eau. Deux à quatre plants par sac selon la culture.</p>
+          <ul class="hs-meta">
+            <li>Niveau 1</li><li>Sans électricité</li><li>Légumes-fruits</li>
+          </ul>
+          <p class="hs-limite-carte"><strong>Limite</strong> le sac sèche vite et se remplace ; un sac mal percé noie les racines.</p>
+        </article>
+
+        <article class="hs-carte reveal" data-niveau="1">
+          <span class="hs-picto" aria-hidden="true">
+            <svg viewBox="0 0 64 48" fill="none">
+              <path class="hs-sol" d="M8 20h48v20H8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M8 14h48" stroke="currentColor" stroke-width="1.6" stroke-opacity=".5"/>
+              <g class="hs-plantes">
+                <path d="M18 20c0-4 2-7 5-7 0 4-2 7-5 7Z" fill="currentColor" fill-opacity=".6"/>
+                <path d="M30 20c0-5 2.5-8 6-8 0 5-2.5 8-6 8Z" fill="currentColor" fill-opacity=".6"/>
+                <path d="M44 20c0-4 2-6 4.5-6 0 4-2 6-4.5 6Z" fill="currentColor" fill-opacity=".6"/>
+              </g>
+            </svg>
+          </span>
+          <h4>Bacs et tables surélevées</h4>
+          <p class="hs-principe">Des bacs de 30 à 40 cm de profondeur posés sur des parpaings ou une structure en bois. Arrosage manuel ou goutte-à-goutte, travail debout.</p>
+          <ul class="hs-meta">
+            <li>Niveau 1</li><li>Eau maîtrisée</li><li>Feuilles et fruits</li>
+          </ul>
+          <p class="hs-limite-carte"><strong>Limite</strong> le volume de substrat chauffe en plein soleil : prévoir un paillage.</p>
+        </article>
+
+        <article class="hs-carte reveal" data-niveau="2">
+          <span class="hs-picto" aria-hidden="true">
+            <svg viewBox="0 0 64 48" fill="none">
+              <path d="M10 16h44" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M32 16v18" stroke="currentColor" stroke-width="1.6" stroke-opacity=".6"/>
+              <g class="hs-gouttes">
+                <circle class="hs-goutte" cx="32" cy="22" r="1.7" fill="currentColor"/>
+                <circle class="hs-goutte hs-goutte-2" cx="32" cy="30" r="1.7" fill="currentColor"/>
+              </g>
+              <path class="hs-sol" d="M20 38h24l-2 6H22z" stroke="currentColor" stroke-width="1.8"/>
+            </svg>
+          </span>
+          <h4>Goutte-à-goutte sur substrat</h4>
+          <p class="hs-principe">Un substrat léger (coco, pouzzolane, sable grossier) alimenté par des micro-tubes, depuis un bidon surélevé ou une petite pompe.</p>
+          <ul class="hs-meta">
+            <li>Niveau 2</li><li>Bidon gravitaire</li><li>Tomate, piment</li>
+          </ul>
+          <p class="hs-limite-carte"><strong>Limite</strong> un tube bouché assèche un plant sans signe visible avant deux jours.</p>
+        </article>
+
+        <article class="hs-carte reveal" data-niveau="3">
+          <span class="hs-picto" aria-hidden="true">
+            <svg viewBox="0 0 64 48" fill="none">
+              <path d="M8 22h48l-4 12H12z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path class="hs-nappe" d="M11 30h42" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-opacity=".55"/>
+              <g class="hs-plantes">
+                <path d="M20 22c0-5 2-8 5-8 0 5-2 8-5 8Z" fill="currentColor" fill-opacity=".6"/>
+                <path d="M34 22c0-6 2.5-9 6-9 0 6-2.5 9-6 9Z" fill="currentColor" fill-opacity=".6"/>
+                <path d="M46 22c0-4 2-6 4-6 0 4-2 6-4 6Z" fill="currentColor" fill-opacity=".6"/>
+              </g>
+            </svg>
+          </span>
+          <h4>Radeau flottant et NFT</h4>
+          <p class="hs-principe">Les racines baignent dans une solution nutritive circulante (NFT) ou dans un bac couvert d'un radeau. Cultures courtes et légères.</p>
+          <ul class="hs-meta">
+            <li>Niveau 3</li><li>Pompe 24 h/24</li><li>Laitue, basilic</li>
+          </ul>
+          <p class="hs-limite-carte"><strong>Limite</strong> sans courant électrique stable, le système s'arrête et les plants grillent en une matinée.</p>
+        </article>
+
+        <article class="hs-carte reveal" data-niveau="2">
+          <span class="hs-picto" aria-hidden="true">
+            <svg viewBox="0 0 64 48" fill="none">
+              <path d="M22 42V8h20v34" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M22 16h20M22 26h20M22 36h20" stroke="currentColor" stroke-width="1.4" stroke-opacity=".55"/>
+              <g class="hs-plantes">
+                <path d="M26 16c0-4 2-6 4-6 0 4-2 6-4 6Z" fill="currentColor" fill-opacity=".6"/>
+                <path d="M34 26c0-5 2-7 5-7 0 5-2 7-5 7Z" fill="currentColor" fill-opacity=".6"/>
+                <path d="M26 36c0-3 2-5 4-5 0 3-2 5-4 5Z" fill="currentColor" fill-opacity=".6"/>
+              </g>
+            </svg>
+          </span>
+          <h4>Tours verticales et gouttières</h4>
+          <p class="hs-principe">Des étages de bouteilles, de gouttières ou de sacs empilés, arrosés en cascade du haut vers le bas. Gain de place sur une terrasse.</p>
+          <ul class="hs-meta">
+            <li>Niveau 2</li><li>Mur ou balcon</li><li>Aromatiques, laitue</li>
+          </ul>
+          <p class="hs-limite-carte"><strong>Limite</strong> le haut sèche plus vite que le bas : l'arrosage doit être vérifié étage par étage.</p>
+        </article>
+
+        <article class="hs-carte reveal" data-niveau="3">
+          <span class="hs-picto" aria-hidden="true">
+            <svg viewBox="0 0 64 48" fill="none">
+              <path d="M8 26h48v14H8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path class="hs-nappe" d="M10 32h44" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-opacity=".5"/>
+              <path class="hs-poisson" d="M22 36c4-3 9-3 13 0-4 3-9 3-13 0Z" fill="currentColor" fill-opacity=".55"/>
+              <path class="hs-plante" d="M40 26c0-6 3-9 7-9 0 6-3 9-7 9Z" fill="currentColor" fill-opacity=".7"/>
+            </svg>
+          </span>
+          <h4>Aquaponie</h4>
+          <p class="hs-principe">Les déjections des poissons nourrissent des bactéries qui transforment l'ammoniac en nitrates pour les plantes ; l'eau revient aux poissons.</p>
+          <ul class="hs-meta">
+            <li>Niveau 3</li><li>Pompe + poissons</li><li>Laitue, menthe</li>
+          </ul>
+          <p class="hs-limite-carte"><strong>Limite</strong> aucun pesticide ni antibiotique dans le système : un seul traitement mal choisi tue le poisson et la colonie de bactéries.</p>
+        </article>
+
+        <article class="hs-carte reveal" data-niveau="1">
+          <span class="hs-picto" aria-hidden="true">
+            <svg viewBox="0 0 64 48" fill="none">
+              <path d="M10 26h44v14H10z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M24 26v14M38 26v14M10 33h44" stroke="currentColor" stroke-width="1.2" stroke-opacity=".5"/>
+              <g class="hs-plantes">
+                <path d="M17 26c0-4 1.5-6 3.5-6 0 4-1.5 6-3.5 6Z" fill="currentColor" fill-opacity=".6"/>
+                <path d="M31 26c0-5 2-7 4-7 0 5-2 7-4 7Z" fill="currentColor" fill-opacity=".6"/>
+                <path d="M45 26c0-3 1.5-5 3.5-5 0 3-1.5 5-3.5 5Z" fill="currentColor" fill-opacity=".6"/>
+              </g>
+            </svg>
+          </span>
+          <h4>Pépinière hors sol</h4>
+          <p class="hs-principe">Plateaux alvéolés et substrat fin à l'ombre : des plants réguliers, repiqués au bon stade, pour toutes les cultures du site.</p>
+          <ul class="hs-meta">
+            <li>Niveau 1</li><li>Ombrière</li><li>Toutes cultures</li>
+          </ul>
+          <p class="hs-limite-carte"><strong>Limite</strong> un plateau trop arrosé fait fondre les jeunes plants en une nuit (fonte des semis).</p>
+        </article>
+
+        <article class="hs-carte reveal" data-niveau="1">
+          <span class="hs-picto" aria-hidden="true">
+            <svg viewBox="0 0 64 48" fill="none">
+              <path d="M12 28h40v12H12z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <g class="hs-plantes">
+                <path d="M18 28v-8M26 28v-11M34 28v-7M42 28v-10M50 28v-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                <circle cx="18" cy="19" r="1.6" fill="currentColor"/><circle cx="26" cy="16" r="1.6" fill="currentColor"/>
+                <circle cx="34" cy="20" r="1.6" fill="currentColor"/><circle cx="42" cy="17" r="1.6" fill="currentColor"/>
+                <circle cx="50" cy="21" r="1.6" fill="currentColor"/>
+              </g>
+            </svg>
+          </span>
+          <h4>Micro-pousses</h4>
+          <p class="hs-principe">Des plateaux peu profonds, semés dense, récoltés en 7 à 21 jours. Peu de lumière, beaucoup de demande en restauration urbaine.</p>
+          <ul class="hs-meta">
+            <li>Niveau 1</li><li>Cycle très court</li><li>Restaurants</li>
+          </ul>
+          <p class="hs-limite-carte"><strong>Limite</strong> le produit est fragile : il faut vendre et livrer vite, en froid.</p>
+        </article>
+      </div>
+
+      <h3 class="hs-soustitre">Tutoriels pas à pas</h3>
+      <div class="hs-tutos">
+
+        <article class="hs-tuto reveal">
+          <h4><span>1</span> Monter un bac de substrat</h4>
+          <ol class="hs-etapes">
+            <li>Choisir un emplacement à 5 ou 6 heures de soleil, près d'un point d'eau, sur un sol nivelé.</li>
+            <li>Poser le bac sur des parpaings ou une structure solide, à 40 cm du sol : le dos vous remerciera.</li>
+            <li>Mettre 3 à 5 cm de gravier au fond, puis une toile ou un géotextile : l'eau doit sortir, le substrat non.</li>
+            <li>Remplir avec un mélange de compost mûr et de matière drainante (coque de riz, sable grossier) sans tasser.</li>
+            <li>Planter, arroser doucement jusqu'à ce que l'eau ressorte, puis laisser ressuyer avant le prochain arrosage.</li>
+          </ol>
+        </article>
+
+        <article class="hs-tuto reveal">
+          <h4><span>2</span> Préparer et suivre la solution nutritive</h4>
+          <ol class="hs-etapes">
+            <li>Remplir le réservoir d'eau claire ; si l'eau est chlorée, la laisser reposer une nuit à l'air libre.</li>
+            <li>Lire l'étiquette du fabricant et respecter la dose indiquée. Ne jamais doubler « pour aller plus vite ».</li>
+            <li>Verser chaque produit séparément dans l'eau, en remuant, jamais l'un dans l'autre.</li>
+            <li>Mesurer avec des bandelettes EC/pH et noter les valeurs, la date et la quantité d'eau.</li>
+            <li>Renouveler la solution tous les 7 à 10 jours : vider, rincer, refaire. Une solution vieille attire les maladies.</li>
+          </ol>
+          <p class="hs-note">Sans bandelettes ni étiquette lisible, ne composez pas de mélange vous-même : gardez la dose du fabricant et faites valider par un technicien.</p>
+        </article>
+
+        <article class="hs-tuto reveal">
+          <h4><span>3</span> Semer en plateau alvéolé</h4>
+          <ol class="hs-etapes">
+            <li>Humidifier le substrat fin avant de remplir les alvéoles : il doit être frais, pas détrempé.</li>
+            <li>Semer une ou deux graines par alvéole, couvrir d'une fine couche, puis tasser légèrement.</li>
+            <li>Placer à l'ombre claire, arroser en pluie fine deux fois par jour, sans noyer.</li>
+            <li>Repiquer quand la plantule a deux à quatre vraies feuilles, aux heures fraîches.</li>
+            <li>Sevrer deux à trois jours avant le repiquage : moins d'eau, plus de lumière, pour endurcir le plant.</li>
+          </ol>
+        </article>
+
+        <article class="hs-tuto reveal">
+          <h4><span>4</span> Installer un goutte-à-goutte simple</h4>
+          <ol class="hs-etapes">
+            <li>Surélever un bidon de 20 à 60 litres à environ un mètre au-dessus des plants.</li>
+            <li>Poser une rampe et un micro-tube par plant, fixé au pied sans le boucher.</li>
+            <li>Faire un test de dix minutes et noter le volume écoulé, pour connaître la dose réelle.</li>
+            <li>Régler deux à trois arrosages par jour selon la chaleur et le stade de la culture.</li>
+            <li>Nettoyer le filtre et rincer les tubes chaque semaine : c'est là que tout se bouche.</li>
+          </ol>
+        </article>
+
+        <article class="hs-tuto reveal">
+          <h4><span>5</span> Enchaîner deux cycles propres</h4>
+          <ol class="hs-etapes">
+            <li>Vider bacs et réservoir, retirer les racines et les débris, laver à l'eau claire.</li>
+            <li>Désinfecter selon la dose de l'étiquette du produit utilisé, puis rincer abondamment.</li>
+            <li>Repartir sur un substrat neuf, ou sur un substrat composté plusieurs mois, jamais celui d'un cycle malade.</li>
+            <li>Décaler les semis de deux semaines pour éviter le trou de production entre deux récoltes.</li>
+            <li>Noter dates, doses, incidents et résultats : c'est ce carnet qui rend le troisième cycle meilleur.</li>
+          </ol>
+        </article>
+      </div>
+
+      <p class="hs-avertissement">
+        <strong>Limites assumées.</strong> Ces repères sont généraux et ne remplacent pas une visite
+        de parcelle. Le coût réel d'un système hors sol dépend du matériel disponible sur place, du
+        prix de l'eau et de l'électricité : chiffrez-le localement avant d'investir. Pour un projet
+        financé, faites valider le dimensionnement par un technicien (ANADER, centre de recherche
+        agricole) et vérifiez la demande du marché avant de produire.
+      </p>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-prix" role="tabpanel" aria-label="Prix du kilo" hidden>
     <div class="wrap">
       <div class="panel-intro">
         <span class="eyebrow">Prix au kilogramme</span>
@@ -650,7 +910,7 @@
   </section>
 
   <!-- ===================== ONGLET ACTUALITÉS ===================== -->
-  <section class="panel" id="panel-actus" role="tabpanel" aria-labelledby="tab-actus" hidden>
+  <section class="panel" id="panel-actus" role="tabpanel" aria-label="Actualités" hidden>
     <div class="wrap">
       <div class="veille-note">
         <span class="veille-pastille" aria-hidden="true"></span>
@@ -883,7 +1143,7 @@
 
 <script src="assets/geo.js?v=13"></script>
 <script src="assets/motion.js?v=14"></script>
-<script src="assets/ui.js?v=17"></script>
+<script src="assets/ui.js?v=18"></script>
 <script src="assets/app.js?v=14"></script>
 <script src="assets/chat.js?v=21"></script>
 </body>

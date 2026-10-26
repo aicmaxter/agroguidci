@@ -136,13 +136,23 @@ verifie("accueil : crédits photo Wikimedia", accueil.count('class="crop-credit"
         accueil.count('class="crop-credit"'))
 verifie("accueil : bandeau temps réel", 'id="prixTicker"' in accueil and "chargerMeteo" in (ROOT / "web" / "assets" / "ui.js").read_text(encoding="utf-8"))
 verifie("accueil : panneaux sans barre d'onglets",
-        accueil.count('role="tab"') == 0 and accueil.count('role="tabpanel"') == 4
+        accueil.count('role="tab"') == 0 and accueil.count('role="tabpanel"') == 5
         and "tabbar" not in accueil)
 verifie("accueil : une seule navigation",
         accueil.count('aria-label="Navigation principale"') == 1)
 verifie("accueil : libellés harmonisés",
         all(l in accueil for l in ("Cultures & épices", "Prix du kilo", "Actualités", "Tarifs", "Confidentialité")))
 verifie("accueil : marque animée", "logo-agro" in accueil and accueil.count('class="logo-agro"') == 2)
+verifie("hors sol : panneau présent et accessible",
+        'id="panel-horssol"' in accueil and 'aria-label="Hors sol"' in accueil
+        and 'data-tab="horssol"' in accueil)
+verifie("hors sol : huit systèmes et cinq tutoriels",
+        accueil.count('class="hs-carte reveal"') == 8 and accueil.count('class="hs-tuto reveal"') == 5)
+verifie("hors sol : aucun dosage de solution inventé",
+        "ne jamais dépasser la dose inscrite sur l'étiquette" in accueil
+        and "sans mesure, pas de mélange" in accueil.lower())
+verifie("hors sol : les limites sont annoncées",
+        "Limites assumées" in accueil and "ne remplacent pas une visite" in accueil)
 verifie("accueil : hero nuit de forêt", ".app-hero {" in css and "--forest" in css and "#062b1d" in css)
 verifie("photos présentes sur le disque",
         all((ROOT / "web" / "assets" / "cultures" / f"{c['id']}.jpg").exists() for c in _cultures),

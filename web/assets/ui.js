@@ -22,7 +22,7 @@
   /* ------------------------------------------------------------------ navigation */
   // Une seule navigation : l'en-tête. Les quatre premiers liens ouvrent un panneau,
   // « Tarifs » et « Confidentialité » mènent à leur section ou à leur page.
-  var panneaux = ["conseil", "cultures", "prix", "actus"];
+  var panneaux = ["conseil", "cultures", "horssol", "prix", "actus"];
 
   function surlignerLien(nom) {
     // Une seule navigation est visible à la fois (.nav sur desktop, .nav-mobile
