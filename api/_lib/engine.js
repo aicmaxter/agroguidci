@@ -5,10 +5,52 @@
  * l'environnement Vercel (AGRO_ENGINE_KEY) et n'est jamais renvoyée au client.
  */
 
-const BASE = (process.env.AGRO_ENGINE_URL || "https://185-213-27-95.sslip.io").replace(/\/+$/, "");
+const DEFAUT_MOTEUR = "https://185-213-27-95.sslip.io";
+const MAX_REPONSE = 2 * 1024 * 1024;     // 2 Mo : le moteur ne rend jamais plus
 const COOKIE = "agro_session";
 const DUREE_COOKIE = 30 * 24 * 3600; // 30 jours glissants
 const ID_CONVERSATION = /^cnv_[0-9a-f]{32}$/;
+
+/**
+ * Base du moteur, validée une fois pour toutes.
+ *
+ * Règle : le relais n'envoie la clé du moteur qu'à SON moteur. Une valeur
+ * d'environnement absente, mal formée, non HTTPS (hors développement local) ou
+ * portant des identifiants dans l'URL est refusée — jamais remplacée par un
+ * domaine tiers. `AGRO_RELAIS_STRICT=0` rétablit l'ancien repli, pour revenir en
+ * arrière sans redéployer de code.
+ */
+function baseMoteur(valeur) {
+  const brut = String(valeur !== undefined ? valeur : (process.env.AGRO_ENGINE_URL || "")).trim();
+  const repli = (process.env.AGRO_RELAIS_STRICT || "1").trim() !== "0";
+  if (!brut) {
+    if (repli) return "";                 // pas de cible : l'appelant rend 503
+    return DEFAUT_MOTEUR;
+  }
+  let u;
+  try {
+    u = new URL(brut);
+  } catch {
+    return repli ? "" : DEFAUT_MOTEUR;
+  }
+  const local = u.hostname === "127.0.0.1" || u.hostname === "localhost";
+  if (u.protocol !== "https:" && !(local && u.protocol === "http:")) return repli ? "" : DEFAUT_MOTEUR;
+  if (u.username || u.password) return repli ? "" : DEFAUT_MOTEUR;
+  if (u.search || u.hash) return repli ? "" : DEFAUT_MOTEUR;
+  const permis = (process.env.AGRO_ENGINE_HOSTS || "").split(",").map((s) => s.trim()).filter(Boolean);
+  if (permis.length && !permis.includes(u.hostname)) return repli ? "" : DEFAUT_MOTEUR;
+  return (u.origin + u.pathname).replace(/\/+$/, "");
+}
+
+/** Lit un corps de réponse en refusant au-delà de MAX_REPONSE octets. */
+async function texteBorne(r) {
+  const t = await r.text();
+  if (t.length > MAX_REPONSE) throw new Error("reponse moteur trop volumineuse");
+  return t;
+}
+
+const BASE = baseMoteur();
+
 
 function cle() {
   return process.env.AGRO_ENGINE_KEY || "";
@@ -36,6 +78,11 @@ function effacerCookie(res) {
 
 /** Appel interne vers le moteur, avec la clé côté serveur et un délai borné. */
 async function appeler(chemin, { method = "GET", corps, jeton, timeout = 25000 } = {}) {
+  if (!BASE) {
+    const e = new Error("moteur non configuré");
+    e.code = "MOTEUR_ABSENT";
+    throw e;
+  }
   const entetes = { Accept: "application/json" };
   const k = cle();
   if (k) entetes["X-API-Key"] = k;
@@ -50,8 +97,9 @@ async function appeler(chemin, { method = "GET", corps, jeton, timeout = 25000 }
       headers: entetes,
       body: corps === undefined ? undefined : JSON.stringify(corps),
       signal: ctrl.signal,
+      redirect: "error",              // une redirection ne doit pas emmener la clé ailleurs
     });
-    const texte = await r.text();
+    const texte = await texteBorne(r);
     let donnees = null;
     try { donnees = texte ? JSON.parse(texte) : null; } catch { donnees = { brut: texte.slice(0, 300) }; }
     return { status: r.status, donnees };
@@ -69,6 +117,9 @@ function repondre(res, status, corps) {
 }
 
 function erreurMoteur(res, e) {
+  if (e && e.code === "MOTEUR_ABSENT") {
+    return repondre(res, 503, { erreur: "Le service de réponse n'est pas configuré sur cet environnement." });
+  }
   const expire = e && (e.name === "AbortError" || e.code === "ABORT_ERR");
   return repondre(res, expire ? 504 : 502, {
     erreur: expire
@@ -88,4 +139,5 @@ function relayer(res, r) {
   return repondre(res, r.status, r.donnees);
 }
 
-module.exports = { BASE, COOKIE, DUREE_COOKIE, ID_CONVERSATION, lireCookie, ecrireCookie, effacerCookie, appeler, repondre, erreurMoteur, relayer };
+module.exports = { BASE, COOKIE, DUREE_COOKIE, ID_CONVERSATION, MAX_REPONSE, baseMoteur, texteBorne,
+                   lireCookie, ecrireCookie, effacerCookie, appeler, repondre, erreurMoteur, relayer };

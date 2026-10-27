@@ -230,7 +230,10 @@
   var meta = document.getElementById("answerMeta");
 
   var ETATS = {
-    TERMINEE_VERIFIEE: ["ok", "Réponse vérifiée"],
+    // « Vérifiée » se lisait comme une validation par un agronome. L'état signifie
+    // seulement que les contrôles internes du moteur (unités, recalcul, sources)
+    // sont passés : le libellé le dit maintenant sans ambiguïté.
+    TERMINEE_VERIFIEE: ["ok", "Contrôles internes passés"],
     A_VALIDER: ["warn", "À valider avec un conseiller"],
     EN_ATTENTE_INFORMATION: ["warn", "Informations manquantes"],
     ECHEC_OUTIL: ["warn", "Outil indisponible — réponse partielle"],
@@ -255,7 +258,7 @@
       h += blocTitre("Ce que le système a compris") + '<div class="prose">' + markdown(rapport.besoin) + "</div>";
     }
     if (rapport.reponse) {
-      h += blocTitre("Réponse de l'Agent Agronome Expert") + '<div class="prose">' + markdown(rapport.reponse) + "</div>";
+      h += blocTitre("Réponse de l'assistant numérique") + '<div class="prose">' + markdown(rapport.reponse) + "</div>";
     }
     if (rapport.hypotheses && rapport.hypotheses.length) {
       h += blocTitre("Hypothèses posées") + blocListe(rapport.hypotheses, "pill-list");

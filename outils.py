@@ -794,29 +794,41 @@ def activer_rappels(demande: str, contexte: str, dossier: Path) -> str:
     return "\n".join(out)
 
 
+TACHES_AUTORISEES = frozenset({"AGROGUIDCI_Rappels"})
+
+
 def activer_rappels_executer(params: dict) -> dict:
     """Execution REELLE de l'action sensible : appelee uniquement par validation.py,
-    apres approbation humaine. Elle cree la tache puis la relit (preuve)."""
+    apres approbation humaine. Elle cree la tache puis la relit (preuve).
+
+    Regle de securite : la ligne de commande est construite avec des constantes du
+    serveur et passee sous forme de tableau (`shell=False`). Aucune valeur issue de
+    la demande, du modele ou du formulaire n'entre dans l'argumentaire : `source`
+    n'est ecrit que dans le compte rendu.
+    """
     nom_tache = "AGROGUIDCI_Rappels"
+    if nom_tache not in TACHES_AUTORISEES:
+        return {"ok": False, "sortie": "ECHEC_OUTIL: tache non autorisee"}
     script = ROOT / "verifier_rappels.py"
     commande = f'"{sys.executable}" "{script}"'
-    lignes = ["### Execution de l'action sensible approuvee", f"- tache visee : `{nom_tache}`",
+    lignes = [f"### Execution de l'action sensible approuvee", f"- tache visee : `{nom_tache}`",
               f"- commande : `{commande}`",
-              f"- demande d'origine : {(params.get('source') or '')[:200]}"]
+              f"- demande d'origine : {(str(params.get('source') or ''))[:200]}"]
     if not script.exists():
         lignes += ["", f"- **Echec** : script absent ({script}) — rien n'a ete cree."]
         return {"ok": False, "sortie": "\n".join(lignes)}
     try:
         creer = subprocess.run(["schtasks", "/Create", "/SC", "DAILY", "/ST", "07:00", "/TN", nom_tache,
-                                "/TR", commande, "/F"], capture_output=True, text=True,
+                                "/TR", commande, "/F"], shell=False, capture_output=True, text=True,
                                encoding="utf-8", errors="replace", timeout=60)
     except (OSError, subprocess.SubprocessError) as e:
-        lignes += ["", f"- **Echec de creation** : {e}"]
+        lignes += ["", f"- **Echec de creation** : {type(e).__name__}"]
         return {"ok": False, "sortie": "\n".join(lignes)}
     lignes += ["", "#### Creation", f"- code de sortie : {creer.returncode}",
                f"- sortie : `{(creer.stdout or creer.stderr or '').strip()[:300]}`"]
     verif = subprocess.run(["schtasks", "/Query", "/TN", nom_tache, "/FO", "LIST"],
-                           capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=60)
+                           shell=False, capture_output=True, text=True, encoding="utf-8",
+                           errors="replace", timeout=60)
     lignes += ["", "#### Verification (relecture reelle de la tache)", "```",
                (verif.stdout or verif.stderr or "").strip()[:700], "```"]
     ok = verif.returncode == 0 and creer.returncode == 0

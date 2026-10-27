@@ -16,8 +16,10 @@ connaissances ne permettent pas de repondre, l'agent le dit et explique pourquoi
 from __future__ import annotations
 
 import hashlib
+import ipaddress
 import json
 import os
+import socket
 import threading
 import time
 import urllib.error
@@ -25,6 +27,7 @@ import urllib.request
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parent
 
@@ -116,9 +119,171 @@ class ErreurOrchestrateur(RuntimeError):
     pass
 
 
+class UrlRefusee(RuntimeError):
+    """URL sortante hors liste blanche, schéma interdit ou cible interne privée."""
+
+
+# --- liste blanche des sorties ------------------------------------------------
+# Le serveur n'appelle QUE des adresses connues de lui : services publics sans
+# identifiants (météo, Wikipédia, Banque mondiale, modèle) et services internes
+# (orchestrateur local, moteur, passerelle). Aucune URL ne vient d'un utilisateur
+# ni d'une sortie de modèle ; si on en ajoutait une, la garde la refuserait.
+DOMAINES_PUBLICS_DEFAUT = (
+    "api.deepseek.com",
+    "geocoding-api.open-meteo.com",
+    "api.open-meteo.com",
+    "archive-api.open-meteo.com",
+    "fr.wikipedia.org",
+    "api.worldbank.org",
+)
+DOMAINES_PUBLICS = tuple(
+    d.strip().lower() for d in (
+        os.environ.get("AGRO_HTTP_DOMAINES_PUBLICS") or ",".join(DOMAINES_PUBLICS_DEFAUT)
+    ).split(",") if d.strip()
+)
+
+
+def _hote(url: str) -> str:
+    try:
+        return (urlsplit(url).hostname or "").strip().lower()
+    except ValueError:
+        return ""
+
+
+def _cible(url: str) -> str:
+    """« hôte:port » normalisé (port par défaut selon le schéma)."""
+    try:
+        p = urlsplit(url)
+        h = (p.hostname or "").lower()
+        if not h:
+            return ""
+        port = p.port or (443 if p.scheme == "https" else 80)
+    except ValueError:
+        return ""
+    return f"{h}:{port}"
+
+
+def hotes_internes() -> set[str]:
+    """Cibles de confiance portant des identifiants : lues dans l'environnement.
+
+    On garde le couple hôte:port, pas l'hôte seul : le loopback n'est ouvert que
+    sur le port de l'orchestrateur et du modèle, pas sur n'importe quel service
+    local. Les défauts suivent les valeurs de repli du code, sinon la clé du
+    modèle serait retirée de sa propre requête.
+    """
+    out: set[str] = set()
+    for defaut in ("http://127.0.0.1:8000", "https://api.deepseek.com/v1",
+                   "http://localhost:8000"):
+        c = _cible(defaut)
+        if c:
+            out.add(c)
+    for var in ("AGRO_ORCH", "LAB_ORCH", "AGRO_ENGINE_URL", "AGRO_LLM_BASE"):
+        c = _cible(os.environ.get(var, ""))
+        if c:
+            out.add(c)
+    c = _cible(ORCH)
+    if c:
+        out.add(c)
+    return out
+
+
+GARDE_HTTP = os.environ.get("AGRO_HTTP_GARDE", "1").strip().lower() not in ("0", "false", "non", "off")
+MAX_OCTETS_REPONSE = int(os.environ.get("AGRO_HTTP_MAX_OCTETS", "8000000") or 8000000)
+DELAI_MAX = float(os.environ.get("AGRO_HTTP_DELAI_MAX", "180") or 180)
+ENTETES_IDENTIFIANTS = ("authorization", "x-api-key", "x-session-token", "cookie", "proxy-authorization")
+_RESOLUS: dict[str, tuple[float, list[str]]] = {}
+_RESOLU_TTL = 300.0
+
+
+def _adresses(hote: str) -> list[str]:
+    maintenant = time.time()
+    memo = _RESOLUS.get(hote)
+    if memo and maintenant - memo[0] < _RESOLU_TTL:
+        return memo[1]
+    try:
+        infos = socket.getaddrinfo(hote, None, proto=socket.IPPROTO_TCP)
+    except (socket.gaierror, UnicodeError, OSError):
+        return []
+    adresses = sorted({i[4][0] for i in infos})
+    _RESOLUS[hote] = (maintenant, adresses)
+    return adresses
+
+
+def _publique(ip: str) -> bool:
+    """Vrai seulement pour une adresse publique : le reste est refusé par défaut."""
+    try:
+        a = ipaddress.ip_address(ip.split("%")[0])
+    except ValueError:
+        return False
+    if isinstance(a, ipaddress.IPv6Address) and a.ipv4_mapped:
+        a = a.ipv4_mapped
+    return not (
+        a.is_private or a.is_loopback or a.is_link_local or a.is_reserved
+        or a.is_multicast or a.is_unspecified
+    )
+
+
+def verifier_url(url: str) -> str:
+    """Refuse tout ce qui n'est pas http(s) vers un hôte de la liste blanche, puis
+    refuse une résolution vers une plage privée pour un hôte public (SSRF/rebinding).
+
+    Lève UrlRefusee. Rend l'URL inchangée si elle est acceptable.
+    """
+    if not GARDE_HTTP:
+        return url
+    if not isinstance(url, str) or not url:
+        raise UrlRefusee("URL vide")
+    parties = urlsplit(url)
+    if parties.scheme.lower() not in ("http", "https"):
+        raise UrlRefusee(f"schéma refusé : {parties.scheme or '(aucun)'}")
+    hote = (parties.hostname or "").lower()
+    if not hote:
+        raise UrlRefusee("hôte absent")
+    internes = hotes_internes()
+    cible = _cible(url)
+    autorise = (cible in internes) or (hote in DOMAINES_PUBLICS)
+    if not autorise:
+        # un suffixe ne suffit pas : la liste blanche est exacte, hôte pour hôte.
+        raise UrlRefusee(f"hôte hors liste blanche : {hote}")
+    if cible in internes:
+        return url
+    adresses = _adresses(hote)
+    for ip in adresses:
+        if not _publique(ip):
+            raise UrlRefusee(f"{hote} résout vers une adresse non publique ({ip})")
+    return url
+
+
+def entetes_pour(url: str, entetes: dict | None) -> dict:
+    """Ne recopie jamais un identifiant interne vers un domaine tiers.
+
+    Un client interne (orchestrateur, moteur) porte la clé ; un client public
+    (météo, Wikipédia, Banque mondiale) part sans aucun identifiant.
+    """
+    if not entetes:
+        return {}
+    if _cible(url) in hotes_internes():
+        return dict(entetes)
+    return {k: v for k, v in entetes.items() if k.lower() not in ENTETES_IDENTIFIANTS}
+
+
+class _SansRedirection(urllib.request.HTTPRedirectHandler):
+    """Refuse toute redirection : une 30x ne doit pas emmener la requête ailleurs."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):  # noqa: D401
+        raise UrlRefusee(f"redirection refusée (HTTP {code} vers {_hote(newurl) or '?'})")
+
+
+def _ouvreur() -> urllib.request.OpenerDirector:
+    o = urllib.request.build_opener(_SansRedirection)
+    return o
+
+
 def _http(method: str, url: str, corps: dict | None = None, entetes: dict | None = None,
           timeout: float = 60.0, tentatives: int = 3) -> tuple[int, Any]:
     """Requete JSON avec reprise sur erreurs transitoires (reseau capricieux ici)."""
+    verifier_url(url)
+    timeout = min(float(timeout), DELAI_MAX)
     donnees = json.dumps(corps, ensure_ascii=False).encode("utf-8") if corps is not None else None
     derniere: Exception | None = None
     for essai in range(tentatives):
@@ -126,17 +291,21 @@ def _http(method: str, url: str, corps: dict | None = None, entetes: dict | None
                           "User-Agent": os.environ.get("AGRO_USER_AGENT",
                                                        "AGROGUIDCI/1.1 (agent local; contact "
                                                        "aicmaxter@gmail.com)"),
-                          "Content-Type": "application/json", **(entetes or {})}
+                          "Content-Type": "application/json"}
+        entetes_finaux.update(entetes_pour(url, entetes))
         req = urllib.request.Request(url, data=donnees, method=method, headers=entetes_finaux)
         try:
-            with urllib.request.urlopen(req, timeout=timeout) as r:
-                brut = r.read().decode("utf-8", errors="replace")
+            with _ouvreur().open(req, timeout=timeout) as r:
+                brut = r.read(MAX_OCTETS_REPONSE + 1)
+                if len(brut) > MAX_OCTETS_REPONSE:
+                    raise UrlRefusee(f"réponse trop volumineuse (> {MAX_OCTETS_REPONSE} octets)")
+                brut = brut.decode("utf-8", errors="replace")
                 try:
                     return r.status, (json.loads(brut) if brut else None)
                 except ValueError:
                     return r.status, brut
         except urllib.error.HTTPError as e:
-            brut = e.read().decode("utf-8", errors="replace")
+            brut = e.read(MAX_OCTETS_REPONSE).decode("utf-8", errors="replace")
             try:
                 return e.code, json.loads(brut)
             except ValueError:
@@ -145,7 +314,7 @@ def _http(method: str, url: str, corps: dict | None = None, entetes: dict | None
             derniere = e
             if essai < tentatives - 1:
                 time.sleep(1.0 * (essai + 1))
-    raise ErreurOrchestrateur(f"{method} {url} injoignable : {derniere}")
+    raise ErreurOrchestrateur(f"{method} {_hote(url) or 'cible'} injoignable : {derniere}")
 
 
 def _http_stream(url: str, corps: dict, entetes: dict, timeout: float = 180.0,
@@ -155,14 +324,21 @@ def _http_stream(url: str, corps: dict, entetes: dict, timeout: float = 180.0,
     `on_delta(morceau)` est appele a chaque fragment recu : c'est ce qui permet
     d'afficher la reponse au fur et a mesure au lieu d'attendre la fin.
     """
+    verifier_url(url)
+    timeout = min(float(timeout), DELAI_MAX)
     donnees = json.dumps(corps, ensure_ascii=False).encode("utf-8")
     entetes_finaux = {"Accept": "text/event-stream", "Content-Type": "application/json",
-                      "Connection": "close", **(entetes or {})}
+                      "Connection": "close"}
+    entetes_finaux.update(entetes_pour(url, entetes))
     req = urllib.request.Request(url, data=donnees, method="POST", headers=entetes_finaux)
     morceaux: list[str] = []
+    taille = 0
     fin: str | None = None
-    with urllib.request.urlopen(req, timeout=timeout) as r:
+    with _ouvreur().open(req, timeout=timeout) as r:
         for brut in r:
+            taille += len(brut)
+            if taille > MAX_OCTETS_REPONSE:
+                raise UrlRefusee(f"flux trop volumineux (> {MAX_OCTETS_REPONSE} octets)")
             ligne = brut.decode("utf-8", errors="replace").strip()
             if not ligne.startswith("data:"):
                 continue

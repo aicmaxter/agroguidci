@@ -1,0 +1,16 @@
+{
+  "name": "agroguidci-site",
+  "version": "9.8.0",
+  "private": true,
+  "description": "Vitrine statique AGROGUIDCI + relais serveur (fonctions Vercel) vers le moteur Python.",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node tests_relais.js",
+    "deploy": "vercel deploy --prod --yes --scope cmaxter"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

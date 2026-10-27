@@ -221,6 +221,14 @@
   var prixCharge = null;
 
   function rendrePrix(d) {
+    if (!d || !Array.isArray(d.produits)) {
+      // relevé illisible : on le dit et on libère le bandeau au lieu de laisser
+      // « Chargement des prix et de la météo… » indéfiniment.
+      var vide = document.getElementById("prixNote");
+      if (vide) vide.textContent = "Relevé indisponible pour le moment. Aucun prix n'est affiché plutôt qu'un prix non vérifié.";
+      construireBandeau();
+      return;
+    }
     prixCharge = d;
     var corps = document.getElementById("prixBody");
     if (!corps || !d || !d.produits) return;
@@ -288,6 +296,7 @@
       .catch(function () {
         var zone = document.getElementById("meteoCartes");
         if (zone) zone.innerHTML = '<p class="prix-empty">Météo indisponible pour le moment — aucune valeur inventée.</p>';
+        construireBandeau();
       });
   }
 
@@ -315,14 +324,16 @@
     var piste = document.getElementById("prixTicker");
     if (!piste) return;
     var items = [];
-    items.push('<span class="ticker-item live"><span class="pastille"></span> Relevés du jour · ' +
-      new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) + "</span>");
+    // Aucun horodatage n'est inventé : celui de la météo est l'heure d'observation
+    // renvoyée par Open-Meteo, celui des prix la date du relevé OCPV. Sans donnée,
+    // on l'écrit au lieu d'afficher une heure de navigateur présentée comme « temps réel ».
     meteo.forEach(function (m) {
       items.push('<span class="ticker-item">' + echapper(m.nom) + ' <b>' +
         (m.t == null ? "—" : Math.round(m.t)) + "°C</b> <span>" +
-        echapper(LIBELLES[m.code] || "") + (m.heure ? " · obs. " + echapper(m.heure) : "") + "</span></span>");
+        echapper(LIBELLES[m.code] || "") +
+        (m.heure ? " · obs. " + echapper(m.heure) : "") + "</span></span>");
     });
-    if (prixCharge && prixCharge.produits) {
+    if (prixCharge && Array.isArray(prixCharge.produits)) {
       // chaque prix affiché porte son marché, son type et sa date de relevé (jamais « temps réel »)
       var releve = prixCharge.releve || prixCharge.semaine || "";
       prixCharge.produits.forEach(function (p) {
@@ -331,6 +342,10 @@
           fcfa(p.prix) + " FCFA/" + echapper(p.unite) + "</span>" +
           (detail ? ' <span>' + echapper(detail) + "</span>" : "") + "</span>");
       });
+    }
+    if (!items.length) {
+      items.push('<span class="ticker-item">Prix et météo indisponibles pour le moment — ' +
+        "aucune valeur affichée plutôt qu'une valeur non vérifiée.</span>");
     }
     var contenu = items.join("");
     // contenu doublé pour un défilement continu sans saut visible
@@ -343,6 +358,7 @@
     .catch(function () {
       var note = document.getElementById("prixNote");
       if (note) note.textContent = "Relevé indisponible pour le moment. Aucun prix n'est affiché plutôt qu'un prix non vérifié.";
+      construireBandeau();
     });
   chargerMeteo();
   setInterval(construireBandeau, 60000);

@@ -16,10 +16,10 @@
  * (même origine). Le mode synchrone n'est pas exposé par ce proxy.
  */
 
-const DEFAUT = "https://agroguidci-saas.vercel.app";
+const { baseMoteur, texteBorne } = require("./_lib/engine");
 
 function base() {
-  return (process.env.AGRO_ENGINE_URL || DEFAUT).replace(/\/+$/, "");
+  return baseMoteur();
 }
 
 /** Réécrit le champ `suivi` du moteur (relatif au moteur) vers la même origine. */
@@ -36,7 +36,13 @@ function memeOrigine(texte, statut) {
 }
 
 async function relayer(req, res, methode, charge) {
-  const url = base() + "/api/demande";
+  const racine = base();
+  if (!racine) {
+    res.statusCode = 503;
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
+    return res.end(JSON.stringify({ erreur: "Le service de réponse n'est pas configuré sur cet environnement." }));
+  }
+  const url = racine + "/api/demande";
   const entetes = { Accept: "application/json" };
   const cle = process.env.AGRO_ENGINE_KEY || "";
   if (cle) entetes["X-API-Key"] = cle;
@@ -52,20 +58,21 @@ async function relayer(req, res, methode, charge) {
       headers: entetes,
       body: methode === "POST" ? JSON.stringify(charge || {}) : undefined,
       signal: ctrl.signal,
+      redirect: "error",            // la clé ne suit pas une redirection
     });
-    let texte = await r.text();
+    let texte = await texteBorne(r);
     if (methode === "POST") texte = memeOrigine(texte, r.status);
     res.statusCode = r.status;
     res.setHeader("Content-Type", "application/json; charset=utf-8");
     res.setHeader("Cache-Control", "no-store");
     return res.end(texte);
   } catch (e) {
-    const message = e && e.name === "AbortError"
-      ? "le moteur n'a pas répondu dans le délai imparti"
-      : "moteur injoignable";
-    res.statusCode = 502;
+    const expire = e && e.name === "AbortError";
+    res.statusCode = expire ? 504 : 502;
     res.setHeader("Content-Type", "application/json; charset=utf-8");
-    return res.end(JSON.stringify({ erreur: message }));
+    return res.end(JSON.stringify({
+      erreur: expire ? "le moteur n'a pas répondu dans le délai imparti" : "moteur injoignable",
+    }));
   } finally {
     clearTimeout(minuteur);
   }

@@ -55,9 +55,12 @@ from experts import EXPERTISES  # noqa: E402
 VERSION = "1.0"
 CLE_API = (os.environ.get("AGRO_API_KEY") or "").strip()
 SANS_AUTH = os.environ.get("AGRO_SANS_AUTH", "") in ("1", "true", "oui")
-ORIGINES = [o.strip() for o in (os.environ.get("AGRO_CORS_ORIGINS")
-                                or "https://agroguidci.vercel.app,http://127.0.0.1:8099,http://localhost:8099"
-                                ).split(",") if o.strip()]
+PROD = os.environ.get("AGRO_ENV", "").strip().lower() in ("prod", "production")
+_ORIGINES_DEFAUT = "https://agroguidci.vercel.app"
+if not PROD:                 # les origines de développement ne valent qu'en développement
+    _ORIGINES_DEFAUT += ",http://127.0.0.1:8099,http://localhost:8099"
+ORIGINES = [o.strip() for o in (os.environ.get("AGRO_CORS_ORIGINS") or _ORIGINES_DEFAUT).split(",")
+            if o.strip()]
 MAX_CONCURRENCE = max(1, int(os.environ.get("AGRO_MAX_CONCURRENCE", "2") or 2))
 BUDGET_S = float(os.environ.get("AGRO_BUDGET_S", "300") or 300)
 MAX_TEXTE = int(os.environ.get("AGRO_MAX_TEXTE", "4000") or 4000)
@@ -114,8 +117,9 @@ def _executer_job(jid: str, texte: str, profil: Profil | None) -> None:
                     erreur="moteur indisponible : orchestrateur ou agents non démarrés")
         journalise(evenement="job_moteur_indisponible", jid=jid, detail=str(e)[:200])
     except Exception as e:                       # jamais de trace interne côté client
-        _job_ecrire(jid, statut="echec", erreur=f"erreur du moteur ({type(e).__name__})")
-        journalise(evenement="job_erreur", jid=jid, type=type(e).__name__)
+        ref = uuid.uuid4().hex[:12]
+        _job_ecrire(jid, statut="echec", erreur="erreur interne du moteur", incident=ref)
+        journalise(evenement="job_erreur", jid=jid, type=type(e).__name__, incident=ref)
     finally:
         _VERROU.release()
 

@@ -6,7 +6,7 @@
  * Chaque appel est court : aucune limite de durée de fonction n'est atteinte.
  */
 
-const DEFAUT = "https://agroguidci-saas.vercel.app";
+const { baseMoteur, texteBorne } = require("../_lib/engine");
 
 module.exports = async function handler(req, res) {
   if (req.method !== "GET") {
@@ -21,7 +21,12 @@ module.exports = async function handler(req, res) {
     return res.end(JSON.stringify({ erreur: "identifiant de mission invalide" }));
   }
 
-  const base = (process.env.AGRO_ENGINE_URL || DEFAUT).replace(/\/+$/, "");
+  const base = baseMoteur();
+  if (!base) {
+    res.statusCode = 503;
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
+    return res.end(JSON.stringify({ erreur: "Le suivi de mission n'est pas configuré sur cet environnement." }));
+  }
   const entetes = { Accept: "application/json" };
   const cle = process.env.AGRO_ENGINE_KEY || "";
   if (cle) entetes["X-API-Key"] = cle;
@@ -29,8 +34,10 @@ module.exports = async function handler(req, res) {
   const ctrl = new AbortController();
   const minuteur = setTimeout(() => ctrl.abort(), 15000);
   try {
-    const r = await fetch(base + "/api/missions/" + id, { headers: entetes, signal: ctrl.signal });
-    const texte = await r.text();
+    const r = await fetch(base + "/api/missions/" + id, {
+      headers: entetes, signal: ctrl.signal, redirect: "error",
+    });
+    const texte = await texteBorne(r);
     res.statusCode = r.status;
     res.setHeader("Content-Type", "application/json; charset=utf-8");
     res.setHeader("Cache-Control", "no-store");
