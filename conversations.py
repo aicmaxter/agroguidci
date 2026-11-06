@@ -129,6 +129,15 @@ CREATE UNIQUE INDEX IF NOT EXISTS ux_credits_lot
 CREATE UNIQUE INDEX IF NOT EXISTS ux_credits_debit
   ON credits(session_id, reference) WHERE raison = 'consultation';
 CREATE INDEX IF NOT EXISTS ix_credits_session ON credits(session_id, created_at);
+
+-- Quota de missions par IP et par jour (UTC) : une session anonyme neuve redonne
+-- le lot gratuit, donc le seul compteur de session ne borne pas l'usage réel.
+CREATE TABLE IF NOT EXISTS usage_ip (
+  ip        TEXT NOT NULL,
+  jour      TEXT NOT NULL,
+  missions  INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (ip, jour)
+);
 """ + _DDL_MESSAGES.format(ifnot="IF NOT EXISTS ", table="messages", limite=LIMITE_CONTENU) + _INDEX_MESSAGES
 
 _connexion: sqlite3.Connection | None = None
@@ -472,6 +481,37 @@ def consommer(session_id: str, reference: str, cout: int | None = None) -> dict[
         if insere:
             return solde(session_id, now)
     return None
+
+
+def autoriser_mission_ip(ip: str, limite: int, now: int | None = None) -> bool:
+    """Autorise (et compte) une mission pour cette IP, plafonnée sur 24 h.
+
+    Jeter son cookie suffisait à obtenir une nouvelle session — donc un nouveau lot
+    gratuit — et des missions à l'infini. Le compteur est tenu en base pour survivre
+    à un redémarrage du processus API.
+    """
+    ip = (ip or "inconnu")[:45]
+    if limite <= 0:
+        return True
+    maintenant = int(now if now is not None else time.time())
+    jour = time.strftime("%Y-%m-%d", time.gmtime(maintenant))
+    c = _db()
+    c.execute("DELETE FROM usage_ip WHERE jour <> ?", (jour,))     # purge des jours passés
+    c.execute("INSERT OR IGNORE INTO usage_ip(ip, jour, missions) VALUES(?,?,0)", (ip, jour))
+    cur = c.execute("UPDATE usage_ip SET missions = missions + 1 "
+                    "WHERE ip=? AND jour=? AND missions < ?", (ip, jour, limite))
+    c.commit()
+    return cur.rowcount == 1
+
+
+def missions_restantes_ip(ip: str, limite: int, now: int | None = None) -> int:
+    """Missions encore disponibles aujourd'hui pour cette IP."""
+    if limite <= 0:
+        return 10 ** 6
+    jour = time.strftime("%Y-%m-%d", time.gmtime(int(now if now is not None else time.time())))
+    row = _db().execute("SELECT missions FROM usage_ip WHERE ip=? AND jour=?",
+                        ((ip or "inconnu")[:45], jour)).fetchone()
+    return max(0, limite - int(row[0] if row else 0))
 
 
 def historique(session_id: str, limite: int = 50) -> list[dict[str, Any]]:

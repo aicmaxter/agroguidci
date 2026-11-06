@@ -18,6 +18,7 @@ import json
 import os
 import subprocess
 import sys
+import tempfile
 import time
 from pathlib import Path
 
@@ -28,6 +29,11 @@ CLE = "cle-de-test"
 os.environ["AGRO_API_KEY"] = CLE
 os.environ["AGRO_CORS_ORIGINS"] = "https://agroguidci.vercel.app"
 os.environ.pop("AGRO_SANS_AUTH", None)
+# Base jetable : un test ne doit pas écrire dans data/conversations.db.
+os.environ["AGRO_CONVERSATIONS_DB"] = str(Path(tempfile.gettempdir()) / "agro-test-api.db")
+# Plafonds de débit desserrés : la suite envoie plus de demandes qu'un humain.
+os.environ["AGRO_LIMITE_DEMANDE"] = "500"
+os.environ["AGRO_LIMITE_GENERAL"] = "5000"
 
 from fastapi.testclient import TestClient  # noqa: E402
 
@@ -76,6 +82,10 @@ class _CoordStub:
 
 api.Coordonnateur = _CoordStub          # le vrai moteur n'est pas sollicité
 
+# Débit et missions exigent une session anonyme : on en ouvre une pour la suite.
+_SESSION = api.conv.creer_session()
+H = {"X-API-Key": CLE, "X-Session-Token": _SESSION["session_token"]}
+
 r = client.post("/api/demande", json={"texte": "analyse mon champ de manioc"})
 cas("POST sans cle -> 401", r.status_code == 401, f"code={r.status_code}")
 
@@ -84,14 +94,14 @@ r = client.post("/api/demande", json={"texte": "analyse mon champ de manioc"},
 cas("POST mauvaise cle -> 401", r.status_code == 401, f"code={r.status_code}")
 
 r = client.post("/api/demande", json={"texte": "analyse mon champ de manioc"},
-                headers={"Authorization": f"Bearer {CLE}"})
+                headers={"Authorization": f"Bearer {CLE}", "X-Session-Token": _SESSION["session_token"]})
 cas("Bearer valide accepte", r.status_code != 401, f"code={r.status_code}")
 
-r = client.post("/api/demande", json={"texte": "abc"}, headers={"X-API-Key": CLE})
+r = client.post("/api/demande", json={"texte": "abc"}, headers=H)
 cas("texte trop court -> 422", r.status_code == 422, f"code={r.status_code}")
 
 r = client.post("/api/demande", json={"texte": "a" * (api.MAX_TEXTE + 10)},
-                headers={"X-API-Key": CLE})
+                headers=H)
 cas("texte trop long -> 422", r.status_code == 422, f"code={r.status_code}")
 
 # ---------------------------------------------------------------- 3. endpoints publics
@@ -161,7 +171,7 @@ cas("enveloppe synthese str", env2["rapport"]["reponse"].startswith("## Réponse
 
 # ---------------------------------------------------------------- 5. mode asynchrone
 r = client.post("/api/demande", json={"texte": "mission en tache de fond", "async": True},
-                headers={"X-API-Key": CLE})
+                headers=H)
 j = r.json() if r.status_code == 202 else {}
 cas("POST async -> 202 + id", r.status_code == 202 and j.get("id", "").startswith("j_"),
     f"code={r.status_code} id={j.get('id')}")
@@ -170,7 +180,7 @@ jid = j.get("id", "")
 etat_final, corps = None, {}
 for _ in range(50):                      # le double de moteur répond en quelques ms
     time.sleep(0.1)
-    rr = client.get(f"/api/missions/{jid}", headers={"X-API-Key": CLE})
+    rr = client.get(f"/api/missions/{jid}", headers=H)
     corps = rr.json() if rr.status_code == 200 else {}
     etat_final = corps.get("statut")
     if etat_final in ("termine", "echec"):
@@ -184,10 +194,10 @@ cas("suivi rend la reponse complete",
 r = client.get(f"/api/missions/{jid}")
 cas("suivi protege par la cle", r.status_code == 401, f"code={r.status_code}")
 
-r = client.get("/api/missions/j_inconnu0000", headers={"X-API-Key": CLE})
+r = client.get("/api/missions/j_inconnu0000", headers=H)
 cas("mission inconnue -> 404", r.status_code == 404, f"code={r.status_code}")
 
-r = client.get("/api/missions/pirate", headers={"X-API-Key": CLE})
+r = client.get("/api/missions/pirate", headers=H)
 cas("identifiant invalide -> 400", r.status_code == 400, f"code={r.status_code}")
 
 # ---------------------------------------------------------------- 6. CORS
@@ -204,7 +214,7 @@ cas("CORS origine refusee", r.headers.get("access-control-allow-origin") !=
 # ---------------------------------------------------------------- 6. saturation
 api._semaphore._value = 0        # simule un moteur déjà occupé
 r = client.post("/api/demande", json={"texte": "question pendant une mission en cours"},
-                headers={"X-API-Key": CLE})
+                headers=H)
 cas("moteur sature -> 429", r.status_code == 429, f"code={r.status_code}")
 api._semaphore._value = api.MAX_CONCURRENCE
 

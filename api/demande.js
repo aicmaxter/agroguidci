@@ -16,7 +16,7 @@
  * (même origine). Le mode synchrone n'est pas exposé par ce proxy.
  */
 
-const { baseMoteur, texteBorne } = require("./_lib/engine");
+const { baseMoteur, texteBorne, lireCookie, ecrireCookie, appeler } = require("./_lib/engine");
 
 function base() {
   return baseMoteur();
@@ -47,35 +47,77 @@ async function relayer(req, res, methode, charge) {
   const cle = process.env.AGRO_ENGINE_KEY || "";
   if (cle) entetes["X-API-Key"] = cle;
   if (methode === "POST") entetes["Content-Type"] = "application/json";
+  // IP du visiteur : Vercel la pose, le moteur s'en sert pour le quota quotidien.
+  // Sans elle, tous les visiteurs partageraient l'IP de Vercel et le quota tomberait
+  // sur le premier venu.
+  const xff = String(req.headers["x-forwarded-for"] || "").split(",")[0].trim();
+  const ipVisiteur = /^[0-9a-fA-F:.]{3,45}$/.test(xff) ? xff : "";
+  if (ipVisiteur) entetes["X-Client-IP"] = ipVisiteur;
+  // Le moteur exige une session anonyme et débite un crédit par mission aboutie.
+  // Le jeton reste dans un cookie HttpOnly : le navigateur ne voit jamais la clé.
+  let jeton = lireCookie(req);
 
-  const ctrl = new AbortController();
-  // En mode asynchrone le moteur rend un 202 en quelques millisecondes : ce délai
-  // couvre une mise en route lente du VPS, pas une coordination complète.
-  const minuteur = setTimeout(() => ctrl.abort(), 25000);   // le moteur répond 202 tout de suite
-  try {
-    const r = await fetch(url, {
-      method: methode,
-      headers: entetes,
-      body: methode === "POST" ? JSON.stringify(charge || {}) : undefined,
-      signal: ctrl.signal,
-      redirect: "error",            // la clé ne suit pas une redirection
-    });
-    let texte = await texteBorne(r);
-    if (methode === "POST") texte = memeOrigine(texte, r.status);
-    res.statusCode = r.status;
+  // Deux tentatives au plus : la première avec le cookie courant, la seconde avec une
+  // session neuve si le moteur répond 401 (cookie absent ou expiré). La session est
+  // ouverte côté serveur et posée en cookie HttpOnly : le navigateur ne voit rien.
+  let texte = "";
+  let statut = 502;
+  for (let essai = 0; essai < 2; essai++) {
+    if (!jeton) {
+      const session = await appeler("/api/sessions", { method: "POST", timeout: 10000 });
+      if (session.status === 200 && session.donnees && session.donnees.session_token) {
+        jeton = session.donnees.session_token;
+        ecrireCookie(res, jeton);
+      } else {
+        res.statusCode = 502;
+        res.setHeader("Content-Type", "application/json; charset=utf-8");
+        return res.end(JSON.stringify({ erreur: "session indisponible : réessayez dans un instant" }));
+      }
+    }
+    const entetesAppel = Object.assign({}, entetes, { "X-Session-Token": jeton });
+    const ctrl = new AbortController();
+    // En mode asynchrone le moteur rend un 202 en quelques millisecondes : ce délai
+    // couvre une mise en route lente du VPS, pas une coordination complète.
+    const minuteur = setTimeout(() => ctrl.abort(), 25000);
+    try {
+      const r = await fetch(url, {
+        method: methode,
+        headers: entetesAppel,
+        body: methode === "POST" ? JSON.stringify(charge || {}) : undefined,
+        signal: ctrl.signal,
+        redirect: "error",            // la clé ne suit pas une redirection
+      });
+      texte = await texteBorne(r);
+      statut = r.status;
+    } catch (e) {
+      const expire = e && e.name === "AbortError";
+      res.statusCode = expire ? 504 : 502;
+      res.setHeader("Content-Type", "application/json; charset=utf-8");
+      return res.end(JSON.stringify({
+        erreur: expire ? "le moteur n'a pas répondu dans le délai imparti" : "moteur injoignable",
+      }));
+    } finally {
+      clearTimeout(minuteur);
+    }
+    if (statut === 401 && essai === 0) { jeton = ""; continue; }   // session morte : on en rouvre une
+    break;
+  }
+  if (statut === 402) {                    // crédits épuisés : on relaie le solde, pas une erreur
+    res.statusCode = 402;
     res.setHeader("Content-Type", "application/json; charset=utf-8");
     res.setHeader("Cache-Control", "no-store");
     return res.end(texte);
-  } catch (e) {
-    const expire = e && e.name === "AbortError";
-    res.statusCode = expire ? 504 : 502;
-    res.setHeader("Content-Type", "application/json; charset=utf-8");
-    return res.end(JSON.stringify({
-      erreur: expire ? "le moteur n'a pas répondu dans le délai imparti" : "moteur injoignable",
-    }));
-  } finally {
-    clearTimeout(minuteur);
   }
+  if (statut === 401) {
+    res.statusCode = 401;
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
+    return res.end(JSON.stringify({ erreur: "session absente ou expirée" }));
+  }
+  if (methode === "POST") texte = memeOrigine(texte, statut);
+  res.statusCode = statut;
+  res.setHeader("Content-Type", "application/json; charset=utf-8");
+  res.setHeader("Cache-Control", "no-store");
+  return res.end(texte);
 }
 
 module.exports = async function handler(req, res) {

@@ -70,6 +70,58 @@ if not CLE_API and not SANS_AUTH:
 
 _semaphore = asyncio.Semaphore(MAX_CONCURRENCE)
 
+# --- limitation de débit ------------------------------------------------------
+# Sans plafond, une clé fuitée ou un client mal écrit peut lancer des dizaines de
+# missions (30 a 120 s de LLM chacune) et épuiser le budget. Fenêtre glissante de
+# 60 s, par IP réelle (X-Forwarded-For posé par Caddy), en mémoire du processus.
+LIMITE_GENERAL = max(1, int(os.environ.get("AGRO_LIMITE_GENERAL", "120") or 120))
+LIMITE_DEMANDE = max(1, int(os.environ.get("AGRO_LIMITE_DEMANDE", "4") or 4))
+LIMITE_AUTH = max(1, int(os.environ.get("AGRO_LIMITE_AUTH", "20") or 20))
+# Missions autorisées par IP de visiteur et par jour (0 = pas de plafond).
+LIMITE_MISSIONS_JOUR = int(os.environ.get("AGRO_LIMITE_MISSIONS_JOUR", "40") or 0)
+_SEAUX: dict[tuple[str, str], list[float]] = {}
+_SEAUX_LOCK = threading.Lock()
+
+
+def _ip_client(request: Request) -> str:
+    """IP du client : celle vue par le proxy (jamais un en-tête client arbitraire).
+
+    `X-Client-IP` est posé par notre relais Vercel (appel serveur à serveur, déjà
+    authentifié par la clé) : derrière la vitrine, l'IP TCP est celle de Vercel et
+    plafonner dessus bloquerait tous les visiteurs à la fois.
+    """
+    client = (request.headers.get("x-client-ip") or "").strip()
+    if client and len(client) <= 45 and all(c in "0123456789abcdefABCDEF:." for c in client):
+        return client
+    xff = (request.headers.get("x-forwarded-for") or "").split(",")[0].strip()
+    if xff:
+        return xff[:45]
+    return (request.client.host if request.client else "inconnu")[:45]
+
+
+def _debit_autorise(bucket: str, ip: str, limite: int) -> bool:
+    """Consomme un jeton ; False si la fenêtre de 60 s est déjà saturée."""
+    maintenant = time.time()
+    cle = (bucket, ip)
+    with _SEAUX_LOCK:
+        if len(_SEAUX) > 5000:                  # borne mémoire : on repart à zéro
+            _SEAUX.clear()
+        recents = _SEAUX.setdefault(cle, [])
+        while recents and maintenant - recents[0] > 60:
+            recents.pop(0)
+        if len(recents) >= limite:
+            return False
+        recents.append(maintenant)
+        return True
+
+
+def _trop_de_requetes(retry: int = 60) -> JSONResponse:
+    return JSONResponse(status_code=429,
+                        content={"erreur": "trop de requêtes : réessayez dans un instant",
+                                 "retry_after_s": retry},
+                        headers={"Retry-After": str(retry)})
+
+
 # --- missions asynchrones -----------------------------------------------------
 # Une coordination dure 30 à 120 s : trop long pour un proxy serverless (limite de
 # durée d'exécution) et fragile pour un navigateur. Le mode `async` rend un identifiant
@@ -98,7 +150,7 @@ def _job_lire(jid: str) -> dict[str, Any] | None:
         return dict(job) if job else None
 
 
-def _executer_job(jid: str, texte: str, profil: Profil | None) -> None:
+def _executer_job(jid: str, texte: str, profil: Profil | None, sid: str | None = None) -> None:
     """Exécute une mission en tâche de fond et publie son état."""
     if not _VERROU.acquire(timeout=BUDGET_S):
         _job_ecrire(jid, statut="echec", erreur="moteur occupé : réessayez dans un instant")
@@ -112,6 +164,12 @@ def _executer_job(jid: str, texte: str, profil: Profil | None) -> None:
         _job_ecrire(jid, statut="termine", duree_s=round(duree, 1), data=corps)
         journalise(evenement="mission_async", id=corps["id"], jid=jid,
                    etat=corps["etat_final"], duree_s=round(duree, 1))
+        # Débit seulement si la mission a réellement abouti (idempotent par mission).
+        if sid and _statut_message(corps.get("etat_final")) in STATUTS_DEBITES:
+            reference = "mis:" + str(corps.get("id") or jid)
+            reste = conv.consommer(sid, reference)
+            journalise(evenement="credits_debite", reference=reference,
+                       reste=(reste or {}).get("total"))
     except RuntimeError as e:
         _job_ecrire(jid, statut="echec",
                     erreur="moteur indisponible : orchestrateur ou agents non démarrés")
@@ -141,16 +199,25 @@ def _egales(a: str, b: str) -> bool:
 
 
 async def garde_cle(
+    request: Request,
     x_api_key: str | None = Header(default=None, alias="X-API-Key"),
     authorization: str | None = Header(default=None),
 ) -> None:
-    """Vérifie la clé d'API (en-tête X-API-Key ou Bearer)."""
+    """Vérifie la clé d'API (en-tête X-API-Key ou Bearer).
+
+    Les échecs sont comptés par IP : au-delà de AGRO_LIMITE_AUTH clés fausses en
+    60 s, la réponse devient 429 au lieu de 401 — une force brute sur la clé ne
+    peut plus être tentée à grande vitesse.
+    """
     if SANS_AUTH:
         return
     fournie = (x_api_key or "").strip()
     if not fournie and authorization and authorization.lower().startswith("bearer "):
         fournie = authorization[7:].strip()
     if not fournie or not _egales(fournie, CLE_API):
+        if not _debit_autorise("auth", _ip_client(request), LIMITE_AUTH):
+            journalise(evenement="auth_bloquee", raison="trop d'echecs")
+            raise HTTPException(status_code=429, detail="trop de tentatives : réessayez plus tard")
         journalise(evenement="auth_refusee", raison="cle absente ou invalide")
         raise HTTPException(status_code=401, detail="clé d'API absente ou invalide")
 
@@ -170,9 +237,26 @@ app.add_middleware(
     allow_origins=ORIGINES,
     allow_credentials=False,
     allow_methods=["GET", "POST", "OPTIONS"],
-    allow_headers=["Content-Type", "X-API-Key", "Authorization"],
+    allow_headers=["Content-Type", "X-API-Key", "Authorization", "X-Session-Token"],
     max_age=600,
 )
+
+
+@app.middleware("http")
+async def limite_debit(request: Request, call_next):
+    """Plafond par IP avant toute logique métier (santé et préflight exemptés)."""
+    chemin = request.url.path
+    if chemin == "/health" or request.method == "OPTIONS":
+        return await call_next(request)
+    ip = _ip_client(request)
+    if chemin == "/api/demande" and request.method == "POST":
+        if not _debit_autorise("demande", ip, LIMITE_DEMANDE):
+            journalise(evenement="debit_refuse", bucket="demande", ip=ip)
+            return _trop_de_requetes()
+    elif not _debit_autorise("general", ip, LIMITE_GENERAL):
+        journalise(evenement="debit_refuse", bucket="general", ip=ip)
+        return _trop_de_requetes()
+    return await call_next(request)
 
 
 class Profil(BaseModel):
@@ -309,7 +393,7 @@ def sante() -> dict[str, Any]:
         joignable, agents = False, []
         journalise(evenement="health_erreur", type=type(e).__name__)
     return {"status": "ok" if joignable else "degrade", "version": VERSION,
-            "orchestrateur": joignable, "agents_en_ligne": len(agents), "agents": agents}
+            "orchestrateur": joignable, "agents_en_ligne": len(agents)}
 
 
 @app.get("/api/demande")
@@ -320,7 +404,7 @@ def mode_emploi() -> dict[str, Any]:
                   "profil": {"localite": "Bouaké", "filiere": "igname", "surface_ha": 2,
                              "budget_fcfa": 300000, "experience": "debutant",
                              "objectif": "vendre"}},
-        "entete": "X-API-Key: <clé> (ou Authorization: Bearer <clé>)",
+        "entete": "X-API-Key: <clé> (ou Authorization: Bearer <clé>) ; X-Session-Token: <jeton de session>",
         "exemple": {"texte": "J'ai 2 hectares et 300 000 FCFA, je débute, que puis-je faire ?",
                     "profil": {"localite": "Korhogo", "filiere": "riz", "surface_ha": 2}},
         "reponse": "id, etat_final, domaines, rapport{besoin, reponse, hypotheses, manques, "
@@ -329,17 +413,37 @@ def mode_emploi() -> dict[str, Any]:
 
 
 @app.post("/api/demande")
-async def demande(d: Demande, _: None = Depends(garde_cle)) -> JSONResponse:
+async def demande(request: Request, d: Demande,
+                  x_session_token: str | None = Header(default=None, alias="X-Session-Token"),
+                  _: None = Depends(garde_cle)) -> JSONResponse:
     """Lance une mission complète. Une coordination prend 10 à 120 secondes.
 
     `{"async": true}` rend immédiatement un identifiant à suivre sur /api/missions/{id}
     (indispensable derrière un proxy qui a une limite de durée d'exécution).
+
+    Une session anonyme (X-Session-Token) est exigée et une consultation est débitée
+    quand la mission aboutit : sans cela la route offrait des missions LLM gratuites
+    à qui appelait le relais, le compteur de crédits était contournable.
     """
+    ip = _ip_client(request)
+    if not conv.autoriser_mission_ip(ip, LIMITE_MISSIONS_JOUR):
+        journalise(evenement="quota_jour_atteint", ip=ip)
+        return JSONResponse(status_code=429,
+                            content={"erreur": "quota quotidien de missions atteint : réessayez demain",
+                                     "limite_jour": LIMITE_MISSIONS_JOUR},
+                            headers={"Retry-After": "3600"})
+    sid = _session(x_session_token)
+    solde_avant = conv.solde(sid)
+    if solde_avant["total"] < solde_avant["cout_consultation"]:
+        journalise(evenement="demande_sans_credits", session=sid)
+        return JSONResponse(status_code=402,
+                            content={"erreur": "crédits épuisés : achetez un pack pour continuer",
+                                     "credits": solde_avant})
     texte = _composer(d.texte.strip(), d.profil)
     if d.asynchrone:
         jid = "j_" + uuid.uuid4().hex[:12]
         _job_ecrire(jid, statut="en_cours", demande=d.texte.strip()[:200], debut=time.time())
-        threading.Thread(target=_executer_job, args=(jid, texte, d.profil), daemon=True).start()
+        threading.Thread(target=_executer_job, args=(jid, texte, d.profil, sid), daemon=True).start()
         journalise(evenement="job_cree", jid=jid)
         return JSONResponse(status_code=202,
                             content={"id": jid, "statut": "en_cours",
@@ -396,6 +500,12 @@ async def demande(d: Demande, _: None = Depends(garde_cle)) -> JSONResponse:
             "persistance": True,
             "cree_le": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         }
+    statut = _statut_message(corps.get("etat_final"))
+    if statut in STATUTS_DEBITES:
+        reference = "mis:" + str(corps.get("id") or d.texte[:8])
+        reste = conv.consommer(sid, reference)
+        journalise(evenement="credits_debite", reference=reference,
+                   reste=(reste or {}).get("total"), statut=statut)
     return JSONResponse(content={"data": corps})
 
 
